@@ -33,7 +33,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
 
-find_package(Qt5 COMPONENTS Gui Network REQUIRED)
+find_package(Qt5Widgets CONFIG REQUIRED)
+find_package(Qt5Network CONFIG REQUIRED)
+find_package(Qt5Core CONFIG REQUIRED)
+find_package(Qt5Gui CONFIG REQUIRED)
+
 
 
 file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
@@ -45,6 +49,6 @@ add_executable(babel_client ${SOURCES_CLIENT} client/Opus/Opus.cpp client/Opus/O
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
 #############################################################
-target_link_libraries(babel_client ${CONAN_LIBS}
-        Qt5::Core Qt5::Gui Qt5::Network)
+target_link_libraries(babel_client ${CONAN_LIBS})
+target_link_libraries(babel_client Qt5::Widgets Qt5::Network Qt5::Core Qt5::Gui)
 target_include_directories(babel_client PRIVATE inc ../common/inc)

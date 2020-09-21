@@ -1,10 +1,19 @@
 #include <iostream>
 #include "portAudio/PortAudio.hpp"
 #include "Opus/Opus.hpp"
+#include <QApplication>
+#include <QPushButton>
 
-int main()
+
+int main(int argc, char **argv)
 {
     std::cout << "Hello, World!" << std::endl;
     Opus p;
-    return 0;
+    PortAudio m;
+    QApplication app (argc, argv);
+
+    QPushButton button ("Hello world !");
+    button.show();
+
+    return app.exec();
 }
