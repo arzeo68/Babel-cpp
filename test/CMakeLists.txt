@@ -41,14 +41,22 @@ find_package(Qt5Gui CONFIG REQUIRED)
 
 
 file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
+file(GLOB_RECURSE SOURCES_SERVER RELATIVE ${CMAKE_SOURCE_DIR} "server/*.cpp")
 
 # UI.h  PATH
 include_directories(build)
 
 add_executable(babel_client ${SOURCES_CLIENT} client/Opus/Opus.cpp client/Opus/Opus.hpp)
+add_executable(babel_server ${SOURCE_SERVER})
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
 #############################################################
 target_link_libraries(babel_client ${CONAN_LIBS})
 target_link_libraries(babel_client Qt5::Widgets Qt5::Network Qt5::Core Qt5::Gui)
 target_include_directories(babel_client PRIVATE inc ../common/inc)
+
+#############################################################
+target_link_libraries(babel_server ${CONAN_LIBS})
+#target_link_libraries(babel_server Qt5::Widgets Qt5::Network Qt5::Core Qt5::Gui)
+target_include_directories(babel_server PRIVATE inc ../common/inc)
