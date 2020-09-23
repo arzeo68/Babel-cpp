@@ -35,7 +35,7 @@ Server::API::RouteContainer::RouteContainer(const Server::API::Route &&route) {
     this->_container.push_back(route);
 }
 
-Server::API::RouteContainer::RouteContainer(const std::list<Route> &&route) {
+Server::API::RouteContainer::RouteContainer(const RouteList_t &&route) {
     this->_container = route;
 }
 
@@ -47,11 +47,11 @@ void Server::API::RouteContainer::PushBackRoute(const Server::API::Route &&route
     this->_container.push_back(route);
 }
 
-std::list<Server::API::Route>::iterator Server::API::RouteContainer::begin() {
+Server::API::RouteContainer::RouteList_t::iterator Server::API::RouteContainer::begin() {
     return (this->_container.begin());
 }
 
-std::list<Server::API::Route>::iterator Server::API::RouteContainer::end() {
+Server::API::RouteContainer::RouteList_t::iterator Server::API::RouteContainer::end() {
     return (this->_container.end());
 }
 

@@ -13,6 +13,7 @@
 namespace Server::API::HTTPCodes {
     typedef uint16_t HTTPCodes_t;
     enum class HTTPCodes_e : HTTPCodes_t {
+        // Some codes might be useless and should removed if so
         OK = 200,
         BAD_REQUEST = 400,
         UNAUTHORIZED = 401,
