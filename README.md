@@ -32,5 +32,6 @@ cd build
 conan install .. --build=missing
 cmake ..
 make
-your binary will be create in /build/bin/
 ```
+
+Your binary will be create in `/build/bin/`.
