@@ -6,6 +6,8 @@
 #define BABEL_PORTAUDIO_HPP
 #include <portaudio.h>
 
+int portAudioTest(void);
+
 class PortAudio
 {
     public:

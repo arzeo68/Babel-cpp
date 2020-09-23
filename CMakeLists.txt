@@ -18,7 +18,7 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STANDARD_UNIX_CXX_FLAGS}")
 endif()
 
-if (EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+if (EXISTS conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 else()
     message(FATAL_ERROR "No conanbuildinfo.cmake file found")
@@ -44,9 +44,9 @@ file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
 file(GLOB_RECURSE SOURCES_SERVER RELATIVE ${CMAKE_SOURCE_DIR} "server/*.cpp")
 
 # UI.h  PATH
-include_directories(build)
+include_directories(test/build)
 
-add_executable(babel_client ${SOURCES_CLIENT} client/Opus/Opus.cpp client/Opus/Opus.hpp)
+add_executable(babel_client ${SOURCES_CLIENT} client/src/Audio/Opus/Opus.cpp client/src/Audio/Opus/Opus.hpp)
 add_executable(babel_server ${SOURCE_SERVER})
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)

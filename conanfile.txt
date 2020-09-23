@@ -6,6 +6,7 @@ qt/5.14.2@bincrafters/stable
 portaudio/v190600.20161030@bincrafters/stable
 opus/1.2.1@bincrafters/stable
 boost/1.71.0@conan/stable
+sqlite3/3.29.0@bincrafters/stable
 
 [generators]
 cmake

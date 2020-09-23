@@ -23,3 +23,14 @@ conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-co
 conan remote add epitech https://api.bintray.com/conan/epitech/public-conan;
 mkdir build && cd build && conan install .. && cmake .. -G "Unix Makefiles" && cmake --build .
 ```
+
+### Building
+
+```
+mkdir build
+cd build
+conan install .. --build=missing
+cmake ..
+make
+your binary will be create in /build/bin/
+```
