@@ -46,9 +46,7 @@ include_directories(test/build)
 
 add_executable(babel_client ${SOURCES_CLIENT} common/Log.cpp common/Log.hpp server/src/Main.cpp)
 add_executable(babel_server
-        common/Log.cpp
-        common/Log.hpp
-        server/src/Main.cpp)
+        server/src/Main.cpp server/src/API/Route.cpp server/src/API/Route.hpp server/src/API/HTTPCodes.hpp)
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
     set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)
