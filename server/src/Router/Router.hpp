@@ -7,18 +7,19 @@
 
 #include <string>
 #include <vector>
+#include <map>
+#include <memory>
 
 namespace Server {
     namespace API {
         class Router {
         public:
             Router();
-            ~Router();
 
-            bool addRoute();
-            bool handler();
+            bool addRoute(std::shared_ptr<Route>);
+            bool handler(std::string routePath);
         private:
-            std::vector<Route> _Routes;
+            std::map<std::string, std::shared_ptr<Route> > _Routes;
         };
     }
 }
