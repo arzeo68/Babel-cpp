@@ -9,9 +9,11 @@ namespace Server {
     class API {
     public:
         API(/* Router */);
-        ~API();
 
         bool handler();
+
+    private:
+        Router _Router;
     };
 }
 

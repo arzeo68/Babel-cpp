@@ -3,3 +3,12 @@
 //
 
 #include "API.hpp"
+
+Server::API::API() {
+
+}
+
+bool Server::API::handler() {
+
+    return false;
+}
