@@ -9,24 +9,25 @@
 #include <iostream>
 #include "Connection.hpp"
 
-Server::Connection::Connection(unsigned int port) : _context(std::make_shared<boost::asio::io_context>()),
-                                                    _socket(std::make_shared<boost::asio::ip::tcp::socket>(*_context)),
-                                                    _acceptor(std::make_shared<boost::asio::ip::tcp::acceptor>(*_context, boost::asio::ip::tcp::endpoint(
+Server::Connection::Connection(unsigned int port) : _socket(std::make_shared<boost::asio::ip::tcp::socket>(_service)),
+                                                    _acceptor(std::make_shared<boost::asio::ip::tcp::acceptor>(_service, boost::asio::ip::tcp::endpoint(
                                                         boost::asio::ip::tcp::v4(),
                                                         port))) {
-    boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address_v4::any(), port);
-
-    //this->_socket->connect(ep);
 }
 
 void Server::Connection::Run() {
-    printf("Waiting for connection...\n");
     try {
-        this->_acceptor->accept(*this->_socket);
-        printf("A new client has joined\n");
-        sleep(5);
-        this->ReadBuffer();
-    } catch (const std::exception &e) {
+        printf("Waiting for new client...\n");
+        this->_acceptor->async_accept(*this->_socket, [](const boost::system::error_code& error) {
+            if (error) {
+                std::cout << "Can't accept connection, error occured" << std::endl;
+            } else {
+                printf("A connection is coming\n");
+            }
+        });
+        this->_service.run(_err);
+    }
+    catch (const std::exception &e) {
         std::cout << e.what() << std::endl;
     }
 }

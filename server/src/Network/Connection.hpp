@@ -13,12 +13,13 @@
 namespace Server {
     class Connection {
         public:
-        Connection(unsigned int  port);
+        Connection(unsigned int port);
 
         void Run();
 
         private:
-        std::shared_ptr<boost::asio::io_context> _context;
+        boost::asio::io_service _service;
+        boost::system::error_code _err;
         std::shared_ptr<boost::asio::ip::tcp::socket> _socket;
         std::shared_ptr<boost::asio::ip::tcp::acceptor> _acceptor;
         std::string ReadBuffer();
