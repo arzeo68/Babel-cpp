@@ -12,6 +12,7 @@
 #include <string>
 #include <list>
 #include "HTTPCodes.hpp"
+#include "Error.hpp"
 
 namespace Server::API {
     namespace Exception {
@@ -29,12 +30,12 @@ namespace Server::API {
     class Route {
         public:
         typedef const char** RouteHandlerArgs_t;
-        typedef HTTPCodes::HTTPCodes_t (*RouteHandler_t)(RouteHandlerArgs_t);
+        typedef Server::API::Error (*RouteHandler_t)(RouteHandlerArgs_t);
 
         Route(const std::string& name, RouteHandler_t handler);
         ~Route() = default;
 
-        HTTPCodes::HTTPCodes_t ExecuteHandler(RouteHandlerArgs_t args) const;
+        Server::API::Error ExecuteHandler(RouteHandlerArgs_t args) const;
         std::string GetName() const;
 
         bool operator==(const std::string& name) const;

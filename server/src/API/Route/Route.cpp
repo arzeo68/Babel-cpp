@@ -13,7 +13,7 @@ Server::API::Route::Route(const std::string &name,
                           _name(name), _handler(handler) {
 }
 
-Server::API::HTTPCodes::HTTPCodes_t
+Server::API::Error
 Server::API::Route::ExecuteHandler(const char **args) const {
     return (this->_handler(args));
 }
