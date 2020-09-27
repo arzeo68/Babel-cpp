@@ -59,7 +59,7 @@ bool Server::API::RouteContainer::Exists(const std::string& RouteName) {
     return (std::find(this->_container.begin(), this->_container.end(), RouteName) != this->_container.end());
 }
 
-Server::API::HTTPCodes::HTTPCodes_t
+Server::API::Error
 Server::API::RouteContainer::ExecuteRouteHandler(const std::string &route, Route::RouteHandlerArgs_t args) {
     auto r = std::find(this->_container.begin(), this->_container.end(), route);
     if (r == this->_container.end())
