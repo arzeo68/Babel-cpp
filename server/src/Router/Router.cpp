@@ -4,18 +4,16 @@
 
 #include "Router.hpp"
 
-Server::API::Router::Router() {
+Server::API::Router::Router() = default;
 
-}
-
-bool Server::API::Router::addRoute(std::shared_ptr<Route> route) {
-    _Routes[route.getName()] = route;
+bool Server::API::Router::addRoute(Route const &route) {
+    _Routes[route.GetName()] = std::make_shared<Route>(route);
     return true;
 }
 
-bool Server::API::Router::handler(std::string routePath) {
+bool Server::API::Router::handler(std::string const &routePath, Route::RouteHandlerArgs_t args) {
     if (_Routes.find(routePath) != _Routes.end()) {
-        _Routes[routePath]->handler();
+        _Routes[routePath]->ExecuteHandler(args);
     } else {
         return true;
     }
