@@ -27,11 +27,10 @@ mkdir build && cd build && conan install .. && cmake .. -G "Unix Makefiles" && c
 ### Building
 
 ```
-mkdir build
-cd build
-conan install .. --build=missing
-cmake ..
-make
+mkdir build;
+cd build;
+conan install .. --build=missing;
+cmake ..;
+make;
 ```
-
 Your binary will be create in `/build/bin/`.
