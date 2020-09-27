@@ -9,6 +9,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include "../Route/Route.hpp"
 
 namespace Server {
     namespace API {
@@ -16,8 +17,8 @@ namespace Server {
         public:
             Router();
 
-            bool addRoute(std::shared_ptr<Route>);
-            bool handler(std::string routePath);
+            bool addRoute(Route const &route);
+            bool handler(std::string const &routePath, Route::RouteHandlerArgs_t args);
         private:
             std::map<std::string, std::shared_ptr<Route> > _Routes;
         };
