@@ -59,7 +59,7 @@ namespace Server::API {
         void PushBackRoute(const Route&& route);
 
         bool Exists(const std::string& RouteName);
-        HTTPCodes::HTTPCodes_t ExecuteRouteHandler(const std::string& route,
+        Server::API::Error ExecuteRouteHandler(const std::string& route,
                                                    Route::RouteHandlerArgs_t args);
 
         RouteList_t::iterator begin();
