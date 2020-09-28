@@ -16,10 +16,10 @@ namespace Server {
     public:
         Router();
 
-        bool addRoute(Route const &route);
-        bool handler(std::string const &routePath, Route::RouteHandlerArgs_t args);
+        bool AddRoute(Route const &route);
+        bool Handler(std::string const &routePath, Route::RouteHandlerArgs_t args);
     private:
-        std::map<std::string, std::shared_ptr<Route> > _Routes;
+        std::map<std::string, std::shared_ptr<Route> > _routes;
     };
 }
 
