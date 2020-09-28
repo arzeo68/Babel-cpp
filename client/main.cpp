@@ -7,6 +7,9 @@
 
 int main(int argc, char **argv)
 {
-    portAudioTest();
+    PortAudio p;
+    p.startStream();
+    p.startListening();
+    while (1);
 }
 
