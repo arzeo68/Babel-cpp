@@ -9,11 +9,11 @@
 #include <string>
 
 namespace Server {
-        struct Response {
-            HTTPCodes::HTTPCodes_t code;
-            std::string msg;
-        };
-    }
+    struct Response {
+        HTTPCodes::HTTPCodes_t code;
+        std::string msg;
+    };
+}
 
 
 #endif //BABEL_RESPONSE_HPP
