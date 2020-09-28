@@ -6,14 +6,14 @@
 
 Server::Router::Router() = default;
 
-bool Server::Router::addRoute(Route const &route) {
-    _Routes[route.GetName()] = std::make_shared<Route>(route);
+bool Server::Router::AddRoute(Route const &route) {
+    _routes[route.GetName()] = std::make_shared<Route>(route);
     return true;
 }
 
-bool Server::Router::handler(std::string const &routePath, Server::Route::RouteHandlerArgs_t args) {
-    if (_Routes.find(routePath) != _Routes.end()) {
-        _Routes[routePath]->ExecuteHandler(args);
+bool Server::Router::Handler(std::string const &routePath, Server::Route::RouteHandlerArgs_t args) {
+    if (_routes.find(routePath) != _routes.end()) {
+        _routes[routePath]->ExecuteHandler(args);
     } else {
         return true;
     }
