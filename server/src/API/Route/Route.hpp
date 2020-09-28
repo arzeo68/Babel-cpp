@@ -14,7 +14,7 @@
 #include "HTTPCodes.hpp"
 #include "Error.hpp"
 
-namespace Server::API {
+namespace Server {
     namespace Exception {
         class InvalidRoute : std::exception {
             public:
@@ -30,12 +30,12 @@ namespace Server::API {
     class Route {
         public:
         typedef const char** RouteHandlerArgs_t;
-        typedef Server::API::Error (*RouteHandler_t)(RouteHandlerArgs_t);
+        typedef Server::Error (*RouteHandler_t)(RouteHandlerArgs_t);
 
         Route(const std::string& name, RouteHandler_t handler);
         ~Route() = default;
 
-        Server::API::Error ExecuteHandler(RouteHandlerArgs_t args) const;
+        Server::Error ExecuteHandler(RouteHandlerArgs_t args) const;
         std::string GetName() const;
 
         bool operator==(const std::string& name) const;
@@ -59,7 +59,7 @@ namespace Server::API {
         void PushBackRoute(const Route&& route);
 
         bool Exists(const std::string& RouteName);
-        Server::API::Error ExecuteRouteHandler(const std::string& route,
+        Server::Error ExecuteRouteHandler(const std::string& route,
                                                    Route::RouteHandlerArgs_t args);
 
         RouteList_t::iterator begin();
