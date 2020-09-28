@@ -1,6 +1,9 @@
-//
-// Created by Jean-Gaël Choppe on 26/09/2020.
-//
+/*
+** EPITECH PROJECT, 2020
+** babel
+** File description:
+** Router
+*/
 
 #include "Router.hpp"
 
@@ -11,7 +14,9 @@ bool Server::Router::AddRoute(Route const &route) {
     return true;
 }
 
-bool Server::Router::Handler(std::string const &routePath, Server::Route::RouteHandlerArgs_t args) {
+bool Server::Router::Handler(std::string const &routePath, Server::Route::RouteHandlerArgs const &args) {
+    std::map<std::string, std::string> test;
+
     if (_routes.find(routePath) != _routes.end()) {
         _routes[routePath]->ExecuteHandler(args);
     } else {

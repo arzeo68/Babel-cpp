@@ -14,7 +14,7 @@ Server::Route::Route(const std::string &name,
 }
 
 Server::Error
-Server::Route::ExecuteHandler(const char **args) const {
+Server::Route::ExecuteHandler(Server::Route::RouteHandlerArgs const &args) const {
     return (this->_handler(args));
 }
 
@@ -60,7 +60,7 @@ bool Server::RouteContainer::Exists(const std::string& RouteName) {
 }
 
 Server::Error
-Server::RouteContainer::ExecuteRouteHandler(const std::string &route, Route::RouteHandlerArgs_t args) {
+Server::RouteContainer::ExecuteRouteHandler(const std::string &route, Route::RouteHandlerArgs const &args) {
     auto r = std::find(this->_container.begin(), this->_container.end(), route);
     if (r == this->_container.end())
         throw Exception::InvalidRoute(route);
