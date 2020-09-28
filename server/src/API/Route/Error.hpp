@@ -8,7 +8,7 @@
 #include "HTTPCodes.hpp"
 #include <string>
 
-namespace Server::API {
+namespace Server {
         struct Error {
             HTTPCodes::HTTPCodes_t code;
             std::string msg;
