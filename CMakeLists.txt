@@ -47,7 +47,7 @@ file(GLOB_RECURSE SOURCES_SERVER RELATIVE ${CMAKE_SOURCE_DIR} "server/*.cpp")
 include_directories(test/build)
 
 add_executable(babel_client ${SOURCES_CLIENT} client/src/Audio/Opus/Opus.cpp client/src/Audio/Opus/Opus.hpp)
-add_executable(babel_server server/src/Auth/Connection.cpp server/src/Auth/Connection.hpp server/src/Auth/Client.cpp server/src/Auth/Client.hpp server/src/Main.cpp)
+add_executable(babel_server server/src/Network/Connection.cpp server/src/Network/Connection.hpp server/src/Network/Client.cpp server/src/Network/Client.hpp server/src/main.cpp)
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 

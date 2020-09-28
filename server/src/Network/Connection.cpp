@@ -17,7 +17,7 @@ Server::Connection::Connection(unsigned int port) : _socket(std::make_shared<boo
 
 void Server::Connection::Run() {
     try {
-        printf("Waiting for new client...\n");
+        printf("Waiting for new client on %u...\n", this->_acceptor->local_endpoint().port());
         this->_acceptor->async_accept(*this->_socket, [](const boost::system::error_code& error) {
             if (error) {
                 std::cout << "Can't accept connection, error occured" << std::endl;
