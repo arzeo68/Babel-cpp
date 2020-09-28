@@ -106,16 +106,11 @@ void *PortAudio::getStout() const
 int PortAudio::recordCallBack(const void *tmp_buff, void *, unsigned long frm, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *obj)
 {
     PortAudio *p = reinterpret_cast<PortAudio *>(obj);
-    float const *rptr = (float const *)tmp_buff;
     std::vector<float> wptr;
-    wptr.reserve(frm * 2);
-    for (int i = 0; i < 480; i++)
-    {
-        wptr.emplace_back(*rptr++);
-        if constexpr (NUM_CHANNEL == 2)
-            wptr.emplace_back(*rptr++);
-    }
     p->_m.lock();
+    wptr.assign(
+        reinterpret_cast<const float *>(tmp_buff), reinterpret_cast<const float *>(tmp_buff) + frm * 2
+        );
     p->_bufferQueue.push(std::move(wptr));
     p->_m.unlock();
     return 0;
@@ -127,7 +122,10 @@ int PortAudio::playCallBack(const void *, void *tmp_buff, unsigned long frm, con
     p->_m.lock();
     if (!p->_bufferQueue.empty())
     {
-        memcpy(tmp_buff, p->_bufferQueue.front().data(), frm * 2);
+        std::vector<float> tmp = p->_bufferQueue.front();
+        float *wptr = static_cast<float *>(tmp_buff);
+        for (int i = 0; i < frm * 2; i++)
+            *wptr++ = tmp[i];
         p->_bufferQueue.pop();
     }
     p->_m.unlock();
