@@ -1,6 +1,9 @@
-//
-// Created by Jean-Gaël Choppe on 26/09/2020.
-//
+/*
+** EPITECH PROJECT, 2020
+** babel
+** File description:
+** Router
+*/
 
 #ifndef BABEL_ROUTER_HPP
 #define BABEL_ROUTER_HPP
@@ -17,7 +20,8 @@ namespace Server {
         Router();
 
         bool AddRoute(Route const &route);
-        bool Handler(std::string const &routePath, Route::RouteHandlerArgs_t args);
+        bool Handler(std::string const &routePath, Route::RouteHandlerArgs const &args);
+
     private:
         std::map<std::string, std::shared_ptr<Route> > _routes;
     };

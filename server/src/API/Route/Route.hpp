@@ -13,6 +13,8 @@
 #include <list>
 #include "HTTPCodes.hpp"
 #include "Error.hpp"
+#include <map>
+#include <vector>
 
 namespace Server {
     namespace Exception {
@@ -29,13 +31,17 @@ namespace Server {
     }
     class Route {
         public:
-        typedef const char** RouteHandlerArgs_t;
-        typedef Server::Error (*RouteHandler_t)(RouteHandlerArgs_t);
+        struct RouteHandlerArgs {
+            std::string body;
+            std::string header;
+            std::vector<std::string> QueryParams;
+        };
+        typedef Server::Error (*RouteHandler_t)(RouteHandlerArgs);
 
         Route(const std::string& name, RouteHandler_t handler);
         ~Route() = default;
 
-        Server::Error ExecuteHandler(RouteHandlerArgs_t args) const;
+        Server::Error ExecuteHandler(RouteHandlerArgs const &args) const;
         std::string GetName() const;
 
         bool operator==(const std::string& name) const;
@@ -60,7 +66,7 @@ namespace Server {
 
         bool Exists(const std::string& RouteName);
         Server::Error ExecuteRouteHandler(const std::string& route,
-                                                   Route::RouteHandlerArgs_t args);
+                                                   Route::RouteHandlerArgs const &args);
 
         RouteList_t::iterator begin();
         RouteList_t::iterator end();
