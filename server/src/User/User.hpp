@@ -5,12 +5,9 @@
 #ifndef BABEL_USER_HPP
 #define BABEL_USER_HPP
 
-
-
 class User {
-
+    public:
+    User() = default;
+    ~User() = default;
 };
-
-
-
 #endif //BABEL_USER_HPP
