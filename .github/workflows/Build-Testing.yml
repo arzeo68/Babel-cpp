@@ -65,7 +65,7 @@ jobs:
       - name: Configure Conan && CMake
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: conan install ../B-CPP-500-STG-5-1-babel-victor.limbach --build=missing && cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        run: conan install ../B-CPP-500-STG-5-1-babel-jean-gael.choppe --build=missing && cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
