@@ -20,7 +20,7 @@ namespace Server {
         Router();
 
         bool AddRoute(Route const &route);
-        bool Handler(std::string const &routePath, Route::RouteHandlerArgs const &args);
+        Server::Response Handler(std::string const &routePath, Route::RouteHandlerArgs const &args);
 
     private:
         std::map<std::string, Route> _routes;
