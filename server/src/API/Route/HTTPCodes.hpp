@@ -10,7 +10,7 @@
 
 #include <cstdint>
 
-namespace Server::API::HTTPCodes {
+namespace Server::HTTPCodes {
     typedef uint16_t HTTPCodes_t;
     enum class HTTPCodes_e : HTTPCodes_t {
         // Some codes might be useless and should removed if so

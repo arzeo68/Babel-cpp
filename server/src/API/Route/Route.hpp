@@ -12,7 +12,7 @@
 #include <string>
 #include <list>
 #include "HTTPCodes.hpp"
-#include "Error.hpp"
+#include "Response.hpp"
 #include <map>
 #include <vector>
 
@@ -42,12 +42,12 @@ namespace Server {
             std::string body;
             std::string token;
         };
-        typedef Server::Error (*RouteHandler_t)(RouteHandlerArgs);
+        typedef Server::Response (*RouteHandler_t)(RouteHandlerArgs);
 
         Route(const std::string& name, RouteHandler_t handler);
         ~Route() = default;
 
-        Server::Error ExecuteHandler(RouteHandlerArgs const &args) const;
+        Server::Response ExecuteHandler(RouteHandlerArgs const &args) const;
         std::string GetName() const;
 
         bool operator==(const std::string& name) const;
@@ -72,7 +72,7 @@ namespace Server {
         void PushBackRoute(const Route&& route);
 
         bool Exists(const std::string& RouteName);
-        Server::Error ExecuteRouteHandler(const std::string& route,
+        Server::Response ExecuteRouteHandler(const std::string& route,
                                                    Route::RouteHandlerArgs const &args);
 
         RouteList_t::iterator begin();

@@ -2,18 +2,18 @@
 // Created by whosdad on 27/09/2020.
 //
 
-#ifndef BABEL_ERROR_HPP
-#define BABEL_ERROR_HPP
+#ifndef BABEL_RESPONSE_HPP
+#define BABEL_RESPONSE_HPP
 
 #include "HTTPCodes.hpp"
 #include <string>
 
 namespace Server {
-        struct Error {
+        struct Response {
             HTTPCodes::HTTPCodes_t code;
             std::string msg;
         };
     }
 
 
-#endif //BABEL_ERROR_HPP
+#endif //BABEL_RESPONSE_HPP

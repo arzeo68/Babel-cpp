@@ -13,7 +13,7 @@ Server::Route::Route(const std::string &name,
                           _name(name), _handler(handler) {
 }
 
-Server::Error
+Server::Response
 Server::Route::ExecuteHandler(Server::Route::RouteHandlerArgs const &args) const {
     return (this->_handler(args));
 }
@@ -59,7 +59,7 @@ bool Server::RouteContainer::Exists(const std::string& RouteName) {
     return (std::find(this->_container.begin(), this->_container.end(), RouteName) != this->_container.end());
 }
 
-Server::Error
+Server::Response
 Server::RouteContainer::ExecuteRouteHandler(const std::string &route, Route::RouteHandlerArgs const &args) {
     auto r = std::find(this->_container.begin(), this->_container.end(), route);
     if (r == this->_container.end())
