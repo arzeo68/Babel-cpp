@@ -10,15 +10,17 @@
 Server::Router::Router() = default;
 
 bool Server::Router::AddRoute(Route const &route) {
-    _routes[route.GetName()] = std::make_shared<Route>(route);
+    _routes[route.GetName()] = route;
     return true;
 }
 
-bool Server::Router::Handler(std::string const &routePath, Server::Route::RouteHandlerArgs const &args) {
+Server::Response Server::Router::Handler(std::string const &routePath, Server::Route::RouteHandlerArgs const &args) {
+    Server::Response res;
     if (_routes.find(routePath) != _routes.end()) {
-        _routes[routePath]->ExecuteHandler(args);
+        res = _routes[routePath].ExecuteHandler(args);
     } else {
-        return true;
+        res.code = 400;
+        res.msg = "Unknown route";
     }
-    return false;
+    return res;
 }
