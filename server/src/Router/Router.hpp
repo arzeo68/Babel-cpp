@@ -23,7 +23,7 @@ namespace Server {
         bool Handler(std::string const &routePath, Route::RouteHandlerArgs const &args);
 
     private:
-        std::map<std::string, std::shared_ptr<Route> > _routes;
+        std::map<std::string, Route> _routes;
     };
 }
 

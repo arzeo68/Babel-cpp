@@ -31,10 +31,16 @@ namespace Server {
     }
     class Route {
         public:
+        enum Method : uint8_t {
+            GET,
+            DELETE,
+            POST,
+            PUT
+        };
         struct RouteHandlerArgs {
+            Method method;
             std::string body;
-            std::string header;
-            std::vector<std::string> QueryParams;
+            std::string token;
         };
         typedef Server::Error (*RouteHandler_t)(RouteHandlerArgs);
 
@@ -50,6 +56,7 @@ namespace Server {
         private:
         std::string _name;
         RouteHandler_t _handler;
+        Method _method;
     };
 
     class RouteContainer {
