@@ -15,8 +15,6 @@ bool Server::Router::AddRoute(Route const &route) {
 }
 
 bool Server::Router::Handler(std::string const &routePath, Server::Route::RouteHandlerArgs const &args) {
-    std::map<std::string, std::string> test;
-
     if (_routes.find(routePath) != _routes.end()) {
         _routes[routePath]->ExecuteHandler(args);
     } else {
