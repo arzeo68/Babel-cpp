@@ -22,12 +22,18 @@ std::string Server::Route::GetName() const {
     return (this->_name);
 }
 
-bool Server::Route::operator==(const std::string& name) {
+bool Server::Route::operator==(const std::string &name) {
     return (this->_name == name);
 }
 
-bool Server::Route::operator==(const std::string& name) const {
+bool Server::Route::operator==(const std::string &name) const {
     return (this->_name == name);
+}
+
+Server::Route::Route(const Route &obj) {
+    this->_handler = obj._handler;
+    this->_name = obj._name;
+    this->_method = obj._method;
 }
 
 

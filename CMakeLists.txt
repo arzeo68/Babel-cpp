@@ -44,9 +44,25 @@ file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
 # UI.h  PATH
 include_directories(test/build)
 
-add_executable(babel_client ${SOURCES_CLIENT} common/Log.cpp common/Log.hpp server/src/Main.cpp)
+add_executable(babel_client ${SOURCES_CLIENT} client/src/Audio/Opus/Opus.cpp client/src/Audio/Opus/Opus.hpp)
 add_executable(babel_server
-        server/src/Main.cpp server/src/API/Route.cpp server/src/API/Route.hpp server/src/API/HTTPCodes.hpp)
+        server/src/DB/Database.cpp
+        server/src/DB/Database.hpp
+        server/src/DB/Exception.cpp
+        server/src/API/Route/Route.cpp
+        server/src/API/Route/Route.hpp
+        server/src/API/Router/Router.cpp
+        server/src/API/Router/Router.hpp
+        server/src/API/Route/Response.hpp
+        server/src/API/Route/HTTPCodes.hpp
+        server/src/User/User.cpp
+        server/src/User/User.hpp
+        server/src/Main.cpp
+        server/src/Network/Client.cpp
+        server/src/Network/Client.hpp
+        server/src/Network/Exception.cpp
+        server/src/Network/Network.cpp
+        server/src/Network/Network.hpp)
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
     set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)

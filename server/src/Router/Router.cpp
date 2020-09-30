@@ -9,7 +9,7 @@
 
 Server::Router::Router() = default;
 
-bool Server::Router::AddRoute(Route const &route) {
+bool Server::Router::AddRoute(const Route &route) {
     _routes[route.GetName()] = route;
     return true;
 }
