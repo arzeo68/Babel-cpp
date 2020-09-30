@@ -10,7 +10,7 @@
 
 namespace Server {
     struct Response {
-        HTTPCodes::HTTPCodes_t code;
+        HTTPCodes::HTTPCodes_e code;
         std::string msg;
     };
 }
