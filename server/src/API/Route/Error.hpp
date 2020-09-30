@@ -9,11 +9,11 @@
 #include <string>
 
 namespace Server::API {
-        struct Error {
-            HTTPCodes::HTTPCodes_t code;
-            std::string msg;
-        };
-    }
+    struct Error {
+        HTTPCodes::HTTPCodes_t code;
+        std::string msg;
+    };
+}
 
 
 #endif //BABEL_ERROR_HPP
