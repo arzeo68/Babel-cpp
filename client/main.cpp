@@ -3,10 +3,25 @@
 #include "src/Audio/Opus/Opus.hpp"
 #include <QApplication>
 #include <QPushButton>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QDesktopWidget>
+#include <client/src/GUI/MainWindow.hpp>
+#include <QtWidgets/QGraphicsScene>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QButtonGroup>
+#include <zconf.h>
+#include <QtCore/QTimer>
 
 
 int main(int argc, char **argv)
 {
-    portAudioTest();
+    QApplication app(argc, argv);
+    MainWindow mainWindow;
+
+    mainWindow.show();
+
+    return app.exec();
 }
 
