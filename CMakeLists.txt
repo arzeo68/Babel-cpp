@@ -46,8 +46,15 @@ file(GLOB_RECURSE SOURCES_SERVER RELATIVE ${CMAKE_SOURCE_DIR} "server/*.cpp")
 # UI.h  PATH
 include_directories(test/build)
 
-add_executable(babel_client ${SOURCES_CLIENT})
-add_executable(babel_server ${SOURCES_SERVER})
+add_executable(babel_client ${SOURCES_CLIENT} client/src/Audio/Opus/Opus.cpp client/src/Audio/Opus/Opus.hpp)
+add_executable(babel_server
+        server/src/Network/Network.cpp
+        server/src/Network/Network.hpp
+        server/src/Network/Client.cpp
+        server/src/Network/Client.hpp
+        server/src/Main.cpp
+        server/src/Network/Exception.cpp)
+
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
