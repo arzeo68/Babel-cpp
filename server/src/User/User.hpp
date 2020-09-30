@@ -5,24 +5,27 @@
 #ifndef BABEL_USER_HPP
 #define BABEL_USER_HPP
 
+#include "../API//Route/Response.hpp"
+#include "../API/Route/Route.hpp"
+
 class User {
     public:
     User() = default;
     ~User() = default;
 
-    static bool Login();
-    static bool Register();
-    static bool UserExist();
-    static bool Status();
-    static bool Friend();
+    static Server::Response Login(Server::Route::RouteHandlerArgs);
+    static Server::Response Register(Server::Route::RouteHandlerArgs);
+    static Server::Response UserExist(Server::Route::RouteHandlerArgs);
+    static Server::Response Status(Server::Route::RouteHandlerArgs);
+    static Server::Response Friend(Server::Route::RouteHandlerArgs);
 
-    static bool PutFriend();
-    static bool PostFriend();
-    static bool DeleteFriend();
-    static bool GetFriends();
+    static Server::Response PutFriend(Server::Route::RouteHandlerArgs);
+    static Server::Response PostFriend(Server::Route::RouteHandlerArgs);
+    static Server::Response DeleteFriend(Server::Route::RouteHandlerArgs);
+    static Server::Response GetFriends(Server::Route::RouteHandlerArgs);
 
-    static bool IsConnected();
-    static bool StartCall();
-    static bool EndCall();
+    static Server::Response IsConnected(Server::Route::RouteHandlerArgs);
+    static Server::Response StartCall(Server::Route::RouteHandlerArgs);
+    static Server::Response EndCall(Server::Route::RouteHandlerArgs);
 };
 #endif //BABEL_USER_HPP
