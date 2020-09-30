@@ -12,6 +12,9 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <ctime>
+#include <iomanip>
+
 
 namespace Common::Log {
     enum LogLevel_e : uint16_t {
@@ -48,12 +51,24 @@ namespace Common::Log {
             return (this->Write(INFO, args...));
         }
 
+
         private:
+        static std::string GetCurrentTime() {
+            time_t rawtime;
+            struct tm *timeinfo;
+            time(&rawtime);
+            timeinfo = localtime(&rawtime);
+            char buffer[80];
+            strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
+            return (buffer);
+        }
+
         template<typename ...variadic>
         void Write(LogLevel_e level, variadic &&... args) {
             if ((level & this->_level) == 0)
                 return;
-            std::string prefix(_map.find(level)->second + "- TODAY: ");
+            std::string prefix("[" + Common::Log::Log::GetCurrentTime() + "/" +
+                               _map.find(level)->second + "]" + " ");
             std::cout << prefix;
             (std::cout << ... << args) << std::endl;
             this->_file << prefix;
