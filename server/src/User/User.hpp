@@ -12,20 +12,5 @@ class User {
     public:
     User() = default;
     ~User() = default;
-
-    static Server::Response Login(Server::Route::RouteHandlerArgs);
-    static Server::Response Register(Server::Route::RouteHandlerArgs);
-    static Server::Response UserExist(Server::Route::RouteHandlerArgs);
-    static Server::Response Status(Server::Route::RouteHandlerArgs);
-    static Server::Response Friend(Server::Route::RouteHandlerArgs);
-
-    static Server::Response PutFriend(Server::Route::RouteHandlerArgs);
-    static Server::Response PostFriend(Server::Route::RouteHandlerArgs);
-    static Server::Response DeleteFriend(Server::Route::RouteHandlerArgs);
-    static Server::Response GetFriends(Server::Route::RouteHandlerArgs);
-
-    static Server::Response IsConnected(Server::Route::RouteHandlerArgs);
-    static Server::Response StartCall(Server::Route::RouteHandlerArgs);
-    static Server::Response EndCall(Server::Route::RouteHandlerArgs);
 };
 #endif //BABEL_USER_HPP

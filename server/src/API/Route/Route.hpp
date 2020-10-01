@@ -45,11 +45,8 @@ namespace Server {
         typedef Server::Response (*RouteHandler_t)(RouteHandlerArgs);
 
         Route(const std::string &name, RouteHandler_t handler);
-
         Route() = default;
-
         ~Route() = default;
-
         Route(const Route &obj);
 
         Server::Response ExecuteHandler(RouteHandlerArgs const &args) const;

@@ -29,6 +29,7 @@ namespace Server::Database {
         ~Database();
 
         void AddUser(const std::string& name, const std::string& password);
+        bool UserExists(const std::string& name);
         // GetUser
         void UpdateStatus(uint16_t id, const std::string& status);
         std::string GetStatus(uint16_t id);
@@ -36,12 +37,12 @@ namespace Server::Database {
 
         #ifndef _UNUSED_
             #define _UNUSED_ __attribute__((unused))
-            #endif
+        #endif
 
         private:
         sqlite3* _handler;
         void RegisterTables();
-        void ExecuteQuery(const std::string& query, DatabaseCallback_t callback = nullptr);
+        void ExecuteQuery(const std::string& query, DatabaseCallback_t callback = nullptr, void *callback_arg = nullptr);
 
         static const constexpr char* USER_TABLE = "user";
         #define USER_TABLE_STR std::string(Server::Database::Database::USER_TABLE)

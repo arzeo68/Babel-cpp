@@ -21,7 +21,7 @@ Server::Network::Network::Network(unsigned int port) : _acceptor(_service, boost
 void Server::Network::Network::Run() {
     while (Server::Network::Network::SERVER_RUNNING) {
         try {
-            SharedPtrClient_t client = std::make_shared<Client>(this->_service);
+            SharedPtrClient_t client = std::make_shared<Client>(this->_service, this->_database);
             printf("Waiting for new client on %u...\n",
                    this->_acceptor.local_endpoint().port());
             this->_acceptor.async_accept(*client->GetSocket(),

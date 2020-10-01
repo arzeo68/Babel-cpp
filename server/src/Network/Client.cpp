@@ -8,8 +8,10 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include "Client.hpp"
+#include "server/src/API/Route/Data/Data.hpp"
 
-Server::Network::Client::Client(boost::asio::io_service &service) {
+Server::Network::Client::Client(boost::asio::io_service &service,
+                                Server::Database::Database& database) : _database(database) {
     this->_socket = Network::SharedPtrSocket_t(
         std::make_shared<boost::asio::ip::tcp::socket>(service));
 }
@@ -41,6 +43,11 @@ void Server::Network::Client::Read(const boost::system::error_code &error,
     std::cout << "text read: '" << std::string(message->begin(), message->end())
               << "'"
               << "from :" << this << std::endl;
+    Server::API::Route::Login(*this, {
+       .method = Route::GET,
+       .body = "user",
+       .token = "token"
+    });
     this->StartRead();
 }
 
@@ -51,4 +58,8 @@ void Server::Network::Client::Write(const std::string &message) {
                                   if (error)
                                       throw InternalError(error);
                               });
+}
+
+Server::Database::Database &Server::Network::Client::GetDatabase() {
+    return (this->_database);
 }

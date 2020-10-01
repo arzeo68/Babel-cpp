@@ -11,6 +11,7 @@
 #include <boost/asio.hpp>
 #include <list>
 #include <memory>
+#include "server/src/DB/Database.hpp"
 
 namespace Server::Network {
     class Client;
@@ -23,7 +24,6 @@ namespace Server::Network {
         typedef std::array<char, MESSAGE_SIZE_LENGTH> MessageArr_t;
         typedef std::shared_ptr<MessageArr_t> SharedPtrMessageArr_t;
 
-
         explicit Network(uint32_t port);
 
         void Run();
@@ -35,6 +35,7 @@ namespace Server::Network {
         boost::asio::io_service _service;
         boost::asio::ip::tcp::acceptor _acceptor;
         //std::list<SharedPtrClient_t> _clients;
+        Server::Database::Database _database;
     };
 }
 
