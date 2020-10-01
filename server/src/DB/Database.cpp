@@ -43,21 +43,12 @@ void Server::Database::Database::RegisterTables() {
     std::cout << "Tables created in the database" << std::endl;
 }
 
-//int CreatedUsed(_UNUSED_ void* unused, _UNUSED_ int size, char **column_text, _UNUSED_ char** column_name) {
-//    printf("Size: %i\n", size);
-//    printf("(%s) '%s' (-> '%s') = '%s'\n", column_text[Server::Database::User::ID],
-//           column_text[Server::Database::User::NAME], column_text[Server::Database::User::PASSWORD],
-//           column_text[Server::Database::User::STATUS] == nullptr ? "NO STATUS" : column_text[Server::Database::User::STATUS]);
-//    return (0);
-//}
-
 void Server::Database::Database::AddUser(const std::string &name,
                                          const std::string &password) {
     this->ExecuteQuery(
         "INSERT INTO " + std::string(Server::Database::Database::USER_TABLE) +
         "('name', 'password') VALUES ('" + name + "', '" + password + "');");
-    //this->ExecuteQuery("SELECT * FROM 'user'\n",
-    //                   &CreatedUsed);
+    std::cout << "User " + name + " added to the database" << std::endl;
 }
 
 void Server::Database::Database::UpdateStatus(uint16_t id, const std::string& status) {
@@ -72,7 +63,6 @@ void Server::Database::Database::UpdateStatus(uint16_t id, const std::string& st
 }
 
 bool Server::Database::Database::UserExists(const std::string& name) {
-    this->AddUser("user", "pass");
     bool exists = false;
     this->ExecuteQuery(
         "SELECT * FROM " + USER_TABLE_STR + " WHERE name='" + name + "';",
@@ -80,7 +70,7 @@ bool Server::Database::Database::UserExists(const std::string& name) {
             bool *existing = reinterpret_cast<bool*>(arg);
             *existing = size != 0;
             return (0);
-        });
+        }, &exists);
     return (exists);
 }
 

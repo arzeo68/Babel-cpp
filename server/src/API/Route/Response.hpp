@@ -13,6 +13,10 @@ namespace Server {
         HTTPCodes::HTTPCodes_e code;
         std::string msg;
     };
+    static const Response InvalidMethodTemplate = {
+        .code = HTTPCodes::HTTPCodes_e::METHOD_NOT_ALLOWED,
+        .msg = "Method not allowed",
+    };
 }
 
 

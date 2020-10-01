@@ -5,17 +5,19 @@
 ** TODO: CHANGE DESCRIPTION.
 */
 
-#include "Data.hpp"
+#include "Listing.hpp"
 
 Server::Response
 Server::API::Route::Login(Server::Network::Client &client,
                           const Server::Route::RouteHandlerArgs &arg) {
-
-    if (arg.method == Server::Route::GET) {
-        bool user = client.GetDatabase().UserExists(arg.body);
-        printf("User '%s' exists: %i?\n", arg.body.c_str(), user);
+    switch (arg.method) {
+        case Server::Route::GET:
+        return Server::Response {
+            .code = HTTPCodes::HTTPCodes_e::OK,
+            .msg = client.GetDatabase().UserExists(arg.body) ? "true" : "false",
+        };
+        default: return InvalidMethodTemplate;
     }
-    return {};
 }
 
 //Server::Response Server::API::Route::Register(const Server::Route::RouteHandlerArgs &arg) {

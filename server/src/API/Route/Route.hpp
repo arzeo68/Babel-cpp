@@ -49,7 +49,7 @@ namespace Server {
         ~Route() = default;
         Route(const Route &obj);
 
-        Server::Response ExecuteHandler(RouteHandlerArgs const &args) const;
+        Server::Response ExecuteHandler(const RouteHandlerArgs &args) const;
         std::string GetName() const;
 
         bool operator==(const std::string& name) const;

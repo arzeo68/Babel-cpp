@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** babel
 ** File description:
-** TODO: CHANGE DESCRIPTION.
+** Main file for the server part
 */
 
 #include <server/src/API/Route/Route.hpp>
@@ -23,10 +23,10 @@ int main (const int ac, const char **av) {
     uint32_t port = 4242;
     if (ac != 1)
         port = std::stoi(av[0], nullptr);
-    Server::Network::Network c(port);
+    Server::Network::Network network(port);
     printf("Launching server...\n");
     try {
-        c.Run();
+        network.Run();
     } catch (const Server::Database::Exception::Query &e) {
         std::cerr << e.what() << std::endl;
     }
