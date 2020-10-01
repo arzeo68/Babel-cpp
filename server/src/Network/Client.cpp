@@ -8,12 +8,14 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include "Client.hpp"
-#include "server/src/API/Route/List/Listing.hpp"
+#include "server/src/API/Router/Router.hpp"
 
 Server::Network::Client::Client(boost::asio::io_service &service,
-                                Server::Database::Database& database) : _database(database) {
+                                Server::Database::Database &database,
+                                Server::Router &router) : _database(database),
+                                                          _router(router) {
     this->_socket = Network::SharedPtrSocket_t(
-        std::make_shared<boost::asio::ip::tcp::socket>(service));
+        std::make_shared <boost::asio::ip::tcp::socket>(service));
 }
 
 Server::Network::Network::SharedPtrSocket_t
@@ -23,7 +25,7 @@ Server::Network::Client::GetSocket() {
 
 
 void Server::Network::Client::StartRead() {
-    Network::SharedPtrMessageArr_t message = std::make_shared<Network::MessageArr_t>();
+    Network::SharedPtrMessageArr_t message = std::make_shared <Network::MessageArr_t>();
 
     this->_socket->async_receive(boost::asio::buffer(*message),
                                  [this, message](
@@ -43,11 +45,11 @@ void Server::Network::Client::Read(const boost::system::error_code &error,
     std::cout << "text read: '" << std::string(message->begin(), message->end())
               << "'"
               << "from :" << this << std::endl;
-    Server::API::Route::Login(*this, {
-       .method = Route::GET,
-       .body = "user",
-       .token = "token"
-    });
+    auto protocol = Server::Router::FormatRouteArgs(
+        std::string(message->begin(), message->end()));
+    this->_router.Execute(protocol,
+                          Server::Router::SplitRawData(protocol),
+                          *this);
     this->StartRead();
 }
 

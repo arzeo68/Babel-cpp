@@ -13,6 +13,10 @@
 #include <memory>
 #include "server/src/DB/Database.hpp"
 
+namespace Server {
+    class Router;
+}
+
 namespace Server::Network {
     class Client;
     class Network {
@@ -36,6 +40,7 @@ namespace Server::Network {
         boost::asio::ip::tcp::acceptor _acceptor;
         //std::list<SharedPtrClient_t> _clients;
         Server::Database::Database _database;
+        std::shared_ptr<Server::Router> _router;
     };
 }
 

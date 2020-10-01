@@ -5,50 +5,20 @@
 ** TODO: CHANGE DESCRIPTION.
 */
 
+#include "common/Protocol.hpp"
 #include "Listing.hpp"
 
-Server::Response
-Server::API::Route::Login(Server::Network::Client &client,
-                          const Server::Route::RouteHandlerArgs &arg) {
+Common::Response
+Server::Route::Listing::User(Server::Network::Client &client,
+                             const Common::RouteHandlerArgs &arg) {
     switch (arg.method) {
-        case Server::Route::GET:
-            return Server::Response {
-                .code = HTTPCodes::HTTPCodes_e::OK,
-                .msg = client.GetDatabase().UserExists(arg.body) ? "true" : "false",
+        case Common::GET:
+            if (arg.body.empty())
+                return Common::BadRequestTemplate;
+            return Common::Response {
+                .code = Common::HTTPCodes_e::OK,
+                .msg = client.GetDatabase().UserExists(arg.body[0]) ? "true" : "false",
             };
-        default: return InvalidMethodTemplate;
+        default: return Common::InvalidMethodTemplate;
     }
 }
-
-//Server::Response Server::API::Route::Register(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::UserExist(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::Status(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::Friend(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::PutFriend(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::PostFriend(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::DeleteFriend(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::GetFriends(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::IsConnected(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::StartCall(const Server::Route::RouteHandlerArgs &arg) {
-//}
-
-//Server::Response Server::API::Route::EndCall(const Server::Route::RouteHandlerArgs &arg) {
-//}

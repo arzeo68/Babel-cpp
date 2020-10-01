@@ -17,7 +17,8 @@ namespace Server::Network {
     class Client {
         public:
         explicit Client(boost::asio::io_service &service,
-                        Server::Database::Database& database);
+                        Server::Database::Database& database,
+                        Server::Router& router);
 
         Network::SharedPtrSocket_t GetSocket();
         //std::string &GetReadBuffer();
@@ -30,6 +31,7 @@ namespace Server::Network {
 
         Network::SharedPtrSocket_t _socket;
         Server::Database::Database& _database;
+        Server::Router& _router;
     };
 
     class InternalError : public std::exception {

@@ -22,7 +22,9 @@ Server::Database::Database::~Database() {
 }
 
 
-void Server::Database::Database::ExecuteQuery(const std::string &query, DatabaseCallback_t callback, void *callback_arg) {
+void Server::Database::Database::ExecuteQuery(const std::string &query,
+                                              DatabaseCallback_t callback,
+                                              void *callback_arg) {
     char *error_msg = nullptr;
     uint32_t code = sqlite3_exec(this->_handler, query.c_str(), callback,
                                  callback_arg, &error_msg);
@@ -51,7 +53,8 @@ void Server::Database::Database::AddUser(const std::string &name,
     std::cout << "User " + name + " added to the database" << std::endl;
 }
 
-void Server::Database::Database::UpdateStatus(uint16_t id, const std::string& status) {
+void Server::Database::Database::UpdateStatus(uint16_t id,
+                                              const std::string &status) {
     this->ExecuteQuery(
         "UPDATE " + std::string(Server::Database::Database::USER_TABLE) +
         " SET 'status'='" + status + "' WHERE 'id'=" + std::to_string(id));
@@ -59,21 +62,18 @@ void Server::Database::Database::UpdateStatus(uint16_t id, const std::string& st
 
 [[maybe_unused]] void Server::Database::Database::DeleteUsers() {
     this->ExecuteQuery("DELETE FROM '" + USER_TABLE_STR + "';" +
-                       "DELETE FROM SQLITE_SEQUENCE WHERE name='"+USER_TABLE_STR+"';");
+                       "DELETE FROM SQLITE_SEQUENCE WHERE name='" +
+                       USER_TABLE_STR + "';");
 }
 
-bool Server::Database::Database::UserExists(const std::string& name) {
+bool Server::Database::Database::UserExists(const std::string &name) {
     bool exists = false;
     this->ExecuteQuery(
         "SELECT * FROM " + USER_TABLE_STR + " WHERE name='" + name + "';",
-        [] (void *arg, int size, char **, char **) -> int {
-            bool *existing = reinterpret_cast<bool*>(arg);
+        [](void *arg, int size, char **, char **) -> int {
+            bool *existing = reinterpret_cast<bool *>(arg);
             *existing = size != 0;
             return (0);
         }, &exists);
     return (exists);
 }
-
-
-
-

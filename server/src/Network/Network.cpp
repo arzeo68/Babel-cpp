@@ -7,6 +7,7 @@
 
 #include <array>
 #include <iostream>
+#include "server/src/API/Router/Router.hpp"
 #include "Network.hpp"
 #include "Client.hpp"
 
@@ -15,13 +16,14 @@ bool Server::Network::Network::SERVER_RUNNING = false;
 Server::Network::Network::Network(unsigned int port) : _acceptor(_service, boost::asio::ip::tcp::endpoint(
     boost::asio::ip::tcp::v4(),
     port)) {
+    this->_router = std::make_shared<Server::Router>();
     Server::Network::Network::Start();
 }
 
 void Server::Network::Network::Run() {
     while (Server::Network::Network::SERVER_RUNNING) {
         try {
-            SharedPtrClient_t client = std::make_shared<Client>(this->_service, this->_database);
+            SharedPtrClient_t client = std::make_shared<Client>(this->_service, this->_database, *this->_router);
             printf("Waiting for new client on %u...\n",
                    this->_acceptor.local_endpoint().port());
             this->_acceptor.async_accept(*client->GetSocket(),

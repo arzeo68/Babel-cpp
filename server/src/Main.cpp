@@ -10,14 +10,6 @@
 #include "Network/Network.hpp"
 #include "server/src/API/Router/Router.hpp"
 
-Server::Response func(Server::Route::RouteHandlerArgs) {
-    printf("Hello world\n");
-    return (Server::Response {
-        Server::HTTPCodes::HTTPCodes_e::OK,
-        "token"
-    });
-}
-
 int main (const int ac, const char **av) {
     setvbuf(stdout, nullptr, _IONBF, 0); // TODO: Remove be removed for the final version
     uint32_t port = 4242;
