@@ -12,10 +12,10 @@ Server::API::Route::Login(Server::Network::Client &client,
                           const Server::Route::RouteHandlerArgs &arg) {
     switch (arg.method) {
         case Server::Route::GET:
-        return Server::Response {
-            .code = HTTPCodes::HTTPCodes_e::OK,
-            .msg = client.GetDatabase().UserExists(arg.body) ? "true" : "false",
-        };
+            return Server::Response {
+                .code = HTTPCodes::HTTPCodes_e::OK,
+                .msg = client.GetDatabase().UserExists(arg.body) ? "true" : "false",
+            };
         default: return InvalidMethodTemplate;
     }
 }

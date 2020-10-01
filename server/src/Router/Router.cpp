@@ -19,7 +19,7 @@ Server::Response Server::Router::Handler(std::string const &routePath, Server::R
     if (_routes.find(routePath) != _routes.end()) {
         res = _routes[routePath].ExecuteHandler(args);
     } else {
-        res.code = HTTPCodes::HTTPCodes_e::DATA_NOT_FOUND;
+        res.code = HTTPCodes::HTTPCodes_e::NOT_FOUND;
         res.msg = "Unknown route";
     }
     return res;
