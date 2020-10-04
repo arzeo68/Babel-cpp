@@ -9,38 +9,40 @@
 #include "Router.hpp"
 
 Common::Response Server::Router::Execute(const Common::PackageServer &protocol,
-                                         Common::RouteHandlerArgs const &args,
+                                         Route::Arguments::RouteHandlerArgs const &args,
                                          Server::Network::Client& client) {
-    if (protocol.routeId >= Common::MAX_ROUTE_ID)
+    printf("Protocol found:\n0x%X - '%u' - '%u' - '%u' - '%s'\n", protocol.magic,
+           protocol.id, protocol.method, protocol.command, protocol.args);
+    if (protocol.id >= Common::MAX_ROUTE_ID)
         return (Common::Response {
-            .code = Common::HTTPCodes_e::NOT_FOUND,
-            .msg = "Unknown route"
+            Common::HTTPCodes_e::NOT_FOUND,
+            "Unknown route"
         });
-    else if (protocol.magicBytes != 0xFABA)
+    else if (protocol.magic != 0xFABA)
         return (Common::Response {
-            .code = Common::HTTPCodes_e::FORBIDDEN,
-            .msg = "Forbidden"
+            Common::HTTPCodes_e::FORBIDDEN,
+            "Forbidden"
         });
     else
-        return (this->_routes[protocol.routeId].ExecuteHandler(client, args));
+        return (this->_routes[protocol.id].ExecuteHandler(client, args));
 }
 
 Common::PackageServer Server::Router::FormatRouteArgs(const std::string &string) {
-    auto protocol = *(struct Common::PackageServer *) string.data();
-    return protocol;
+    return *(struct Common::PackageServer *) string.data();
 }
 
-Common::RouteHandlerArgs
+Server::Route::Arguments::RouteHandlerArgs
 Server::Router::SplitRawData(const Common::PackageServer &protocol) {
-    Common::RouteHandlerArgs handler;
+    Route::Arguments::RouteHandlerArgs handler;
     std::vector<std::string> subStr;
     boost::split(subStr, std::string(protocol.args), boost::is_any_of("|"));
 
+    //if (!subStr.empty())
+    //    handler.token = subStr[0];
+    //if (subStr.size() > 1)
     if (!subStr.empty())
-        handler.token = subStr[0];
-    if (subStr.size() > 1)
-        for (auto k = subStr.begin() + 1; k != subStr.end(); ++k)
-            handler.body.push_back(*k);
+        for (auto& k : subStr)
+            handler.body.push_back(k);
     handler.method = protocol.method;
     return (handler);
 }

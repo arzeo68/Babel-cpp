@@ -19,7 +19,7 @@ Server::Network::Network::Network(unsigned int port) : _acceptor(_service,
                                                                      boost::asio::ip::tcp::v4(),
                                                                      port)) {
     this->_router = std::make_shared<Server::Router>();
-    this->_pool = std::make_shared<Server::User::Pool>();
+    //this->_pool = std::make_shared<Server::User::Pool>();
     Server::Network::Network::Start();
 }
 
@@ -33,9 +33,9 @@ void Server::Network::Network::Run() {
             printf("Waiting for new client on %u...\n",
                    this->_acceptor.local_endpoint().port());
             this->_acceptor.async_accept(*client->GetSocket(),
-                                         [this, client](
+                                         [self = this->shared_from_this(), client](
                                              const boost::system::error_code &err) {
-                                             this->AcceptClient(err, client);
+                                             self->AcceptClient(err, client);
                                          });
             this->_service.run();
         }
@@ -48,7 +48,7 @@ void Server::Network::Network::Run() {
             }
         }
         catch (const std::exception &e) {
-            std::cout << e.what() << std::endl;
+            std::cout << "Fatal error occurred: " << e.what() << std::endl;
             Server::Network::Network::Stop();
         }
     }
@@ -78,9 +78,10 @@ void Server::Network::Network::Stop() {
 
 uint32_t
 Server::Network::Network::AddUserToPool(const std::shared_ptr<Client> &client) {
-    if (!this->_mutex.try_lock())
+    //if (!this->_mutex.try_lock())
         throw std::exception();
-    uint32_t id = this->_pool->AddClient(client);
-    this->_mutex.unlock();
-    return (id);
+    //uint32_t id = this->_pool->AddClient(client);
+    //this->_mutex.unlock();
+    return (0);
+    //return (id);
 }

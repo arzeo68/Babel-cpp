@@ -51,8 +51,8 @@ add_executable(babel_server
         server/src/DB/Exception.cpp
         server/src/API/Route/Route.cpp
         server/src/API/Route/Route.hpp
-        server/src/API/Router/Router.cpp
-        server/src/API/Router/Router.hpp
+        server/src/API/Route/Router.cpp
+        server/src/API/Route/Router.hpp
         server/src/User/User.cpp
         server/src/User/User.hpp
         server/src/Main.cpp
@@ -60,7 +60,12 @@ add_executable(babel_server
         server/src/Network/Client.hpp
         server/src/Network/Exception.cpp
         server/src/Network/Network.cpp
-        server/src/Network/Network.hpp)
+        server/src/Network/Network.hpp
+        server/src/API/Route/List/Listing.cpp
+        server/src/API/Route/List/Listing.hpp
+        server/src/User/Pool.cpp
+        server/src/User/Pool.hpp
+        common/Protocol.hpp server/src/API/Route/Arguments.hpp)
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
     set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)

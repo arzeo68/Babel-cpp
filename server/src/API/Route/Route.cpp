@@ -14,7 +14,7 @@ Server::Route::Route::Route(const std::string &name,
 
 Common::Response
 Server::Route::Route::ExecuteHandler(Server::Network::Client& client,
-                                     Common::RouteHandlerArgs const &args) const {
+                                     Arguments::RouteHandlerArgs const &args) const {
     return (this->_handler(client, args));
 }
 

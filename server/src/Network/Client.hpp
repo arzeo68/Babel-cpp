@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <mutex>
+#include "common/Protocol.hpp"
 #include "Network.hpp"
 #include "server/src/DB/Database.hpp"
 
@@ -22,18 +23,14 @@ namespace Server::Network {
                         const std::shared_ptr<Network> &network);
 
         Network::SharedPtrSocket_t GetSocket();
-
-        //std::string &GetReadBuffer();
         void StartRead();
-
-        void Write(const std::string &message);
-
+        void Write(const Common::Response& response);
         Server::Database::Database &GetDatabase();
 
         private:
         void Read(const boost::system::error_code &error,
                   std::size_t bytes_transferred,
-                  Network::SharedPtrMessageArr_t message);
+                  const Network::SharedPtrMessageArr_t& message);
 
         Network::SharedPtrSocket_t _socket;
         Server::Database::Database &_database;

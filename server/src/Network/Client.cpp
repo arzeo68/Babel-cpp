@@ -31,33 +31,33 @@ void Server::Network::Client::StartRead() {
     Network::SharedPtrMessageArr_t message = std::make_shared <Network::MessageArr_t>();
 
     this->_socket->async_receive(boost::asio::buffer(*message),
-                                 [this, message](
+                                 [self = shared_from_this(), message](
                                      const boost::system::error_code &err,
                                      std::size_t bytes_transferred) {
-                                     this->Read(err, bytes_transferred,
+                                     self->Read(err, bytes_transferred,
                                                 message);
                                  });
 }
 
 void Server::Network::Client::Read(const boost::system::error_code &error,
-                                   std::size_t,
-                                   Network::SharedPtrMessageArr_t message) {
-    //std::cerr << "Bytes transferred: " << std::to_string(bytes_transferred) << std::endl;
+                                   std::size_t bytes_transferred,
+                                   const Network::SharedPtrMessageArr_t& message) {
+    std::cerr << "Bytes transferred: " << std::to_string(bytes_transferred) << std::endl;
     if (error)
         throw InternalError(error);
-    std::cout << "text read: '" << std::string(message->begin(), message->end())
-              << "'"
-              << "from :" << this << std::endl;
     auto protocol = Server::Router::FormatRouteArgs(
         std::string(message->begin(), message->end()));
-    this->_router.Execute(protocol,
+    auto response = this->_router.Execute(protocol,
                           Server::Router::SplitRawData(protocol),
                           *this);
+    this->Write(response);
     this->StartRead();
 }
 
-void Server::Network::Client::Write(const std::string &message) {
-    this->_socket->async_send(boost::asio::buffer(message),
+void Server::Network::Client::Write(const Common::Response& response) {
+    std::vector<boost::asio::const_buffer> buffers;
+    buffers.emplace_back(boost::asio::buffer(&response, sizeof(response)));
+    this->_socket->async_send(buffers,
                               [](const boost::system::error_code &error,
                                  std::size_t) {
                                   if (error)

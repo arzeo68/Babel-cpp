@@ -13,6 +13,7 @@
 #include <map>
 #include <memory>
 #include "common/Protocol.hpp"
+#include "server/src/API/Route/Arguments.hpp"
 #include "server/src/API/Route/Route.hpp"
 #include "server/src/API/Route/List/Listing.hpp"
 
@@ -23,9 +24,9 @@ namespace Server {
         ~Router() = default;
 
         static Common::PackageServer FormatRouteArgs(const std::string& string);
-        static Common::RouteHandlerArgs SplitRawData(const Common::PackageServer& protocol);
+        static Route::Arguments::RouteHandlerArgs SplitRawData(const Common::PackageServer& protocol);
         Common::Response Execute(const Common::PackageServer &protocol,
-                                 Common::RouteHandlerArgs const &args,
+                                 Route::Arguments::RouteHandlerArgs const &args,
                                  Server::Network::Client& client);
 
         private:
