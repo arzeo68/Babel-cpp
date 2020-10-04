@@ -38,7 +38,6 @@ std::shared_ptr<Babel::Audio::soundEncoded>Opus::encode(std::shared_ptr<Babel::A
         encoded->setSize(0);
         return encoded;
     }
-    std::cout << data->getSize() << std::endl;
     encoded->resizeBuffer(data->getSize());
     int err = opus_encode_float(_encoder, data->getData(), 480, encoded->getEncodedBuffer().data(), data->getSize());
 
@@ -47,6 +46,7 @@ std::shared_ptr<Babel::Audio::soundEncoded>Opus::encode(std::shared_ptr<Babel::A
         throw ThrowError("OPUS","failed to encode");
     }
     encoded->setSize(err);
+    std::cout << "size:  "<<encoded->getEncodedBuffer().size() << std::endl;
     return encoded;
 }
 
@@ -63,6 +63,5 @@ std::shared_ptr<Babel::Audio::soundDecoded>Opus::decode(std::shared_ptr<Babel::A
     decode->setSize(err);
     if (err < 0)
         throw ThrowError("OPUS","failed to decode");
-    std::cout << "real exist" << std::endl;
     return decode;
 }
