@@ -8,7 +8,7 @@
 #include <boost/algorithm/string.hpp>
 #include "Router.hpp"
 
-Common::Response Server::Router::Execute(const Common::Protocol &protocol,
+Common::Response Server::Router::Execute(const Common::PackageServer &protocol,
                                          Common::RouteHandlerArgs const &args,
                                          Server::Network::Client& client) {
     if (protocol.routeId >= Common::MAX_ROUTE_ID)
@@ -25,13 +25,13 @@ Common::Response Server::Router::Execute(const Common::Protocol &protocol,
         return (this->_routes[protocol.routeId].ExecuteHandler(client, args));
 }
 
-Common::Protocol Server::Router::FormatRouteArgs(const std::string &string) {
-    auto protocol = *(struct Common::Protocol *) string.data();
+Common::PackageServer Server::Router::FormatRouteArgs(const std::string &string) {
+    auto protocol = *(struct Common::PackageServer *) string.data();
     return protocol;
 }
 
 Common::RouteHandlerArgs
-Server::Router::SplitRawData(const Common::Protocol &protocol) {
+Server::Router::SplitRawData(const Common::PackageServer &protocol) {
     Common::RouteHandlerArgs handler;
     std::vector<std::string> subStr;
     boost::split(subStr, std::string(protocol.args), boost::is_any_of("|"));

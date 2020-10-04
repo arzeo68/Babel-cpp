@@ -22,9 +22,9 @@ namespace Server {
         Router() = default;
         ~Router() = default;
 
-        static Common::Protocol FormatRouteArgs(const std::string& string);
-        static Common::RouteHandlerArgs SplitRawData(const Common::Protocol& protocol);
-        Common::Response Execute(const Common::Protocol &protocol,
+        static Common::PackageServer FormatRouteArgs(const std::string& string);
+        static Common::RouteHandlerArgs SplitRawData(const Common::PackageServer& protocol);
+        Common::Response Execute(const Common::PackageServer &protocol,
                                  Common::RouteHandlerArgs const &args,
                                  Server::Network::Client& client);
 
