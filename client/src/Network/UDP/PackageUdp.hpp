@@ -9,10 +9,6 @@
 
 class PackageUdp: public IPackage<std::string>
 {
-    public:
-    std::string toString(std::string t) override;
-
-    std::string toPackage(const std::string &string) override;
 };
 
 #endif //BABEL_PACKAGEUDP_HPP
