@@ -48,7 +48,7 @@ include_directories(test/build)
 add_executable(babel_client ${SOURCES_CLIENT} )
 add_executable(babel_server ${SOURCES_SERVER} common/Log.cpp common/Log.hpp)
 set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
-set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)
+#set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
