@@ -17,8 +17,7 @@ Server::Network::Client::Client(boost::asio::io_service &service,
     : _database(database),
       _router(router),
       _network_parent(network) {
-    this->_socket = Network::SharedPtrSocket_t(
-        std::make_shared<boost::asio::ip::tcp::socket>(service));
+    this->_socket = std::make_shared<boost::asio::ip::tcp::socket>(service);
 }
 
 Server::Network::Network::SharedPtrSocket_t
@@ -34,8 +33,10 @@ void Server::Network::Client::StartRead() {
                                  [self = shared_from_this(), message](
                                      const boost::system::error_code &err,
                                      std::size_t bytes_transferred) {
+                                     std::cout << "start read lambda" << std::endl;
                                      self->Read(err, bytes_transferred,
                                                 message);
+                                     std::cout << "end read lambda" << std::endl;
                                  });
 }
 
@@ -43,8 +44,10 @@ void Server::Network::Client::Read(const boost::system::error_code &error,
                                    std::size_t bytes_transferred,
                                    const Network::SharedPtrMessageArr_t& message) {
     std::cerr << "Bytes transferred: " << std::to_string(bytes_transferred) << std::endl;
-    if (error)
-        throw InternalError(error);
+    if (error) {
+        std::cerr << "read: " << error << std::endl;
+        return;
+    }
     auto protocol = Server::Router::FormatRouteArgs(
         std::string(message->begin(), message->end()));
     auto response = this->_router.Execute(protocol,
@@ -61,10 +64,20 @@ void Server::Network::Client::Write(const Common::Response& response) {
                               [](const boost::system::error_code &error,
                                  std::size_t) {
                                   if (error)
-                                      throw InternalError(error);
+                                      std::cerr << "write " << error << std::endl;
                               });
 }
 
 Server::Database::Database &Server::Network::Client::GetDatabase() {
     return (this->_database);
+}
+
+Server::Network::Client::~Client() {
+    std::cout << this << " -> DESTRUCTOR CALLED IN CLIENT" << std::endl;
+    //boost::system::error_code ec;
+    //this->_socket->cancel(ec);
+    //this->_socket->shutdown(boost::asio::socket_base::shutdown_type::shutdown_both, ec);
+    //this->_socket->close(ec);
+    //if (ec)
+    //    std::cerr << "Shutdown client err: " << ec << std::endl;
 }

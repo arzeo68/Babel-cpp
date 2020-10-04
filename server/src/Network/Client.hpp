@@ -21,6 +21,7 @@ namespace Server::Network {
                         Server::Database::Database &database,
                         Server::Router &router,
                         const std::shared_ptr<Network> &network);
+        ~Client();
 
         Network::SharedPtrSocket_t GetSocket();
         void StartRead();

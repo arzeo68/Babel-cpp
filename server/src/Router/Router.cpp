@@ -11,8 +11,8 @@
 Common::Response Server::Router::Execute(const Common::PackageServer &protocol,
                                          Route::Arguments::RouteHandlerArgs const &args,
                                          Server::Network::Client& client) {
-    printf("Protocol found:\n0x%X - '%u' - '%u' - '%u' - '%s'\n", protocol.magic,
-           protocol.id, protocol.method, protocol.command, protocol.args);
+    //printf("Protocol found:\n0x%X - '%u' - '%u' - '%u' - '%s'\n", protocol.magic,
+    //       protocol.id, protocol.method, protocol.command, protocol.args);
     if (protocol.id >= Common::MAX_ROUTE_ID)
         return (Common::Response {
             Common::HTTPCodes_e::NOT_FOUND,

@@ -8,6 +8,7 @@
 #ifndef BABEL_NETWORK_HPP
 #define BABEL_NETWORK_HPP
 
+#include <iostream>
 #include <boost/asio.hpp>
 #include <list>
 #include <memory>
@@ -35,6 +36,7 @@ namespace Server::Network {
         typedef std::shared_ptr<MessageArr_t> SharedPtrMessageArr_t;
 
         explicit Network(uint32_t port);
+        ~Network();
 
         void Run();
 
@@ -43,6 +45,7 @@ namespace Server::Network {
         void Stop();
 
         uint32_t AddUserToPool(const std::shared_ptr<Client> &client);
+        //void RemoveClient()
 
         private:
         void AcceptClient(const boost::system::error_code &error,
@@ -50,10 +53,11 @@ namespace Server::Network {
 
         boost::asio::io_service _service;
         boost::asio::ip::tcp::acceptor _acceptor;
-        //std::list<SharedPtrClient_t> _clients;
+        std::list<SharedPtrClient_t> _clients;
         Server::Database::Database _database;
         std::shared_ptr<Server::Router> _router;
-        //std::mutex _mutex;
+        boost::asio::signal_set _signalSet;
+        std::mutex _mutex;
         //std::shared_ptr<User::Pool> _pool;
         //std::map<uint32_t, std::enable_shared_from_this<Network>> _pool; //
     };

@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     //boost::asio::write(sock, buffers);
     std::cout << "Write done" << std::endl;
     std::array<char, sizeof(Common::Response)> bb = {};
-    sleep(3);
+    sleep(50);
     std::cout << "let met reead" << std::endl;
     sock->read_some(boost::asio::buffer(bb));
     auto r = *(struct Common::Response *) bb.data();

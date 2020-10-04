@@ -9,16 +9,16 @@
 #include "Database.hpp"
 
 Server::Database::Database::Database() : _handler(nullptr) {
-    uint32_t rtn = sqlite3_open("database.db", &this->_handler);
-    if (rtn != SQLITE_OK)
-        throw Exception::Opening(rtn);
+    uint32_t code = sqlite3_open("database.db", &this->_handler);
+    if (code != SQLITE_OK)
+        throw Exception::Opening(code);
     std::cout << "Connected to the database" << std::endl;
     this->RegisterTables();
 }
 
 Server::Database::Database::~Database() {
+    std::cout << "Database dstr is called" << std::endl;
     sqlite3_close(this->_handler);
-    this->_handler = nullptr;
 }
 
 
@@ -30,6 +30,7 @@ void Server::Database::Database::ExecuteQuery(const std::string &query,
                                  callback_arg, &error_msg);
     if (code != SQLITE_OK || error_msg != nullptr)
         throw Exception::Query(code, error_msg, query);
+    sqlite3_free(error_msg);
 }
 
 void Server::Database::Database::RegisterTables() {
