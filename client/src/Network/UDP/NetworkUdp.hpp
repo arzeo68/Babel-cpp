@@ -7,7 +7,7 @@
 
 #include "PackageUdp.hpp"
 
-class NetworkUDP: public INetwork<PackageUdp>
+class NetworkUDP: public INetwork<PackageUdp, PackageUdp>
 {
     public:
     bool startConnection(const std::string &ip, const std::string &port) override;

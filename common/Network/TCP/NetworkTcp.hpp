@@ -7,11 +7,11 @@
 
 #include "PackageTcp.hpp"
 
-class NetworkTcp: public INetwork<PackageTcp> {
+class NetworkTcp: public INetwork<PackageTcp, PackageTcp> {
     public:
     bool startConnection(const std::string &ip, const std::string &port) override;
 
-    bool write(PackageTcp aPackage) override;
+    bool write(PackageTcp) override;
 
     PackageTcp read() override;
 };
