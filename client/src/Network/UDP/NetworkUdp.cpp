@@ -8,13 +8,3 @@ bool NetworkUDP::startConnection(const std::string &ip, const std::string &port)
 {
     return false;
 }
-
-bool NetworkUDP::write(std::string send)
-{
-    return false;
-}
-
-Babel::Audio::packageAudio_t *NetworkUDP::read()
-{
-    return nullptr;
-}
