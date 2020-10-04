@@ -50,7 +50,7 @@ add_executable(babel_client ${SOURCES_CLIENT} )
 set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
 #set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
-install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+#install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
 #############################################################
 target_link_libraries(babel_client ${CONAN_LIBS})
@@ -58,6 +58,6 @@ target_link_libraries(babel_client Qt5::Widgets Qt5::Network Qt5::Core Qt5::Gui)
 target_include_directories(babel_client PRIVATE inc ../common/inc)
 
 #############################################################
-target_link_libraries(babel_server ${CONAN_LIBS})
+#target_link_libraries(babel_server ${CONAN_LIBS})
 #target_link_libraries(babel_server Qt5::Widgets Qt5::Network Qt5::Core Qt5::Gui)
-target_include_directories(babel_server PRIVATE inc ../common/inc)
+#target_include_directories(babel_server PRIVATE inc ../common/inc)
