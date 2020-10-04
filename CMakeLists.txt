@@ -50,7 +50,8 @@ add_executable(babel_client ${SOURCES_CLIENT}
         client/src/Audio/Opus/Opus.cpp
         client/src/Audio/Opus/Opus.hpp
         common/Error/ThrowError.cpp
-        common/Error/ThrowError.cpp)
+        common/Error/ThrowError.cpp
+        client/src/Network/INetwork.hpp)
 add_executable(babel_server ${SOURCES_SERVER})
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)
