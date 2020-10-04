@@ -6,14 +6,23 @@
 #define BABEL_PACKAGETCP_HPP
 
 #include "client/src/Network/INetwork.hpp"
+<<<<<<<< HEAD:common/Network/TCP/PackageTcp.hpp
+#include "../../Package/IPackage.hpp"
+
+
+class PackageTcp: public IPackage<std::string, std::string> {
+========
 #include "client/src/Network/IPackage.hpp"
+#include "common/TCP/CommonPackages.hpp"
 
 
-class PackageTcp: public IPackage<std::string &, std::string &> {
+class PackageTcp: public IPackage<Common::PackageServer *, Common::Response> {
+>>>>>>>> 70d82ac... feat(client): adding secodary template:client/src/Network/TCP/PackageTcp.hpp
     public:
-    const std::string &toString(std::string &send) override;
+    std::string toString(Common::PackageServer *send) override;
+    const char *toString2(Common::PackageServer *send);
 
-    std::string &toPackage(std::string &string) override;
+    Common::Response toPackage(std::string &string) override;
 };
 
 #endif //BABEL_PACKAGETCP_HPP
