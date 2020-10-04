@@ -5,10 +5,10 @@ endif ()
 cmake_minimum_required(VERSION 3.5.1)
 project(babel)
 
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build/bin)
 set(CMAKE_CXX_STANDARD 17)
 
-add_definitions("-fPIC")
 
 if(MSVC)
     set(CMAKE_EXE_LINKER_FLAGS
@@ -45,8 +45,10 @@ file(GLOB_RECURSE SOURCES_SERVER RELATIVE ${CMAKE_SOURCE_DIR} "server/*.cpp")
 # UI.h  PATH
 include_directories(test/build)
 
-add_executable(babel_client ${SOURCES_CLIENT} client/src/Audio/Opus/Opus.cpp client/src/Audio/Opus/Opus.hpp common/Log.cpp common/Log.hpp)
+add_executable(babel_client ${SOURCES_CLIENT} )
 add_executable(babel_server ${SOURCES_SERVER} common/Log.cpp common/Log.hpp)
+set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
+set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
