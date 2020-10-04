@@ -7,10 +7,11 @@
 
 #include "PackageUdp.hpp"
 
-class NetworkUDP: public INetwork<PackageUdp, PackageUdp>
+    class NetworkUDP: public INetwork<const std::string &, std::string &>
 {
     public:
     bool startConnection(const std::string &ip, const std::string &port) override;
-};
+
+    };
 
 #endif //BABEL_NETWORKUDP_HPP
