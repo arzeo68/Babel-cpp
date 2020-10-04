@@ -4,14 +4,17 @@
 
 #ifndef BABEL_PORTAUDIO_HPP
 #define BABEL_PORTAUDIO_HPP
-#include "../data.hpp"
+
 #include <portaudio.h>
 #include <vector>
 #include <cstdint>
 #include <memory>
 #include <mutex>
 #include <queue>
-#include <client/src/Audio/portAudio/AAudio/AAudio.hpp>
+
+#include "client/src/Audio/portAudio/AAudio/AAudio.hpp"
+#include "../data.hpp"
+
 
 int portAudioTest(void);
 

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <cstring>
+
 #include "PortAudio.hpp"
 
 PortAudio::PortAudio()

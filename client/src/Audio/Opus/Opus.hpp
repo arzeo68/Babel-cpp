@@ -4,14 +4,16 @@
 
 #ifndef BABEL_OPUS_HPP
 #define BABEL_OPUS_HPP
-#include "../data.hpp"
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include "memory"
+#include <cstdlib>
+#include <cerrno>
+#include <cstring>
+#include <memory>
 #include <opus.h>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
+
+#include "../data.hpp"
+
 class Opus
 {
     public:

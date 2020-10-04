@@ -2,6 +2,8 @@
 // Created by alexis on 20/09/2020.
 //
 
+#include <common/Error/ThrowError.hpp>
+
 #include "Opus.hpp"
 
 Opus::Opus()
@@ -10,13 +12,14 @@ Opus::Opus()
     _encoder = opus_encoder_create(_sampleRate, _channel, OPUS_APPLICATION_VOIP, &_err);
     if (_err < 0)
     {
-        std::cout << " opus failed to create the encoder error: " << opus_strerror(_err) << std::endl;
+        throw ThrowError("OPUS","failed to create the encoder");
     }
     // DECODER
     _decoder = opus_decoder_create(48000, _channel, &_err);
     if (_err < 0)
     {
-        std::cout << " opus failed to create the decoder error: " << opus_strerror(_err) << std::endl;
+        throw ThrowError("OPUS","failed to create the decoder");
+
     }
     std::cout << "opus initialization works" << std::endl;
 }
@@ -41,7 +44,7 @@ std::shared_ptr<Babel::Audio::soundEncoded>Opus::encode(std::shared_ptr<Babel::A
 
     if (err < 0)
     {
-        std::cerr << "error faut throw: " << err << std::endl;
+        throw ThrowError("OPUS","failed to encode");
     }
     encoded->setSize(err);
     return encoded;
@@ -59,7 +62,7 @@ std::shared_ptr<Babel::Audio::soundDecoded>Opus::decode(std::shared_ptr<Babel::A
     int err = opus_decode_float(_decoder, data->getEncodedBuffer().data(), data->getSize(), decode->getSoundBuffer().data(), 480, 0) * 2;
     decode->setSize(err);
     if (err < 0)
-        std::cerr << "error faut throw: " << err << std::endl;
+        throw ThrowError("OPUS","failed to decode");
     std::cout << "real exist" << std::endl;
     return decode;
 }
