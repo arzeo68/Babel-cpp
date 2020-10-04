@@ -6,8 +6,9 @@
 #define BABEL_PACKAGEUDP_HPP
 
 #include <client/src/Network/INetwork.hpp>
+#include <common/Package/IPackage.hpp>
 
-class PackageUdp: public IPackage<std::string>
+class PackageUdp: public IPackage<std::string, std::string>
 {
     public:
     std::string toString(std::string t) override;
