@@ -11,10 +11,6 @@ class NetworkUDP: public INetwork<PackageUdp, PackageUdp>
 {
     public:
     bool startConnection(const std::string &ip, const std::string &port) override;
-
-    bool write(PackageUdp Package) override;
-
-    PackageUdp read() override;
 };
 
 #endif //BABEL_NETWORKUDP_HPP

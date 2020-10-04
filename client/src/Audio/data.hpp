@@ -6,6 +6,8 @@
 #define BABEL_DATA_HPP
 
 #include <vector>
+#include <bits/types/time_t.h>
+#include <ctime>
 
 namespace Babel
 {
@@ -89,6 +91,14 @@ namespace Babel
             int _size;
             std::vector<float> _soundBuffer;
         };
+        #pragma pack(push,1)
+        typedef struct packageAudio_s {
+            u_int16_t magicByte;
+            u_int16_t idSender;
+            std::time_t timestamp;
+            unsigned char voice[960];
+        } packageAudio_t;
+        #pragma pack(pop)
     }
 }
 
