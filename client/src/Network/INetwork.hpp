@@ -16,8 +16,7 @@ class IPackage {
 };
 
 template <typename T>
-class INetwork : public QObject
-{
+class INetwork : public QObject {
     public:
     virtual ~INetwork() = default;
     virtual bool startConnection(const std::string &ip, const std::string &port) = 0;

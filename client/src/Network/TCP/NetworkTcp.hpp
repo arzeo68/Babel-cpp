@@ -7,8 +7,7 @@
 
 #include "PackageTcp.hpp"
 
-class NetworkTcp: public INetwork<PackageTcp>
-{
+class NetworkTcp: public INetwork<PackageTcp> {
     public:
     bool startConnection(const std::string &ip, const std::string &port) override;
 

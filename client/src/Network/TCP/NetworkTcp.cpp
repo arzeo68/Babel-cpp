@@ -4,17 +4,14 @@
 
 #include "NetworkTcp.hpp"
 
-bool NetworkTcp::startConnection(const std::string &ip, const std::string &port)
-{
+bool NetworkTcp::startConnection(const std::string &ip, const std::string &port) {
     return false;
 }
 
-bool NetworkTcp::write(PackageTcp aPackage)
-{
+bool NetworkTcp::write(PackageTcp aPackage) {
     return false;
 }
 
-PackageTcp NetworkTcp::read()
-{
+PackageTcp NetworkTcp::read() {
     return PackageTcp();
 }

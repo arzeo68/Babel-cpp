@@ -7,8 +7,7 @@
 
 #include "../INetwork.hpp"
 
-class PackageTcp: public IPackage<std::string>
-{
+class PackageTcp: public IPackage<std::string> {
     public:
     std::string toString(std::string t) override;
 
