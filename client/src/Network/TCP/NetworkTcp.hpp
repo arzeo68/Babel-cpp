@@ -7,13 +7,13 @@
 
 #include "PackageTcp.hpp"
 
-class NetworkTcp: public INetwork<std::string const &, std::string &> {
+class NetworkTcp: public INetwork<PackageTcp, PackageTcp> {
     public:
     bool startConnection(const std::string &ip, const std::string &port) override;
 
-    bool write(std::string const &) override;
+    bool write(PackageTcp) override;
 
-    std::string &read() override;
+    PackageTcp read() override;
 };
 
 #endif //BABEL_NETWORKTCP_HPP

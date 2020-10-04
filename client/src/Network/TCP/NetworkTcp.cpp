@@ -8,9 +8,10 @@ bool NetworkTcp::startConnection(const std::string &ip, const std::string &port)
     return false;
 }
 
-std::string &NetworkTcp::read() {
+bool NetworkTcp::write(PackageTcp aPackage) {
+    return false;
 }
 
-bool NetworkTcp::write(const std::string &) {
-    return false;
+PackageTcp NetworkTcp::read() {
+    return PackageTcp();
 }
