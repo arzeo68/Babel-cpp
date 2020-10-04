@@ -28,9 +28,10 @@ namespace Server::Database {
         Database();
         ~Database();
 
-        void AddUser(const std::string& name, const std::string& password);
+        bool ConnectUser(const std::string &name, const std::string &password);
+
+        void AddUser(const std::string &name, const std::string &password);
         bool UserExists(const std::string& name);
-        // GetUser
         void UpdateStatus(uint16_t id, const std::string& status);
         std::string GetStatus(uint16_t id);
         [[maybe_unused]] void DeleteUsers();

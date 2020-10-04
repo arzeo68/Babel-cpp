@@ -77,3 +77,20 @@ bool Server::Database::Database::UserExists(const std::string &name) {
         }, &exists);
     return (exists);
 }
+
+// https://github.com/mpdn/sqlite-digest/blob/master/digest.c
+// Encoding SHA526
+bool Server::Database::Database::ConnectUser(const std::string &name,
+                                             const std::string &password) {
+    bool exists = false;
+    this->ExecuteQuery(
+        "SELECT * FROM " + USER_TABLE_STR + " WHERE name='" + name + "'"
+                                                                     "AND password='" +
+        password + "';",
+        [](void *arg, int size, char **, char **) -> int {
+            bool *existing = reinterpret_cast<bool *>(arg);
+            *existing = size != 0;
+            return (0);
+        }, &exists);
+    return (exists);
+}

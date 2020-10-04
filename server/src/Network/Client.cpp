@@ -12,10 +12,13 @@
 
 Server::Network::Client::Client(boost::asio::io_service &service,
                                 Server::Database::Database &database,
-                                Server::Router &router) : _database(database),
-                                                          _router(router) {
+                                Server::Router &router,
+                                const std::shared_ptr<Network> &network)
+    : _database(database),
+      _router(router),
+      _network_parent(network) {
     this->_socket = Network::SharedPtrSocket_t(
-        std::make_shared <boost::asio::ip::tcp::socket>(service));
+        std::make_shared<boost::asio::ip::tcp::socket>(service));
 }
 
 Server::Network::Network::SharedPtrSocket_t

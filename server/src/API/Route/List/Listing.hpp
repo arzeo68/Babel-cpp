@@ -14,6 +14,12 @@
 namespace Server::Route::Listing {
     Common::Response User(Server::Network::Client &client,
                           const Common::RouteHandlerArgs &arg);
+
+    Common::Response Login(Server::Network::Client &client,
+                           const Common::RouteHandlerArgs &arg);
+
+    Common::Response Register(Server::Network::Client &client,
+                              const Common::RouteHandlerArgs &arg);
 }
 
 #endif
