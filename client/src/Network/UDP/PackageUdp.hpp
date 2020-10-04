@@ -6,14 +6,14 @@
 #define BABEL_PACKAGEUDP_HPP
 
 #include <client/src/Network/INetwork.hpp>
-#include <common/Package/IPackage.hpp>
+#include <client/src/Network/IPackage.hpp>
 
-class PackageUdp: public IPackage<std::string, std::string>
+class PackageUdp: public IPackage<std::string &, std::string &>
 {
     public:
-    std::string toString(std::string t) override;
+    const std::string &toString(std::string &send) override;
 
-    std::string toPackage(const std::string &string) override;
+    std::string &toPackage(std::string &string) override;
 };
 
 #endif //BABEL_PACKAGEUDP_HPP

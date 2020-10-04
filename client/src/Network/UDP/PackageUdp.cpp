@@ -5,12 +5,11 @@
 #include "PackageUdp.hpp"
 
 
-std::string PackageUdp::toString(std::string t)
+
+const std::string &PackageUdp::toString(std::string &send)
 {
-    return std::string();
 }
 
-std::string PackageUdp::toPackage(const std::string &string)
+std::string &PackageUdp::toPackage(std::string &string)
 {
-    return std::string();
 }

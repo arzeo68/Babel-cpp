@@ -11,8 +11,8 @@ template <typename SEND, typename RECEIVE>
 class IPackage {
     public:
     virtual ~IPackage() = default;
-    virtual std::string toString(SEND) = 0;
-    virtual RECEIVE toPackage(const std::string &) = 0;
+    virtual const std::string &toString(SEND) = 0;
+    virtual RECEIVE toPackage(std::string &) = 0;
 };
 
 #endif //BABEL_IPACKAGE_HPP
