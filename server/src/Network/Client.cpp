@@ -33,10 +33,12 @@ void Server::Network::Client::StartRead() {
                                  [self = shared_from_this(), message](
                                      const boost::system::error_code &err,
                                      std::size_t bytes_transferred) {
-                                     std::cout << "start read lambda" << std::endl;
-                                     self->Read(err, bytes_transferred,
-                                                message);
-                                     std::cout << "end read lambda" << std::endl;
+                                         std::cout << "start read lambda"
+                                                   << std::endl;
+                                         self->Read(err, bytes_transferred,
+                                                    message);
+                                         std::cout << "end read lambda"
+                                                   << std::endl;
                                  });
 }
 

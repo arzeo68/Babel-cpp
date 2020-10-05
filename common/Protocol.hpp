@@ -46,7 +46,7 @@ namespace Common {
 
     static const constexpr uint8_t MAX_ROUTE_ID = 2;
     typedef uint8_t HTTPMethod_t;
-    enum Method : HTTPMethod_t {
+    enum class Method : HTTPMethod_t {
         GET,
         DELETE,
         POST,
@@ -62,8 +62,6 @@ namespace Common {
         char args[g_maxMessageLength];
     };
     #pragma pack(pop)
-
-
 }
 
 #endif

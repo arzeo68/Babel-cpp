@@ -44,7 +44,11 @@ file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
 # UI.h  PATH
 include_directories(test/build)
 
-add_executable(babel_client ${SOURCES_CLIENT} client/main.cpp)
+add_executable(babel_client ${SOURCES_CLIENT} client/main.cpp
+        common/Protocol.hpp
+        common/Log.cpp
+        common/Log.hpp)
+
 add_executable(babel_server
         server/src/DB/Database.cpp
         server/src/DB/Database.hpp
@@ -65,7 +69,9 @@ add_executable(babel_server
         server/src/API/Route/List/Listing.hpp
         server/src/User/Pool.cpp
         server/src/User/Pool.hpp
-        common/Protocol.hpp server/src/API/Route/Arguments.hpp)
+        common/Protocol.hpp
+        server/src/API/Route/Arguments.hpp)
+
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
     set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)
