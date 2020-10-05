@@ -7,13 +7,14 @@
 
 #include "client/src/Network/INetwork.hpp"
 #include "client/src/Network/IPackage.hpp"
+#include "common/TCP/CommonPackages.hpp"
 
 
-class PackageTcp: public IPackage<std::string &, std::string &> {
+class PackageTcp: public IPackage<Common::PackageServer *, Common::Response *> {
     public:
-    const std::string &toString(std::string &send) override;
+    const std::string &toString(Common::PackageServer *send) override;
 
-    std::string &toPackage(std::string &string) override;
+    Common::Response *toPackage(std::string &string) override;
 };
 
 #endif //BABEL_PACKAGETCP_HPP

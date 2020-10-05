@@ -5,10 +5,11 @@
 
 #include "PackageTcp.hpp"
 
-const std::string &PackageTcp::toString(std::string &send)
-{
+const std::string &PackageTcp::toString(Common::PackageServer *send) {
+    std::string str((char *)send);
+    return str;
 }
 
-std::string &PackageTcp::toPackage(std::string &string)
-{
+Common::Response *PackageTcp::toPackage(std::string &string) {
+    return (Common::Response *)string.c_str();
 }
