@@ -20,14 +20,14 @@ class LoginScene : public AScene
 public:
     explicit LoginScene(MainWindow *parent = Q_NULLPTR);
 
-    void initWidgets();
-    void initConnect();
-
 private slots:
     void submitLogin();
     void resetLogin();
 
 private:
+    void initWidgets();
+    void initConnect();
+
     enum InputList {
         IN_USERNAME,
         IN_PASS,
