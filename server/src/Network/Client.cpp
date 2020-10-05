@@ -17,6 +17,7 @@ Server::Network::Client::Client(boost::asio::io_service &service,
     : _database(database),
       _router(router),
       _network_parent(network) {
+    printf("Client constructor, ptr: %p\n", this);
     this->_socket = std::make_shared<boost::asio::ip::tcp::socket>(service);
 }
 
@@ -47,7 +48,8 @@ void Server::Network::Client::Read(const boost::system::error_code &error,
                                    const MessageArr_t& message) {
     std::cerr << "Bytes transferred: " << std::to_string(bytes_transferred) << std::endl;
     if (error) {
-        std::cerr << "read: " << error << std::endl;
+        std::cerr << "read: " << error.message() << std::endl;
+        this->_network_parent->RemoveClient(this);
         return;
     }
     auto protocol = Server::Router::FormatRouteArgs(
@@ -63,10 +65,12 @@ void Server::Network::Client::Write(const Common::Response& response) {
     std::vector<boost::asio::const_buffer> buffers;
     buffers.emplace_back(boost::asio::buffer(&response, sizeof(response)));
     this->_socket->async_send(buffers,
-                              [](const boost::system::error_code &error,
+                              [this](const boost::system::error_code &error,
                                  std::size_t) {
-                                  if (error)
-                                      std::cerr << "write " << error << std::endl;
+                                  if (error) {
+                                      std::cerr << "write " << error.message() << std::endl;
+                                      this->_network_parent->RemoveClient(this);
+                                  }
                               });
 }
 

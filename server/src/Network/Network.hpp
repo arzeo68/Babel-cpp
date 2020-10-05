@@ -42,7 +42,7 @@ namespace Server::Network {
         void Stop();
 
         uint32_t AddUserToPool(const std::shared_ptr<Client> &client);
-        //void RemoveClient()
+        void RemoveClient(const Client *client);
 
         private:
         void AcceptClient(const boost::system::error_code &error,

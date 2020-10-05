@@ -27,7 +27,7 @@ Server::Network::Network::Network(unsigned int port) : _acceptor(_service,
 
 void Server::Network::Network::Run() {
     this->_signalSet.async_wait([self = shared_from_this()] (const boost::system::error_code& error, int signal)  {
-        printf("Catch signal: %i\n", signal);
+        //printf("Catch signal: %i\n", signal);
         if (error)
            std::cerr << "Error during catching signals: " << error << std::endl;
         if (Server::Network::Network::SERVER_RUNNING)
@@ -80,6 +80,7 @@ Server::Network::Network::AcceptClient(const boost::system::error_code &error,
               << client->GetSocket()->remote_endpoint().address().to_string()
               << std::endl;
     client->StartRead();
+    this->Run();
 }
 
 void Server::Network::Network::Start() {
@@ -96,6 +97,7 @@ void Server::Network::Network::Stop() {
     for (auto &i : this->_clients) {
         boost::system::error_code ec;
         i->GetSocket()->close(ec);
+        std::cout << "Force stop: " << ec.message() << std::endl;
     }
     this->_clients.clear();
     this->_mutex.unlock();
@@ -114,4 +116,18 @@ Server::Network::Network::AddUserToPool(const std::shared_ptr<Client> &client) {
 
 Server::Network::Network::~Network() {
     std::cout << "network dstr is called" << std::endl;
+}
+
+void Server::Network::Network::RemoveClient(const Client *client) {
+    this->_mutex.lock();
+    for (auto &i : this->_clients)
+        if (i.get() == client) {
+            boost::system::error_code ec;
+            i->GetSocket()->close(ec);
+            std::cerr << "Remove: " << ec.message() << std::endl;
+            this->_clients.remove(i);
+            this->_mutex.unlock();
+            return;
+        }
+    this->_mutex.unlock();
 }
