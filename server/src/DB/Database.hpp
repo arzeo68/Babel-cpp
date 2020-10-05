@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <string>
 #include <sqlite3.h>
+#include "common/Log.hpp"
 
 namespace Server::Database {
     namespace User {
@@ -25,7 +26,7 @@ namespace Server::Database {
     class Database {
         public:
         typedef int (*DatabaseCallback_t)(void*, int, char**, char**);
-        Database();
+        Database(Common::Log::Log& logger);
         ~Database();
 
         bool ConnectUser(const std::string &name, const std::string &password);
@@ -42,6 +43,7 @@ namespace Server::Database {
 
         private:
         sqlite3* _handler;
+        Common::Log::Log& _logger;
         void RegisterTables();
         void ExecuteQuery(const std::string& query,
                           DatabaseCallback_t callback = nullptr,

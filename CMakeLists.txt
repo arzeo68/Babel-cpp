@@ -70,6 +70,8 @@ add_executable(babel_server
         server/src/User/Pool.cpp
         server/src/User/Pool.hpp
         common/Protocol.hpp
+        common/Log.cpp
+        common/Log.hpp
         server/src/API/Route/Arguments.hpp)
 
 if (MSVC)

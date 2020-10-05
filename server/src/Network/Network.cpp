@@ -13,99 +13,92 @@
 #include "Client.hpp"
 #include "../User/Pool.hpp"
 
-bool Server::Network::Network::SERVER_RUNNING = false;
 
-Server::Network::Network::Network(unsigned int port) : _acceptor(_service,
-                                                                 boost::asio::ip::tcp::endpoint(
-                                                                     boost::asio::ip::tcp::v4(),
-                                                                     port)),
-                                                                     _signalSet(_service, SIGINT, SIGTERM){
-    this->_router = std::make_shared<Server::Router>();
+Server::Network::Network::Network(uint32_t port, Common::Log::Log& logger) :
+    _acceptor(_service,
+              boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
+    _signalSet(_service, SIGINT),
+    _database(logger),
+    _logger(logger) {
+    this->_router = std::make_shared <Server::Router>();
     //this->_pool = std::make_shared<Server::User::Pool>();
-    Server::Network::Network::Start();
 }
 
 void Server::Network::Network::Run() {
-    this->_signalSet.async_wait([self = shared_from_this()] (const boost::system::error_code& error, int signal)  {
-        //printf("Catch signal: %i\n", signal);
-        if (error)
-           std::cerr << "Error during catching signals: " << error << std::endl;
-        if (Server::Network::Network::SERVER_RUNNING)
-            self->Stop();
-    });
-    while (Server::Network::Network::SERVER_RUNNING) {
-        try {
-            SharedPtrClient_t client = std::make_shared<Client>(this->_service,
-                                                                this->_database,
-                                                                *this->_router,
-                                                                this->shared_from_this());
-            this->_clients.emplace_back(client);
-            printf("Client list size: %zu\n", this->_clients.size());
-            printf("%p - Waiting for new client on %u...\n", client.get(),
-                   this->_acceptor.local_endpoint().port());
-            this->_acceptor.async_accept(*client->GetSocket(),
-                                         [self = this->shared_from_this(), client](
-                                             const boost::system::error_code &err) {
-                                             //std::cout << "start lambda" << std::endl;
-                                             self->AcceptClient(err, client);
-                                             //std::cout << "end lambda" << std::endl;
-                                         });
-            this->_service.run();
-        }
-        catch (const InternalError &e) {
-            auto errorCode = e.GetError();
-            if (errorCode == boost::asio::error::eof) {
-                std::cerr << "A client has exited the server" << std::endl;
-            } else if (errorCode == boost::asio::error::operation_aborted) {
-                std::cerr << "The server doesn't accept connections anymore"
+    this->_is_running = true;
+    this->_signalSet.async_wait(
+        [self = shared_from_this()](const boost::system::error_code &error,
+                                    int) {
+            if (error)
+                std::cerr << "Error during catching signals: " << error
                           << std::endl;
-            } else {
-                std::cout << e.what() << std::endl;
-                //this->Stop();
-            }
-        }
-        catch (const std::exception &e) {
-            std::cout << "Fatal error occurred: " << e.what() << std::endl;
-            this->Stop();
-        }
+            if (self->_is_running)
+                self->Stop();
+        });
+    try {
+        SharedPtrClient_t client = std::make_shared <Client>(this->_service,
+                                                             this->_database,
+                                                             *this->_router,
+                                                             this,
+                                                             this->_logger);
+        this->_clients.emplace_back(client);
+        this->_logger.Debug(client.get(), " - Waiting for new client on ",
+                            this->_acceptor.local_endpoint().port(), "...");
+        this->_acceptor.async_accept(*client->GetSocket(),
+                                     [self = this->shared_from_this(), client](
+                                         const boost::system::error_code &err) {
+                                         self->AcceptClient(err, client);
+                                     });
+        this->_service.run();
+    }
+    catch (const InternalError &e) {
+        auto errorCode = e.GetError();
+        if (errorCode != boost::asio::error::eof &&
+            errorCode != boost::asio::error::operation_aborted)
+            this->_logger.Error(e.what());
+    }
+    catch (const std::exception &e) {
+        this->_logger.Error("Fatal error occurred: ", e.what());
+        this->Stop();
     }
 }
 
 void
 Server::Network::Network::AcceptClient(const boost::system::error_code &error,
                                        SharedPtrClient_t client) {
-    if (error)
+    if (error) {
+        this->_logger.Error("Err accept client: ", error.message());
         throw InternalError(error);
-    std::cerr << this << " - Incoming connection from: "
-              << client->GetSocket()->remote_endpoint().address().to_string()
-              << std::endl;
+    }
+    this->_logger.Info(client.get(), " - Incoming connection from: ",
+                       client->GetSocket()->remote_endpoint().address().to_string());
     client->StartRead();
     this->Run();
 }
 
-void Server::Network::Network::Start() {
-    Server::Network::Network::SERVER_RUNNING = true;
-}
-
 void Server::Network::Network::Stop() {
+    if (!this->_is_running)
+        return;
     this->_mutex.lock();
-    std::cerr << "The server is being shut down..." << std::endl;
-    Server::Network::Network::SERVER_RUNNING = false;
-    this->_acceptor.cancel();
+    this->_logger.Info("Server start to shut down.");
+    this->_logger.Info("Stopping all services...");
+    this->_is_running = false;
+    if (this->_acceptor.is_open())
+        this->_acceptor.close();
     this->_service.stop();
     this->_service.reset();
+    this->_logger.Info("Closing all sockets...");
     for (auto &i : this->_clients) {
-        boost::system::error_code ec;
-        i->GetSocket()->close(ec);
-        std::cout << "Force stop: " << ec.message() << std::endl;
+        i->Shutdown();
     }
     this->_clients.clear();
     this->_mutex.unlock();
-    std::cerr << "Server stopped!" << std::endl;
+    this->_logger.Info("Server stopped!");
 }
 
 uint32_t
-Server::Network::Network::AddUserToPool(const std::shared_ptr<Client> &client) {
+Server::Network::Network::AddUserToPool(
+    const std::shared_ptr<Client> &client) {
     //if (!this->_mutex.try_lock())
     //    throw std::exception();
     //uint32_t id = this->_pool->AddClient(client);
@@ -114,18 +107,14 @@ Server::Network::Network::AddUserToPool(const std::shared_ptr<Client> &client) {
     //return (id);
 }
 
-Server::Network::Network::~Network() {
-    std::cout << "network dstr is called" << std::endl;
-}
-
 void Server::Network::Network::RemoveClient(const Client *client) {
     this->_mutex.lock();
     for (auto &i : this->_clients)
         if (i.get() == client) {
-            boost::system::error_code ec;
-            i->GetSocket()->close(ec);
-            std::cerr << "Remove: " << ec.message() << std::endl;
+            i->Shutdown();
             this->_clients.remove(i);
+            //std::cout << "Size list after remove: "
+            //          << std::to_string(this->_clients.size()) << std::endl;
             this->_mutex.unlock();
             return;
         }

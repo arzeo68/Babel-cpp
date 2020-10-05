@@ -15,13 +15,17 @@ int main (const int ac, const char **av) {
     uint32_t port = 4242;
     if (ac != 1)
         port = std::stoi(av[0], nullptr);
-    std::shared_ptr<Server::Network::Network> network = std::make_shared<Server::Network::Network>(port);
-    printf("Launching server...\n");
+
+    Common::Log::Log logger("SERVER", "server.log",
+                            Common::Log::Log::g_AllLogLevel,
+                            std::ios_base::trunc);
+    std::shared_ptr <Server::Network::Network> network = std::make_shared<Server::Network::Network>(port, logger);
+    logger.Info("Launching server...");
     try {
         network->Run();
     } catch (const Server::Database::Exception::Query &e) {
-        std::cerr << "Query error? " << e.what() << std::endl;
+        logger.Error("Query error? ", e.what());
     }
-    printf("Server exited gracefully.\n");
+    logger.Info("Server exited gracefully.");
     return (0);
 }

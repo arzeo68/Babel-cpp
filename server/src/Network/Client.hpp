@@ -23,13 +23,15 @@ namespace Server::Network {
         explicit Client(boost::asio::io_service &service,
                         Server::Database::Database &database,
                         Server::Router &router,
-                        const std::shared_ptr<Network> &network);
+                        Network *network,
+                        Common::Log::Log& logger);
         ~Client();
 
         SharedPtrSocket_t GetSocket();
         void StartRead();
         void Write(const Common::Response& response);
         Server::Database::Database &GetDatabase();
+        void Shutdown();
 
         private:
         void Read(const boost::system::error_code &error,
@@ -39,7 +41,8 @@ namespace Server::Network {
         SharedPtrSocket_t _socket;
         Server::Database::Database &_database;
         Server::Router &_router;
-        std::shared_ptr<Network> _network_parent;
+        Network* _network_parent;
+        Common::Log::Log& _logger;
     };
 
     class InternalError : public std::exception {
