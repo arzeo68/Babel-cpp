@@ -14,7 +14,8 @@
 #include <vector>
 
 namespace Common {
-    static const constexpr uint16_t MagicNumber = 0xFABA;
+    static const constexpr uint16_t g_MagicNumber = 0xFABAu;
+    const static constexpr uint16_t g_maxMessageLength = 256u;
 
     enum class HTTPCodes_e : uint16_t {
         OK = 200,
@@ -26,21 +27,21 @@ namespace Common {
         INTERNAL_SERVER_ERROR = 500,
     };
 
-    #pragma pack(push, 1)
+#pragma pack(push, 1)
     struct Response {
         HTTPCodes_e code;
-        char msg[256];
+        char msg[g_maxMessageLength];
     };
-    #pragma pack(pop)
+#pragma pack(pop)
 
     static const Response InvalidMethodTemplate = {
-            .code = HTTPCodes_e::METHOD_NOT_ALLOWED,
-            .msg = "Method not allowed",
+            HTTPCodes_e::METHOD_NOT_ALLOWED,
+            "Method not allowed",
     };
 
     static const Response BadRequestTemplate = {
-            .code = HTTPCodes_e::BAD_REQUEST,
-            .msg = "Missing argument",
+            HTTPCodes_e::BAD_REQUEST,
+            "Missing argument",
     };
 
     static const constexpr uint8_t MAX_ROUTE_ID = 2;
@@ -52,15 +53,17 @@ namespace Common {
         PUT
     };
 
-    #pragma pack(push, 1)
+#pragma pack(push, 1)
     struct PackageServer {
         uint16_t magic;
         uint16_t id;
         Method method;
         uint8_t command;
-        char args[256];
+        char args[g_maxMessageLength];
     };
-    #pragma pack(pop)
+#pragma pack(pop)
+
+
 }
 
 #endif
