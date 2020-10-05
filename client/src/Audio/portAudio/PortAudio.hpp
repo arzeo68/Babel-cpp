@@ -14,9 +14,7 @@
 
 #include "client/src/Audio/portAudio/AAudio/AAudio.hpp"
 #include "../data.hpp"
-
-
-int portAudioTest(void);
+class PackageManager;
 
 #define SAMPLE_RATE  (48000)
 #define BUFFER_SIZE  (480)

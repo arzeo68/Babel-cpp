@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <utility>
 
 #include "PortAudio.hpp"
 
@@ -40,7 +41,6 @@ PortAudio::PortAudio()
     _init = true;
     std::cout << "Port audio initialized." << std::endl;
 }
-
 
 int PortAudio::recordCallBack(const void *tmp_buff, void *, unsigned long frm, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *obj)
 {
@@ -148,3 +148,4 @@ void PortAudio::addSoundToQueue(const std::shared_ptr<Babel::Audio::soundDecoded
     }
     _m.unlock();
 }
+
