@@ -14,7 +14,7 @@ int main (const int ac, const char **av) {
     setvbuf(stdout, nullptr, _IONBF, 0); // TODO: Remove be removed for the final version
     uint32_t port = 4242;
     if (ac != 1)
-        port = std::stoi(av[0], nullptr);
+        port = std::stoi(av[1], nullptr);
 
     Common::Log::Log logger("SERVER", "server.log",
                             Common::Log::Log::g_AllLogLevel,
