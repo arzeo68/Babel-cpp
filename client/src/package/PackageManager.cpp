@@ -12,6 +12,7 @@ PackageManager::PackageManager() : _packageBuilder(std::make_unique<PackageUdp>(
 
 void PackageManager::sendPackage(void)
 {
+
 }
 
 void PackageManager::start()

@@ -2,7 +2,7 @@
 // Created by alexis on 04/10/2020.
 //
 
-#include "../../../common/Error/ThrowError.hpp"
+#include "common/Error/ThrowError.hpp"
 #include "NetworkUdp.hpp"
 
 NetworkUDP::NetworkUDP(): _socket(std::make_shared<QUdpSocket>(this)
@@ -42,6 +42,7 @@ std::string NetworkUDP::read()
 //    message.host = host.toString().toStdString();
 //    message.port = port;
 //    mIsReadable = false;
+std::cout << "package received" << std::endl;
     _packageManger->handlePackage(buffer.get(), size);
     return std::string(buffer.get(), size);
 }
