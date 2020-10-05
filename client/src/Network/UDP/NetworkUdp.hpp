@@ -10,7 +10,7 @@
 #include "client/src/package/PackageManager.hpp"
 #include "PackageUdp.hpp"
 
-class NetworkUDP: public INetwork<std::string>
+class NetworkUDP: public INetwork<std::string, std::string>
 {
     public:
     NetworkUDP();

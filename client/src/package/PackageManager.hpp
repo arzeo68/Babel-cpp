@@ -22,7 +22,7 @@ class PackageManager
     std::shared_ptr<PortAudio> getPa();
 
     private:
-    std::unique_ptr<IPackage<Babel::Audio::packageAudio_t *>> _packageBuilder;
+    std::unique_ptr<IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>> _packageBuilder;
     std::unique_ptr<Opus> _encoder;
     std::shared_ptr<PortAudio> _player;
 };
