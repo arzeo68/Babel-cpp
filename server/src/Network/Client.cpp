@@ -27,34 +27,34 @@ Server::Network::Client::GetSocket() {
 
 
 void Server::Network::Client::StartRead() {
-    Network::SharedPtrMessageArr_t message = std::make_shared <Network::MessageArr_t>();
+    MessageArr_t message = {};
 
-    this->_socket->async_receive(boost::asio::buffer(*message),
-                                 [self = shared_from_this(), message](
+    this->_socket->async_receive(boost::asio::buffer(message),
+                                 [self = shared_from_this(), &message](
                                      const boost::system::error_code &err,
                                      std::size_t bytes_transferred) {
-                                         std::cout << "start read lambda"
-                                                   << std::endl;
-                                         self->Read(err, bytes_transferred,
-                                                    message);
-                                         std::cout << "end read lambda"
-                                                   << std::endl;
+                                     //std::cout << "start read lambda"
+                                     //          << std::endl;
+                                     self->Read(err, bytes_transferred,
+                                                message);
+                                     //std::cout << "end read lambda"
+                                     //          << std::endl;
                                  });
 }
 
 void Server::Network::Client::Read(const boost::system::error_code &error,
                                    std::size_t bytes_transferred,
-                                   const Network::SharedPtrMessageArr_t& message) {
+                                   const MessageArr_t& message) {
     std::cerr << "Bytes transferred: " << std::to_string(bytes_transferred) << std::endl;
     if (error) {
         std::cerr << "read: " << error << std::endl;
         return;
     }
     auto protocol = Server::Router::FormatRouteArgs(
-        std::string(message->begin(), message->end()));
+        std::string(message.begin(), message.end()));
     auto response = this->_router.Execute(protocol,
-                          Server::Router::SplitRawData(protocol),
-                          *this);
+                                          Server::Router::SplitRawData(protocol),
+                                          *this);
     this->Write(response);
     this->StartRead();
 }

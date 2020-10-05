@@ -46,9 +46,9 @@ void Server::Network::Network::Run() {
             this->_acceptor.async_accept(*client->GetSocket(),
                                          [self = this->shared_from_this(), client](
                                              const boost::system::error_code &err) {
-                                             std::cout << "start lambda" << std::endl;
+                                             //std::cout << "start lambda" << std::endl;
                                              self->AcceptClient(err, client);
-                                             std::cout << "end lambda" << std::endl;
+                                             //std::cout << "end lambda" << std::endl;
                                          });
             this->_service.run();
         }
@@ -80,7 +80,6 @@ Server::Network::Network::AcceptClient(const boost::system::error_code &error,
               << client->GetSocket()->remote_endpoint().address().to_string()
               << std::endl;
     client->StartRead();
-    //this->Run();
 }
 
 void Server::Network::Network::Start() {
@@ -106,7 +105,7 @@ void Server::Network::Network::Stop() {
 uint32_t
 Server::Network::Network::AddUserToPool(const std::shared_ptr<Client> &client) {
     //if (!this->_mutex.try_lock())
-        throw std::exception();
+    //    throw std::exception();
     //uint32_t id = this->_pool->AddClient(client);
     //this->_mutex.unlock();
     return (0);

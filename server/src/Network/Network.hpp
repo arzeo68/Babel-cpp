@@ -31,8 +31,6 @@ namespace Server::Network {
         public:
         static bool SERVER_RUNNING;
         typedef std::shared_ptr<Client> SharedPtrClient_t;
-        typedef std::array<char, sizeof(Common::PackageServer)> MessageArr_t;
-        typedef std::shared_ptr<MessageArr_t> SharedPtrMessageArr_t;
 
         explicit Network(uint32_t port);
         ~Network();

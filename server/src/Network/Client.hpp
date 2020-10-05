@@ -18,6 +18,8 @@ namespace Server::Network {
     class Client : public std::enable_shared_from_this<Client> {
         public:
         typedef std::shared_ptr<boost::asio::ip::tcp::socket> SharedPtrSocket_t;
+        typedef std::array<char, sizeof(Common::PackageServer)> MessageArr_t;
+
         explicit Client(boost::asio::io_service &service,
                         Server::Database::Database &database,
                         Server::Router &router,
@@ -32,7 +34,7 @@ namespace Server::Network {
         private:
         void Read(const boost::system::error_code &error,
                   std::size_t bytes_transferred,
-                  const Network::SharedPtrMessageArr_t& message);
+                  const MessageArr_t& message);
 
         SharedPtrSocket_t _socket;
         Server::Database::Database &_database;
