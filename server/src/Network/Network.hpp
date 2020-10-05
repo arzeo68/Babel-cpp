@@ -38,6 +38,7 @@ namespace Server::Network {
         void Run();
         void Stop();
         uint32_t AddUserToPool(const std::shared_ptr<Client> &client);
+        void RemoveUserFromPool(const Client *client);
         void RemoveClient(const Client *client);
 
         private:
@@ -52,7 +53,7 @@ namespace Server::Network {
         boost::asio::signal_set _signalSet;
         Server::Database::Database _database;
         std::mutex _mutex;
-        //std::shared_ptr<User::Pool> _pool;
+        std::shared_ptr<User::Pool> _pool;
         Common::Log::Log& _logger;
     };
 }

@@ -21,14 +21,14 @@ Server::Network::Network::Network(uint32_t port, Common::Log::Log& logger) :
     _database(logger),
     _logger(logger) {
     this->_router = std::make_shared <Server::Router>();
-    //this->_pool = std::make_shared<Server::User::Pool>();
+    this->_pool = std::make_shared<Server::User::Pool>();
 }
 
 void Server::Network::Network::Run() {
     this->_is_running = true;
     this->_signalSet.async_wait(
         [self = shared_from_this()](const boost::system::error_code &error,
-                                    int) {
+                                    int /*signal*/) {
             if (error)
                 std::cerr << "Error during catching signals: " << error
                           << std::endl;
@@ -97,14 +97,16 @@ void Server::Network::Network::Stop() {
 }
 
 uint32_t
-Server::Network::Network::AddUserToPool(
-    const std::shared_ptr<Client> &client) {
-    //if (!this->_mutex.try_lock())
-    //    throw std::exception();
-    //uint32_t id = this->_pool->AddClient(client);
-    //this->_mutex.unlock();
-    return (0);
-    //return (id);
+Server::Network::Network::AddUserToPool(const std::shared_ptr<Client> &client) {
+    if (!this->_mutex.try_lock())
+        throw std::exception();
+    uint32_t id = this->_pool->AddClient(client);
+    this->_mutex.unlock();
+    return (id);
+}
+
+void Server::Network::Network::RemoveUserFromPool(const Client *client) {
+    this->_pool->RemoveClient(client);
 }
 
 void Server::Network::Network::RemoveClient(const Client *client) {
@@ -112,9 +114,8 @@ void Server::Network::Network::RemoveClient(const Client *client) {
     for (auto &i : this->_clients)
         if (i.get() == client) {
             i->Shutdown();
+            this->RemoveUserFromPool(client);
             this->_clients.remove(i);
-            //std::cout << "Size list after remove: "
-            //          << std::to_string(this->_clients.size()) << std::endl;
             this->_mutex.unlock();
             return;
         }

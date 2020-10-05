@@ -31,7 +31,8 @@ namespace Server {
 
         private:
         std::array<Route::Route, Common::MAX_ROUTE_ID> _routes = {
-            {{"USER", &Route::Listing::User}},
+            Route::Route{"USER", &Route::Listing::User},
+            Route::Route{"LOGIN", &Route::Listing::Login},
         };
     };
 }

@@ -18,13 +18,13 @@ Common::Response Server::Router::Execute(const Common::PackageServer &protocol,
             Common::HTTPCodes_e::NOT_FOUND,
             "Unknown route"
         });
-    else if (protocol.magic != 0xFABA)
+    else if (protocol.magic != Common::g_MagicNumber)
         return (Common::Response {
             Common::HTTPCodes_e::FORBIDDEN,
             "Forbidden"
         });
     else
-        return (this->_routes[protocol.id].ExecuteHandler(client, args));
+        return (this->_routes[protocol.command].ExecuteHandler(client, args));
 }
 
 Common::PackageServer Server::Router::FormatRouteArgs(const std::string &string) {

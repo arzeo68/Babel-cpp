@@ -8,20 +8,28 @@
 #ifndef SRC_ROUTE_DATA_
 #define SRC_ROUTE_DATA_
 
+
+#ifdef _WIN32
+    #define __STDC_WANT_LIB_EXT1__ 1
+    #include <string.h>
+#else
+    #include <cstring>
+#endif
 #include "server/src/API/Route/Route.hpp"
 #include "server/src/Network/Client.hpp"
 #include "server/src/API/Route/Arguments.hpp"
 
 namespace Server::Route::Listing {
-
     Common::Response User(Server::Network::Client &client,
                           const Arguments::RouteHandlerArgs &arg);
 
-    //Common::Response Login(Server::Network::Client &client,
-    //                       const RouteHandlerArgs &arg);
+    Common::Response Login(Server::Network::Client &client,
+                           const Arguments::RouteHandlerArgs &arg);
     //
     //Common::Response Register(Server::Network::Client &client,
     //                          const RouteHandlerArgs &arg);
+
+    void CopyCString(char* dest, const char* source);
 }
 
 #endif

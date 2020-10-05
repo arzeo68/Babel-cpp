@@ -26,8 +26,10 @@ namespace Server::Network {
                         Network *network,
                         Common::Log::Log& logger);
         ~Client();
+        Client(Client &obj);
 
         SharedPtrSocket_t GetSocket();
+        Network* GetNetwork();
         void StartRead();
         void Write(const Common::Response& response);
         Server::Database::Database &GetDatabase();
@@ -36,13 +38,14 @@ namespace Server::Network {
         private:
         void Read(const boost::system::error_code &error,
                   std::size_t bytes_transferred,
-                  const MessageArr_t& message);
+                  const std::shared_ptr<MessageArr_t>& message);
 
         SharedPtrSocket_t _socket;
-        Server::Database::Database &_database;
-        Server::Router &_router;
+        Server::Database::Database& _database;
+        Server::Router& _router;
         Network* _network_parent;
         Common::Log::Log& _logger;
+        boost::asio::io_service& _service;
     };
 
     class InternalError : public std::exception {

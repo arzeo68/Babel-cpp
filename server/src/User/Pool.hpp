@@ -16,12 +16,10 @@ namespace Server::User {
     class Pool {
         public:
         Pool() = default;
-
         ~Pool() = default;
 
         uint32_t AddClient(const std::shared_ptr<Network::Client> &client);
-
-        void RemoveClient(uint32_t id);
+        void RemoveClient(const Network::Client *client);
 
         private:
         std::map<uint32_t, std::shared_ptr<Network::Client>> _pool;

@@ -20,10 +20,14 @@ Server::User::Pool::AddClient(const std::shared_ptr<Network::Client> &client) {
     throw Exception::NoMoreSpace();
 }
 
-void Server::User::Pool::RemoveClient(uint32_t id) {
-    this->_pool.erase(id);
+void Server::User::Pool::RemoveClient(const Server::Network::Client *client) {
+    for (auto &i: this->_pool) {
+        if (i.second.get() == client) {
+            this->_pool.erase(i.first);
+            return;
+        }
+    }
 }
-
 
 const char *Server::User::Exception::NoMoreSpace::what() const noexcept {
     return ("No more space for user available, please retry later");
