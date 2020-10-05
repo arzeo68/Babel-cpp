@@ -5,9 +5,11 @@
 #ifndef BABEL_PACKAGETCP_HPP
 #define BABEL_PACKAGETCP_HPP
 
-#include "../INetwork.hpp"
+#include "client/src/Network/INetwork.hpp"
+#include "../../Package/IPackage.hpp"
 
-class PackageTcp: public IPackage<std::string> {
+
+class PackageTcp: public IPackage<std::string, std::string> {
     public:
     std::string toString(std::string t) override;
 

@@ -7,21 +7,13 @@
 
 #include <QtCore/QObject>
 
-template <typename T>
-class IPackage {
-    public:
-    virtual ~IPackage() = default;
-    virtual std::string toString(T) = 0;
-    virtual T toPackage(const std::string &) = 0;
-};
-
-template <typename T>
+template <typename SEND, typename RECEIVE>
 class INetwork : public QObject {
     public:
     virtual ~INetwork() = default;
     virtual bool startConnection(const std::string &ip, const std::string &port) = 0;
-    virtual bool write(T) = 0;
-    virtual T read() = 0;
+    virtual bool write(SEND) = 0;
+    virtual RECEIVE read() = 0;
 };
 
 #endif
