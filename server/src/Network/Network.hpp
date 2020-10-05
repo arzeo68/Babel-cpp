@@ -30,7 +30,6 @@ namespace Server::Network {
     class Network : public std::enable_shared_from_this<Network> {
         public:
         static bool SERVER_RUNNING;
-        typedef std::shared_ptr<boost::asio::ip::tcp::socket> SharedPtrSocket_t;
         typedef std::shared_ptr<Client> SharedPtrClient_t;
         typedef std::array<char, sizeof(Common::PackageServer)> MessageArr_t;
         typedef std::shared_ptr<MessageArr_t> SharedPtrMessageArr_t;

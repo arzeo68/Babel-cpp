@@ -20,7 +20,7 @@ Server::Network::Client::Client(boost::asio::io_service &service,
     this->_socket = std::make_shared<boost::asio::ip::tcp::socket>(service);
 }
 
-Server::Network::Network::SharedPtrSocket_t
+Server::Network::Client::SharedPtrSocket_t
 Server::Network::Client::GetSocket() {
     return (this->_socket);
 }
