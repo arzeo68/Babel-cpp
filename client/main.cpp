@@ -1,15 +1,9 @@
-#include <client/src/Audio/portAudio/PortAudio.hpp>
-#include <client/src/Audio/Opus/Opus.hpp>
+#include "src/Network/UDP/NetworkUdp.hpp"
 
 int main(int argc, char **argv)
 {
-    PortAudio p;
-    Opus o;
-    p.startRecording();
-    p.startPlaying();
-    while (1)
-    {
-        p.addSoundToQueue(p.getNextSound());
-    }
+    NetworkUDP p;
+    p.startConnection("127.0.0.1", "80");
+    while (1);
 }
 

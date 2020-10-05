@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <ctime>
+#include <tiff.h>
 
 namespace Babel
 {
@@ -92,8 +93,8 @@ namespace Babel
         };
         #pragma pack(push,1)
         typedef struct packageAudio_s {
-            uint16_t magicByte;
-            uint16_t idSender;
+            uint16 magicByte;
+            uint16 idSender;
             std::time_t timestamp;
             unsigned char voice[960];
         } packageAudio_t;

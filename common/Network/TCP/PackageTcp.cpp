@@ -5,7 +5,8 @@
 #include "PackageTcp.hpp"
 
 std::string &PackageTcp::toString(std::string t) {
-    return std::string();
+    std::string p;
+    return p;
 }
 
 
