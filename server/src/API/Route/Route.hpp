@@ -11,12 +11,14 @@
 #include <exception>
 #include <string>
 #include <list>
-#include "HTTPCodes.hpp"
-#include "Response.hpp"
 #include <map>
 #include <vector>
+#include "common/Protocol.hpp"
+#include "server/src/API/Route/Arguments.hpp"
+#include "server/src/Network/Client.hpp"
+#include "server/src/DB/Database.hpp"
 
-namespace Server {
+namespace Server::Route {
     namespace Exception {
         class InvalidRoute : std::exception {
             public:
@@ -31,55 +33,27 @@ namespace Server {
     }
     class Route {
         public:
-        enum Method : uint8_t {
-            GET,
-            DELETE,
-            POST,
-            PUT
-        };
-        struct RouteHandlerArgs {
-            Method method;
-            std::string body;
-            std::string token;
-        };
-        typedef Server::Response (*RouteHandler_t)(RouteHandlerArgs);
+        typedef Common::Response (*RouteHandler_t)(Server::Network::Client &,
+                           const Arguments::RouteHandlerArgs &);
 
-        Route(const std::string& name, RouteHandler_t handler);
+        Route(const std::string &name, RouteHandler_t handler);
+        Route() = default;
         ~Route() = default;
+        Route(const Route &obj);
 
-        Server::Response ExecuteHandler(RouteHandlerArgs const &args) const;
+        Common::Response ExecuteHandler(Server::Network::Client& client,
+                                        const Arguments::RouteHandlerArgs &args) const;
         std::string GetName() const;
 
         bool operator==(const std::string& name) const;
         bool operator==(const std::string& name);
+        bool operator!=(const std::string& name) const;
+        bool operator!=(const std::string& name);
 
         private:
         std::string _name;
         RouteHandler_t _handler;
-        Method _method;
-    };
-
-    class RouteContainer {
-        public:
-        typedef std::list<Route> RouteList_t;
-
-        RouteContainer() = default;
-        RouteContainer(const Route&& route);
-        RouteContainer(const RouteList_t&& route);
-        ~RouteContainer() = default;
-
-        void PushBackRoute(const Route& route);
-        void PushBackRoute(const Route&& route);
-
-        bool Exists(const std::string& RouteName);
-        Server::Response ExecuteRouteHandler(const std::string& route,
-                                                   Route::RouteHandlerArgs const &args);
-
-        RouteList_t::iterator begin();
-        RouteList_t::iterator end();
-
-        private:
-        RouteList_t _container;
+        Common::Method _method;
     };
 }
 

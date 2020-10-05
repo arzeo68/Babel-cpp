@@ -8,27 +8,28 @@
 #include <iostream>
 #include "Database.hpp"
 
-Server::Database::Database::Database() : _handler(nullptr) {
-    uint32_t rtn = sqlite3_open("database.db", &this->_handler);
-    if (rtn != SQLITE_OK)
-        throw Exception::Opening(rtn);
-    std::cout << "Connected to the database" << std::endl;
+Server::Database::Database::Database(Common::Log::Log& logger) : _handler(nullptr), _logger(logger) {
+    uint32_t code = sqlite3_open("database.db", &this->_handler);
+    if (code != SQLITE_OK)
+        throw Exception::Opening(code);
+    this->_logger.Info("Successfully connected to the database");
     this->RegisterTables();
 }
 
 Server::Database::Database::~Database() {
     sqlite3_close(this->_handler);
-    this->_handler = nullptr;
 }
 
 
-void Server::Database::Database::ExecuteQuery(const std::string &query, DatabaseCallback_t callback) {
+void Server::Database::Database::ExecuteQuery(const std::string &query,
+                                              DatabaseCallback_t callback,
+                                              void *callback_arg) {
     char *error_msg = nullptr;
-    int a = 5;
     uint32_t code = sqlite3_exec(this->_handler, query.c_str(), callback,
-                                 &a, &error_msg);
+                                 callback_arg, &error_msg);
     if (code != SQLITE_OK || error_msg != nullptr)
         throw Exception::Query(code, error_msg, query);
+    sqlite3_free(error_msg);
 }
 
 void Server::Database::Database::RegisterTables() {
@@ -41,15 +42,7 @@ void Server::Database::Database::RegisterTables() {
                        "    'password' TEXT                              NOT NULL,\n"
                        "    'status'   TEXT\n"
                        ");");
-    std::cout << "Tables created in the database" << std::endl;
-}
-
-int CreatedUsed(_UNUSED_ void* unused, _UNUSED_ int size, char **column_text, _UNUSED_ char** column_name) {
-    printf("Size: %i\n", size);
-    printf("(%s) '%s' (-> '%s') = '%s'\n", column_text[Server::Database::User::ID],
-           column_text[Server::Database::User::NAME], column_text[Server::Database::User::PASSWORD],
-           column_text[Server::Database::User::STATUS] == nullptr ? "NO STATUS" : column_text[Server::Database::User::STATUS]);
-    return (0);
+    this->_logger.Info("Tables created in the database");
 }
 
 void Server::Database::Database::AddUser(const std::string &name,
@@ -57,11 +50,11 @@ void Server::Database::Database::AddUser(const std::string &name,
     this->ExecuteQuery(
         "INSERT INTO " + std::string(Server::Database::Database::USER_TABLE) +
         "('name', 'password') VALUES ('" + name + "', '" + password + "');");
-    this->ExecuteQuery("SELECT * FROM 'user'\n",
-                       &CreatedUsed);
+    std::cout << "User " + name + " added to the database" << std::endl;
 }
 
-void Server::Database::Database::UpdateStatus(uint16_t id, const std::string& status) {
+void Server::Database::Database::UpdateStatus(uint16_t id,
+                                              const std::string &status) {
     this->ExecuteQuery(
         "UPDATE " + std::string(Server::Database::Database::USER_TABLE) +
         " SET 'status'='" + status + "' WHERE 'id'=" + std::to_string(id));
@@ -69,9 +62,35 @@ void Server::Database::Database::UpdateStatus(uint16_t id, const std::string& st
 
 [[maybe_unused]] void Server::Database::Database::DeleteUsers() {
     this->ExecuteQuery("DELETE FROM '" + USER_TABLE_STR + "';" +
-                       "DELETE FROM SQLITE_SEQUENCE WHERE name='"+USER_TABLE_STR+"';");
+                       "DELETE FROM SQLITE_SEQUENCE WHERE name='" +
+                       USER_TABLE_STR + "';");
 }
 
+bool Server::Database::Database::UserExists(const std::string &name) {
+    bool exists = false;
+    this->ExecuteQuery(
+        "SELECT * FROM " + USER_TABLE_STR + " WHERE name='" + name + "';",
+        [](void *arg, int size, char **, char **) -> int {
+            bool *existing = reinterpret_cast<bool *>(arg);
+            *existing = size != 0;
+            return (0);
+        }, &exists);
+    return (exists);
+}
 
-
-
+// https://github.com/mpdn/sqlite-digest/blob/master/digest.c
+// Encoding SHA526
+bool Server::Database::Database::ConnectUser(const std::string &name,
+                                             const std::string &password) {
+    bool exists = false;
+    this->ExecuteQuery(
+        "SELECT * FROM " + USER_TABLE_STR + " WHERE name='" + name + "'"
+                                                                     "AND password='" +
+        password + "';",
+        [](void *arg, int size, char **, char **) -> int {
+            bool *existing = reinterpret_cast<bool *>(arg);
+            *existing = size != 0;
+            return (0);
+        }, &exists);
+    return (exists);
+}

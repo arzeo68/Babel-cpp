@@ -12,18 +12,28 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include "../Route/Route.hpp"
+#include "common/Protocol.hpp"
+#include "server/src/API/Route/Arguments.hpp"
+#include "server/src/API/Route/Route.hpp"
+#include "server/src/API/Route/List/Listing.hpp"
 
 namespace Server {
     class Router {
-    public:
-        Router();
+        public:
+        Router() = default;
+        ~Router() = default;
 
-        bool AddRoute(Route const &route);
-        Server::Response Handler(std::string const &routePath, Route::RouteHandlerArgs const &args);
+        static Common::PackageServer FormatRouteArgs(const std::string& string);
+        static Route::Arguments::RouteHandlerArgs SplitRawData(const Common::PackageServer& protocol);
+        Common::Response Execute(const Common::PackageServer &protocol,
+                                 Route::Arguments::RouteHandlerArgs const &args,
+                                 Server::Network::Client& client);
 
-    private:
-        std::map<std::string, Route> _routes;
+        private:
+        std::array<Route::Route, Common::MAX_ROUTE_ID> _routes = {
+            Route::Route{"USER", &Route::Listing::User},
+            Route::Route{"LOGIN", &Route::Listing::Login},
+        };
     };
 }
 

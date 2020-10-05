@@ -9,24 +9,43 @@
 #define BABEL_CLIENT_HPP
 
 #include <memory>
-#include <boost/enable_shared_from_this.hpp>
+#include <mutex>
+#include "common/Protocol.hpp"
 #include "Network.hpp"
-
+#include "server/src/DB/Database.hpp"
 
 namespace Server::Network {
-    class Client {
+    class Client : public std::enable_shared_from_this<Client> {
         public:
-        explicit Client(boost::asio::io_service &service);
+        typedef std::shared_ptr<boost::asio::ip::tcp::socket> SharedPtrSocket_t;
+        typedef std::array<char, sizeof(Common::PackageServer)> MessageArr_t;
 
-        Network::SharedPtrSocket_t GetSocket();
-        //std::string &GetReadBuffer();
+        explicit Client(boost::asio::io_service &service,
+                        Server::Database::Database &database,
+                        Server::Router &router,
+                        Network *network,
+                        Common::Log::Log& logger);
+        ~Client();
+        Client(Client &obj);
+
+        SharedPtrSocket_t GetSocket();
+        Network* GetNetwork();
         void StartRead();
-        void Write(const std::string& message);
+        void Write(const Common::Response& response);
+        Server::Database::Database &GetDatabase();
+        void Shutdown();
 
         private:
-        void Read(const boost::system::error_code& error, std::size_t bytes_transferred, Network::SharedPtrMessageArr_t message);
+        void Read(const boost::system::error_code &error,
+                  std::size_t bytes_transferred,
+                  const std::shared_ptr<MessageArr_t>& message);
 
-        Network::SharedPtrSocket_t _socket;
+        SharedPtrSocket_t _socket;
+        Server::Database::Database& _database;
+        Server::Router& _router;
+        Network* _network_parent;
+        Common::Log::Log& _logger;
+        boost::asio::io_service& _service;
     };
 
     class InternalError : public std::exception {
