@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(900, 600);
     setWindowTitle("Babel");
 
-    _sceneManager.addScene(new LoginScene(this), "login");
+//    _sceneManager.addScene(new LoginScene(this), "login");
     _sceneManager.addScene(new MainScene(), "main");
     setCentralWidget(&_sceneManager);
 }

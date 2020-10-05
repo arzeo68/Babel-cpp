@@ -12,12 +12,13 @@
 class Container : public QGroupBox
 {
 public:
-    Container(QBoxLayout *layout = new QVBoxLayout);
+    Container(QBoxLayout *layout = new QVBoxLayout, Qt::Alignment alignment1 = Qt::AlignVCenter, Qt::Alignment alignment2 = Qt::AlignHCenter);
     QWidget *addWidget(QWidget *widget, Qt::Alignment alignment = Qt::AlignLeft);
 
 private:
-    QBoxLayout *_layout;
     std::vector<QWidget *> _list;
+protected:
+    QBoxLayout *_layout;
 };
 
 

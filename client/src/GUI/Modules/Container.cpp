@@ -4,9 +4,9 @@
 
 #include "Container.hpp"
 
-Container::Container(QBoxLayout *layout) {
+Container::Container(QBoxLayout *layout, Qt::Alignment alignment1, Qt::Alignment alignment2) {
     _layout = layout;
-    _layout->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+    _layout->setAlignment(alignment1 | alignment2);
     setLayout(layout);
 }
 

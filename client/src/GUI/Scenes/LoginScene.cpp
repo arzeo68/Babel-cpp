@@ -12,7 +12,7 @@ LoginScene::LoginScene(MainWindow *parent)
         _inputs({std::make_unique<InputText>("Username", 20),
                  std::make_unique<InputText>("Password", 20),
                  std::make_unique<InputText>("Confirm Password", 20)}),
-        _containers({new Container(), new Container(new QHBoxLayout())}),
+        _containers({new Container(), new Container(new QHBoxLayout(), Qt::AlignHCenter)}),
         _parent(parent),
         _info(new QLabel)
 {
