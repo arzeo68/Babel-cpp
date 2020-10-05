@@ -9,6 +9,6 @@ int main(int argc, char **argv)
     p.startPlaying();
     while (1)
     {
-        p.addSoundToQueue(o.decode(o.encode(p.getNextSound())));
+        p.addSoundToQueue(p.getNextSound());
     }
 }

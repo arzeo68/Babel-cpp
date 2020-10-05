@@ -6,7 +6,6 @@
 #define BABEL_DATA_HPP
 
 #include <vector>
-#include <bits/types/time_t.h>
 #include <ctime>
 
 namespace Babel
@@ -93,8 +92,8 @@ namespace Babel
         };
         #pragma pack(push,1)
         typedef struct packageAudio_s {
-            u_int16_t magicByte;
-            u_int16_t idSender;
+            uint16_t magicByte;
+            uint16_t idSender;
             std::time_t timestamp;
             unsigned char voice[960];
         } packageAudio_t;
