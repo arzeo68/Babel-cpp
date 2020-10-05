@@ -44,7 +44,7 @@ file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
 # UI.h  PATH
 include_directories(test/build)
 
-add_executable(babel_client ${SOURCES_CLIENT} common/Log.cpp common/Log.hpp server/src/Main.cpp)
+add_executable(babel_client ${SOURCES_CLIENT} common/Log.cpp common/Log.hpp)
 add_executable(babel_server
         common/Log.cpp
         common/Log.hpp
