@@ -12,9 +12,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 if(MSVC)
     set(CMAKE_EXE_LINKER_FLAGS
-            "${CMAKE_EXE_LINKER_FLAGS}")
+            "${CMAKE_EXE_LINKER_FLAGS} -D_WIN32_WINNT=0x0601")
 else()
-    set(STANDARD_UNIX_CXX_FLAGS "-Wall -g3 -Wextra -Wfatal-errors")
+    set(STANDARD_UNIX_CXX_FLAGS "-Wall -g3 -Wextra -Wfatal-errors -D_WIN32_WINNT=0x0601")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STANDARD_UNIX_CXX_FLAGS}")
 endif()
 

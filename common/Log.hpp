@@ -77,6 +77,7 @@ namespace Common::Log {
             time_t rawtime;
             struct tm *timeinfo;
             time(&rawtime);
+            // Use localtime_s on windows
             timeinfo = localtime(&rawtime);
             char buffer[80];
             strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);

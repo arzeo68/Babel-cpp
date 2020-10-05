@@ -9,6 +9,7 @@
 #include <iostream>
 #include "Network/Network.hpp"
 #include "server/src/API/Router/Router.hpp"
+
 int main (const int ac, const char **av) {
     setvbuf(stdout, nullptr, _IONBF, 0); // TODO: Remove be removed for the final version
     uint32_t port = 4242;
