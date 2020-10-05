@@ -4,10 +4,12 @@
 
 #include "PackageTcp.hpp"
 
-std::string PackageTcp::toString(std::string t) {
+std::string &PackageTcp::toString(std::string t) {
     return std::string();
 }
 
-std::string PackageTcp::toPackage(const std::string &string) {
+
+std::string PackageTcp::toPackage(std::string &string)
+{
     return std::string();
 }

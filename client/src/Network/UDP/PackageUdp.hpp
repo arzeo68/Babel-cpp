@@ -7,13 +7,14 @@
 
 #include "client/src/Audio/data.hpp"
 #include "client/src/Network/INetwork.hpp"
+#include "../../../common/Package/IPackage.hpp"
 
-class PackageUdp: public IPackage<Babel::Audio::packageAudio_t *>
+class PackageUdp: public IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>
 {
     public:
-    std::string toString(Babel::Audio::packageAudio_t *t) override;
+    std::string &toString(Babel::Audio::packageAudio_t *t) override;
 
-    Babel::Audio::packageAudio_t *toPackage(const std::string &string) override;
+    Babel::Audio::packageAudio_t *toPackage(std::string &string) override;
 };
 
 #endif //BABEL_PACKAGEUDP_HPP

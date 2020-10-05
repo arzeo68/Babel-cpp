@@ -4,12 +4,13 @@
 
 #include "PackageUdp.hpp"
 
-std::string PackageUdp::toString(Babel::Audio::packageAudio_t *t)
+std::string &PackageUdp::toString(Babel::Audio::packageAudio_t *t)
 {
-    return std::string((char *)t);
+    std::string str((char *)t);
+    return str;
 }
 
-Babel::Audio::packageAudio_t *PackageUdp::toPackage(const std::string &string)
+Babel::Audio::packageAudio_t *PackageUdp::toPackage(std::string &string)
 {
     return (Babel::Audio::packageAudio_t *)string.c_str();
 }

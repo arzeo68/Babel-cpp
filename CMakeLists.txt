@@ -49,22 +49,13 @@ add_executable(babel_client ${SOURCES_CLIENT}
         client/src/Audio/Opus/Opus.cpp
         client/src/Audio/Opus/Opus.hpp
         common/Error/ThrowError.cpp
-        common/Error/ThrowError.cpp
-        client/src/Network/INetwork.hpp client/src/package/PackageManager.cpp client/src/package/PackageManager.hpp
         client/src/Network/INetwork.hpp
-        common/Package/IPackage.hpp
+        client/src/package/PackageManager.cpp
+        client/src/package/PackageManager.hpp
         common/Network/TCP/NetworkTcp.cpp
         common/Network/TCP/PackageTcp.cpp
         common/Package/IPackage.hpp)
 add_executable(babel_server ${SOURCES_SERVER})
-
-
-
-add_executable(babel_server ${SOURCES_SERVER}
-        common/Package/IPackage.hpp
-        common/Network/TCP/NetworkTcp.cpp
-        common/Network/TCP/PackageTcp.cpp)
-
 
 install(TARGETS babel_client DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 install(TARGETS babel_server DESTINATION ${PROJECT_SOURCE_DIR}/bin)

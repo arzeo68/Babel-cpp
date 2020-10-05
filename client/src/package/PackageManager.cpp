@@ -29,7 +29,8 @@ void PackageManager::end()
 
 void PackageManager::handlePackage(char *pack, int size)
 {
-    Babel::Audio::packageAudio_t *package = _packageBuilder->toPackage(pack);
+    std::string str(pack);
+    Babel::Audio::packageAudio_t *package = _packageBuilder->toPackage(str);
     // check magic byte + time stamp
     std::shared_ptr<Babel::Audio::soundEncoded> encoded;
     // todo if sound bug try to replace 960 by size
