@@ -48,7 +48,6 @@ add_executable(babel_client ${SOURCES_CLIENT} client/main.cpp
         common/TCP/CommonPackages.hpp
         common/Log.cpp
         common/Log.hpp)
-
 add_executable(babel_server
         server/src/DB/Database.cpp
         server/src/DB/Database.hpp
