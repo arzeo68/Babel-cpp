@@ -4,6 +4,7 @@
 
 #include "LoginScene.hpp"
 #include <QDebug>
+#include <iostream>
 
 
 LoginScene::LoginScene(MainWindow *parent)
@@ -30,6 +31,7 @@ LoginScene::LoginScene(MainWindow *parent)
 
     initWidgets();
     initConnect();
+    std::cout << "Login Scene" << std::endl;
 }
 
 void LoginScene::initWidgets()
@@ -59,7 +61,7 @@ void LoginScene::initConnect() {
 }
 
 void LoginScene::submitLogin() {
-
+    std::cout << "SubmitLogin" << std::endl;
     if (_state == STATE_USER) {
 
         // test with username: Clément

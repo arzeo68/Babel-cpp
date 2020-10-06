@@ -11,7 +11,7 @@
 class UserBox : public FriendBox
 {
 public:
-    UserBox(QString name, FriendBox::UserState state, Qt::Alignment alignment = Qt::AlignLeft);
+    UserBox(MainScene *scene, QString name, FriendBox::UserState state, Qt::Alignment alignment = Qt::AlignLeft);
 };
 
 

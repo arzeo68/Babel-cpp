@@ -8,12 +8,14 @@
 
 #include "Container.hpp"
 
+class MainScene;
 class FriendsList : public Container
 {
 public:
-    FriendsList();
+    FriendsList(MainScene *scene);
 
 private:
+    MainScene *_scene;
 };
 
 

@@ -9,6 +9,7 @@
 #include <QtWidgets/QLabel>
 #include "Container.hpp"
 
+class MainScene;
 class FriendBox : public Container
 {
     Q_OBJECT
@@ -19,19 +20,23 @@ public:
         OCCUPIED
     } UserState;
 
-    explicit FriendBox(QString name, FriendBox::UserState state, Qt::Alignment alignment = Qt::AlignLeft);
+    explicit FriendBox(MainScene *scene, QString name, FriendBox::UserState state, Qt::Alignment alignment = Qt::AlignLeft);
+    QString getName();
+    QString getDesc();
+    UserState getState();
 
 protected:
     QString _name;
+    QString _desc;
     QLabel *_label;
     QGroupBox *_box;
     UserState _state;
+    MainScene *_scene;
 
     void setState();
     void mousePressEvent(QMouseEvent *event) override;
 
 private:
-
 };
 
 
