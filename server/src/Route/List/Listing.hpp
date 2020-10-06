@@ -30,6 +30,9 @@ namespace Server::Route::Listing {
 
     Common::Response Register(Server::Network::Client &client,
                               const Arguments::RouteHandlerArgs &arg);
+
+    Common::Response SetStatus(Server::Network::Client &client,
+                              const Arguments::RouteHandlerArgs &arg);
 }
 
 #endif

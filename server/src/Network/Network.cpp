@@ -72,6 +72,7 @@ Server::Network::Network::AcceptClient(const boost::system::error_code &error,
     }
     this->_logger.Info(client.get(), " - Incoming connection from: ",
                        client->GetSocket()->remote_endpoint().address().to_string());
+    client->GetUserData().SetUserIp(client->GetSocket()->remote_endpoint().address().to_string());
     client->StartRead();
     this->Run();
 }

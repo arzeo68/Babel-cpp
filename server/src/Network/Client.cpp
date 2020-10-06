@@ -118,3 +118,7 @@ Server::Network::Client::Client(Server::Network::Client &obj) :
            obj._logger) {
     this->_logger.Debug("COPY constructor, ptr: ", this);
 }
+
+Server::User::User& Server::Network::Client::GetUserData() {
+    return (this->_user);
+}

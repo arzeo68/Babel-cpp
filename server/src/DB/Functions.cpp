@@ -19,13 +19,6 @@ bool Server::Database::Database::AddUser(const std::string& name,
     return (true);
 }
 
-void Server::Database::Database::UpdateStatus(uint16_t id,
-                                              const std::string& status) {
-    this->ExecuteQuery(
-        "UPDATE " + std::string(Server::Database::Database::USER_TABLE) +
-        " SET 'status'='" + status + "' WHERE 'id'=" + std::to_string(id));
-}
-
 [[maybe_unused]] void Server::Database::Database::DeleteUsers() {
     this->ExecuteQuery("DELETE FROM '" + USER_TABLE_STR + "';" +
                        "DELETE FROM SQLITE_SEQUENCE WHERE name='" +
@@ -59,4 +52,12 @@ bool Server::Database::Database::ConnectUser(const std::string& name,
             return (0);
         }, &exists);
     return (exists);
+}
+
+void Server::Database::Database::UpdateStatus(const std::string &name,
+                                              const std::string &status) {
+
+    this->ExecuteQuery(
+        "UPDATE 'user' SET 'status'='" +
+        status + "' WHERE 'name'=" + name);
 }

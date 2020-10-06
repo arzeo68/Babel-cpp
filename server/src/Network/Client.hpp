@@ -13,6 +13,7 @@
 #include "common/TCP/CommonPackages.hpp"
 #include "Network.hpp"
 #include "server/src/DB/Database.hpp"
+#include "server/src/User/User.hpp"
 
 namespace Server::Network {
     class Client : public std::enable_shared_from_this<Client> {
@@ -34,6 +35,7 @@ namespace Server::Network {
         void Write(const Common::Response& response);
         Server::Database::Database &GetDatabase();
         void Shutdown();
+        User::User& GetUserData();
 
         private:
         void Read(const boost::system::error_code &error,
@@ -46,6 +48,7 @@ namespace Server::Network {
         Network* _network_parent;
         Common::Log::Log& _logger;
         boost::asio::io_service& _service;
+        User::User _user;
     };
 
     class InternalError : public std::exception {

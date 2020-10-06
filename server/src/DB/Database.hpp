@@ -33,7 +33,7 @@ namespace Server::Database {
 
         bool AddUser(const std::string& name, const std::string& password);
         bool UserExists(const std::string& name);
-        void UpdateStatus(uint16_t id, const std::string& status);
+        void UpdateStatus(const std::string& name, const std::string& status);
         //std::string GetStatus(uint16_t id);
         void DeleteUsers();
 

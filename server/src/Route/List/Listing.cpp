@@ -50,12 +50,14 @@ Server::Route::Listing::Login(Server::Network::Client &client,
         case Common::POST:
             if (arg.body.size() != 2)
                 return Common::BadRequestTemplate;
-            if (!client.GetDatabase().ConnectUser(arg.body[0], arg.body[1]))
+            if (client.GetUserData().IsConnected() ||
+                !client.GetDatabase().ConnectUser(arg.body[0], arg.body[1]))
                 return (Common::Response {
                     Common::HTTPCodes_e::UNAUTHORIZED,
                     "false",
                 });
             id = client.GetNetwork()->AddUserToPool(client.shared_from_this());
+            client.GetUserData().SetUserName(arg.body[0]);
             CopyCString(response.msg, std::string(std::to_string(id)).c_str());
             return response;
         default:
@@ -76,13 +78,39 @@ Server::Route::Listing::Register(Server::Network::Client &client,
         case Common::POST:
             if (arg.body.size() != 2)
                 return Common::BadRequestTemplate;
-            if (!client.GetDatabase().AddUser(arg.body[0], arg.body[1]))
+            if (client.GetUserData().IsConnected() ||
+                !client.GetDatabase().AddUser(arg.body[0], arg.body[1]))
                 return (Common::Response {
                     Common::HTTPCodes_e::UNAUTHORIZED,
                     "false",
                 });
             id = client.GetNetwork()->AddUserToPool(client.shared_from_this());
+            client.GetUserData().SetUserName(arg.body[0]);
             CopyCString(response.msg, std::string(std::to_string(id)).c_str());
+            return (response);
+        default:
+            return Common::InvalidMethodTemplate;
+    }
+}
+
+Common::Response
+Server::Route::Listing::SetStatus(Server::Network::Client &client,
+                                  const Server::Route::Arguments::RouteHandlerArgs &arg) {
+    Common::Response response {
+        Common::HTTPCodes_e::OK,
+        "true",
+    };
+
+    switch (arg.method) {
+        case Common::POST:
+            if (arg.body.empty())
+                return Common::BadRequestTemplate;
+            if (!client.GetUserData().IsConnected())
+                return (Common::Response {
+                    Common::HTTPCodes_e::UNAUTHORIZED,
+                    "false",
+                });
+            client.GetDatabase().UpdateStatus(client.GetUserData().GetName(), arg.body[0]);
             return (response);
         default:
             return Common::InvalidMethodTemplate;
