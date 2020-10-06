@@ -4,7 +4,7 @@
 
 #include "PackageTcp.hpp"
 
-std::string &PackageTcp::toString(std::string t) {
+std::string PackageTcp::toString(std::string t) {
     std::string p;
     return p;
 }

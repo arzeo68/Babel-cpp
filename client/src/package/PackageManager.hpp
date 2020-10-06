@@ -20,10 +20,13 @@ class PackageManager
     void sendPackage(void);
     void handlePackage(char *pack, int size);
     std::shared_ptr<PortAudio> getPa();
+    std::shared_ptr<Opus> getEncoder() const;
+    std::shared_ptr<Babel::Audio::soundDecoded> getPaNextSound();
+    const std::shared_ptr<IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>> &getPackageBuilder() const;
 
     private:
-    std::unique_ptr<IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>> _packageBuilder;
-    std::unique_ptr<Opus> _encoder;
+    std::shared_ptr<IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>> _packageBuilder;
+    std::shared_ptr<Opus> _encoder;
     std::shared_ptr<PortAudio> _player;
 };
 

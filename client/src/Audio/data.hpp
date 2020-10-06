@@ -93,10 +93,10 @@ namespace Babel
         };
         #pragma pack(push,1)
         typedef struct packageAudio_s {
-            uint16 magicByte;
-            uint16 idSender;
-            std::time_t timestamp;
-            unsigned char voice[960];
+            uint16 magicByte;  //2
+            uint16 idSender;   //2
+            std::time_t timestamp;   //8
+            unsigned char voice[960];   //960
         } packageAudio_t;
         #pragma pack(pop)
     }

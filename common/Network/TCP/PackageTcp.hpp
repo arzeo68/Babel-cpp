@@ -11,7 +11,7 @@
 
 class PackageTcp: public IPackage<std::string, std::string> {
     public:
-    std::string &toString(std::string t) override;
+    std::string toString(std::string t) override;
 
     std::string toPackage(std::string &string) override;
 };
