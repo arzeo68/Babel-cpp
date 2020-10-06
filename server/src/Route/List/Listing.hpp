@@ -15,9 +15,9 @@
 #else
     #include <cstring>
 #endif
-#include "server/src/API/Route/Route.hpp"
+#include "server/src/Route/Route.hpp"
 #include "server/src/Network/Client.hpp"
-#include "server/src/API/Route/Arguments.hpp"
+#include "server/src/Route/Arguments.hpp"
 
 namespace Server::Route::Listing {
     Common::Response User(Server::Network::Client &client,

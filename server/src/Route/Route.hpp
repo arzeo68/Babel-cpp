@@ -14,7 +14,7 @@
 #include <map>
 #include <vector>
 #include "common/Protocol.hpp"
-#include "server/src/API/Route/Arguments.hpp"
+#include "Arguments.hpp"
 #include "server/src/Network/Client.hpp"
 #include "server/src/DB/Database.hpp"
 

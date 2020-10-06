@@ -13,9 +13,9 @@
 #include <map>
 #include <memory>
 #include "common/Protocol.hpp"
-#include "server/src/API/Route/Arguments.hpp"
-#include "server/src/API/Route/Route.hpp"
-#include "server/src/API/Route/List/Listing.hpp"
+#include "server/src/Route/Arguments.hpp"
+#include "server/src/Route/Route.hpp"
+#include "server/src/Route/List/Listing.hpp"
 
 namespace Server {
     class Router {

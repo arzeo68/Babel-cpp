@@ -9,11 +9,13 @@
 #define BABEL_NETWORK_HPP
 
 #include <iostream>
-#include <boost/asio.hpp>
 #include <list>
 #include <memory>
 #include <map>
 #include <mutex>
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/signal_set.hpp>
 #include "common/Protocol.hpp"
 #include "common/Log.hpp"
 #include "server/src/DB/Database.hpp"

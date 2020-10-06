@@ -14,7 +14,7 @@ if(MSVC)
     set(CMAKE_EXE_LINKER_FLAGS
             "${CMAKE_EXE_LINKER_FLAGS} -D_WIN32_WINNT=0x0601")
 else()
-    set(STANDARD_UNIX_CXX_FLAGS "-Wall -g3 -Wextra -Wfatal-errors -D_WIN32_WINNT=0x0601")
+    set(STANDARD_UNIX_CXX_FLAGS "-Wall -g3 -Wextra -Wfatal-errors")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STANDARD_UNIX_CXX_FLAGS}")
 endif()
 
@@ -53,24 +53,24 @@ add_executable(babel_server
         server/src/DB/Database.cpp
         server/src/DB/Database.hpp
         server/src/DB/Exception.cpp
-        server/src/API/Route/Route.cpp
-        server/src/API/Route/Route.hpp
-        server/src/API/Router/Router.cpp
-        server/src/API/Router/Router.hpp
+        server/src/Route/Route.cpp
+        server/src/Route/Route.hpp
+        server/src/Router/Router.cpp
+        server/src/Router/Router.hpp
         server/src/Main.cpp
         server/src/Network/Client.cpp
         server/src/Network/Client.hpp
         server/src/Network/Exception.cpp
         server/src/Network/Network.cpp
         server/src/Network/Network.hpp
-        server/src/API/Route/List/Listing.cpp
-        server/src/API/Route/List/Listing.hpp
+        server/src/Route/List/Listing.cpp
+        server/src/Route/List/Listing.hpp
         server/src/User/Pool.cpp
         server/src/User/Pool.hpp
         common/Protocol.hpp
         common/Log.cpp
         common/Log.hpp
-        server/src/API/Route/Arguments.hpp)
+        server/src/Route/Arguments.hpp)
 
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)

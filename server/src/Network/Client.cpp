@@ -8,7 +8,7 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include "Client.hpp"
-#include "server/src/API/Router/Router.hpp"
+#include "server/src/Router/Router.hpp"
 
 Server::Network::Client::Client(boost::asio::io_service &service,
                                 Server::Database::Database &database,

@@ -5,10 +5,10 @@
 ** Main file for the server part
 */
 
-#include <server/src/API/Route/Route.hpp>
+#include <server/src/Route/Route.hpp>
 #include <iostream>
 #include "Network/Network.hpp"
-#include "server/src/API/Router/Router.hpp"
+#include "server/src/Router/Router.hpp"
 
 int main (const int ac, const char **av) {
     setvbuf(stdout, nullptr, _IONBF, 0); // TODO: Remove be removed for the final version
