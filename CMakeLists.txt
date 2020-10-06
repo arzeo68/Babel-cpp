@@ -70,7 +70,7 @@ add_executable(babel_server
         common/TCP/CommonPackages.hpp
         common/Log.cpp
         common/Log.hpp
-        server/src/Route/Arguments.hpp)
+        server/src/Route/Arguments.hpp server/src/Server.cpp server/src/Server.hpp server/src/DB/Functions.cpp)
 
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)

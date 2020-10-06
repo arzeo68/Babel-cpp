@@ -44,7 +44,6 @@ namespace Common {
         "Missing argument",
     };
 
-    static const constexpr uint8_t MAX_ROUTE_ID = 2;
     typedef uint8_t HTTPMethod_t;
     enum Method : HTTPMethod_t {
         GET,

@@ -20,6 +20,7 @@
 namespace Server {
     class Router {
         public:
+        static const constexpr uint8_t MAX_ROUTE_ID = 3;
         Router() = default;
         ~Router() = default;
 
@@ -30,9 +31,10 @@ namespace Server {
                                  Server::Network::Client& client);
 
         private:
-        std::array<Route::Route, Common::MAX_ROUTE_ID> _routes = {
+        std::array<Route::Route, MAX_ROUTE_ID> _routes = {
             Route::Route{"USER", &Route::Listing::User},
             Route::Route{"LOGIN", &Route::Listing::Login},
+            Route::Route{"REGISTER", &Route::Listing::Register}
         };
     };
 }

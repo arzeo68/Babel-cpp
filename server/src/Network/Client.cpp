@@ -47,7 +47,7 @@ void Server::Network::Client::Read(const boost::system::error_code &error,
                                    std::size_t bytes_transferred,
                                    const std::shared_ptr<MessageArr_t>& message) {
     if (error) {
-        this->_logger.Error("[client] read: ", error.message());
+        this->_logger.Warning("[client] read: ", error.message());
         this->_network_parent->RemoveClient(this);
         throw InternalError(error);
     }
@@ -77,8 +77,7 @@ void Server::Network::Client::Write(const Common::Response &response) {
                               [this](const boost::system::error_code &error,
                                      std::size_t) {
                                   if (error) {
-                                      std::cerr << "write " << error.message()
-                                                << std::endl;
+                                      this->_logger.Error("[client->] write ", error.message());
                                       this->_network_parent->RemoveClient(this);
                                   }
                               });
@@ -98,13 +97,13 @@ void Server::Network::Client::Shutdown() {
         this->_socket->shutdown(
             boost::asio::socket_base::shutdown_type::shutdown_both, ec);
         if (ec)
-            this->_logger.Error("Remove close: ", ec.message());
+            this->_logger.Error("[client->] Remove close: ", ec.message());
         this->_socket->cancel(ec);
         if (ec)
-            this->_logger.Error("Remove cancel: ", ec.message());
+            this->_logger.Error("[client->] Remove cancel: ", ec.message());
         this->_socket->close(ec);
         if (ec)
-            this->_logger.Error("Remove close: ", ec.message());
+            this->_logger.Error("[client->] Remove close: ", ec.message());
         this->_logger.Debug(this, " socket successfully closed");
     } else
         this->_logger.Debug(this, " socket already closed");

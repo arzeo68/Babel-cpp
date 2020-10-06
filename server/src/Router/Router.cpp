@@ -11,9 +11,7 @@
 Common::Response Server::Router::Execute(const Common::PackageServer &protocol,
                                          Route::Arguments::RouteHandlerArgs const &args,
                                          Server::Network::Client& client) {
-    //printf("Protocol found:\n0x%X - '%u' - '%u' - '%u' - '%s'\n", protocol.magic,
-    //       protocol.id, protocol.method, protocol.command, protocol.args);
-    if (protocol.id >= Common::MAX_ROUTE_ID)
+    if (protocol.id >= MAX_ROUTE_ID)
         return (Common::Response {
             Common::HTTPCodes_e::NOT_FOUND,
             "Unknown route"
@@ -35,11 +33,9 @@ Server::Route::Arguments::RouteHandlerArgs
 Server::Router::SplitRawData(const Common::PackageServer &protocol) {
     Route::Arguments::RouteHandlerArgs handler;
     std::vector<std::string> subStr;
+    // TODO: Escape split character: |
     boost::split(subStr, std::string(protocol.args), boost::is_any_of("|"));
 
-    //if (!subStr.empty())
-    //    handler.token = subStr[0];
-    //if (subStr.size() > 1)
     if (!subStr.empty())
         for (auto& k : subStr)
             handler.body.push_back(k);

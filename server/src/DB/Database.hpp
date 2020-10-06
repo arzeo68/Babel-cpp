@@ -26,24 +26,20 @@ namespace Server::Database {
     class Database {
         public:
         typedef int (*DatabaseCallback_t)(void*, int, char**, char**);
-        Database(Common::Log::Log& logger);
+        explicit Database(Common::Log::Log& logger);
         ~Database();
 
-        bool ConnectUser(const std::string &name, const std::string &password);
+        bool ConnectUser(const std::string& name, const std::string& password);
 
-        void AddUser(const std::string &name, const std::string &password);
+        bool AddUser(const std::string& name, const std::string& password);
         bool UserExists(const std::string& name);
         void UpdateStatus(uint16_t id, const std::string& status);
-        std::string GetStatus(uint16_t id);
-        [[maybe_unused]] void DeleteUsers();
-
-        #ifndef _UNUSED_
-            #define _UNUSED_ __attribute__((unused))
-        #endif
+        //std::string GetStatus(uint16_t id);
+        void DeleteUsers();
 
         private:
         sqlite3* _handler;
-        Common::Log::Log& _logger;
+        Common::Log::Log _logger;
         void RegisterTables();
         void ExecuteQuery(const std::string& query,
                           DatabaseCallback_t callback = nullptr,

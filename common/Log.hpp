@@ -91,7 +91,8 @@ namespace Common::Log {
                 return;
             this->_mutex.lock();
             std::string prefix("[" + Common::Log::Log::GetCurrentTime() + "/" +
-                               _map.find(level)->second + "]" + " ");
+                                this->_title + "/" +
+                               _map.find(level)->second + "] ");
             std::cout << prefix;
             (std::cout << ... << args) << std::endl;
             this->_file << prefix;

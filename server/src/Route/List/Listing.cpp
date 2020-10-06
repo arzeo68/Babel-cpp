@@ -10,9 +10,9 @@
 
 void Server::Route::Listing::CopyCString(char* dest, const char* source) {
     #ifdef _WIN32
-        strcpy_s(dest, sizeof(dest), source);
+    strcpy_s(dest, sizeof(dest), source);
     #else
-        strcpy(dest, source);
+    strcpy(dest, source);
     #endif
 }
 
@@ -48,11 +48,42 @@ Server::Route::Listing::Login(Server::Network::Client &client,
 
     switch (arg.method) {
         case Common::POST:
-            if (arg.body.size() < 2)
+            if (arg.body.size() != 2)
                 return Common::BadRequestTemplate;
+            if (!client.GetDatabase().ConnectUser(arg.body[0], arg.body[1]))
+                return (Common::Response {
+                    Common::HTTPCodes_e::UNAUTHORIZED,
+                    "false",
+                });
             id = client.GetNetwork()->AddUserToPool(client.shared_from_this());
             CopyCString(response.msg, std::string(std::to_string(id)).c_str());
             return response;
+        default:
+            return Common::InvalidMethodTemplate;
+    }
+}
+
+Common::Response
+Server::Route::Listing::Register(Server::Network::Client &client,
+                                 const Server::Route::Arguments::RouteHandlerArgs &arg) {
+    Common::Response response {
+        Common::HTTPCodes_e::OK,
+        "false",
+    };
+    uint32_t id;
+
+    switch (arg.method) {
+        case Common::POST:
+            if (arg.body.size() != 2)
+                return Common::BadRequestTemplate;
+            if (!client.GetDatabase().AddUser(arg.body[0], arg.body[1]))
+                return (Common::Response {
+                    Common::HTTPCodes_e::UNAUTHORIZED,
+                    "false",
+                });
+            id = client.GetNetwork()->AddUserToPool(client.shared_from_this());
+            CopyCString(response.msg, std::string(std::to_string(id)).c_str());
+            return (response);
         default:
             return Common::InvalidMethodTemplate;
     }
