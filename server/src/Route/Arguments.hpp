@@ -8,7 +8,7 @@
 #ifndef SRC_SERVER_ROUTE_ARGUMENTS_
 #define SRC_SERVER_ROUTE_ARGUMENTS_
 
-#include "common/Protocol.hpp"
+#include "common/TCP/CommonPackages.hpp"
 
 namespace Server::Route::Arguments {
     struct RouteHandlerArgs {

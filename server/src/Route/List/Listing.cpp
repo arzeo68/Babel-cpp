@@ -5,7 +5,7 @@
 ** TODO: CHANGE DESCRIPTION.
 */
 
-#include "common/Protocol.hpp"
+#include "common/TCP/CommonPackages.hpp"
 #include "Listing.hpp"
 
 void Server::Route::Listing::CopyCString(char* dest, const char* source) {

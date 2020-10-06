@@ -16,7 +16,7 @@
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/signal_set.hpp>
-#include "common/Protocol.hpp"
+#include "common/TCP/CommonPackages.hpp"
 #include "common/Log.hpp"
 #include "server/src/DB/Database.hpp"
 

@@ -13,7 +13,7 @@
 #include <list>
 #include <map>
 #include <vector>
-#include "common/Protocol.hpp"
+#include "common/TCP/CommonPackages.hpp"
 #include "Arguments.hpp"
 #include "server/src/Network/Client.hpp"
 #include "server/src/DB/Database.hpp"

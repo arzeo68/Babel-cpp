@@ -45,7 +45,7 @@ file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
 include_directories(test/build)
 
 add_executable(babel_client ${SOURCES_CLIENT} client/main.cpp
-        common/Protocol.hpp
+        common/TCP/CommonPackages.hpp
         common/Log.cpp
         common/Log.hpp)
 
@@ -67,7 +67,7 @@ add_executable(babel_server
         server/src/Route/List/Listing.hpp
         server/src/User/Pool.cpp
         server/src/User/Pool.hpp
-        common/Protocol.hpp
+        common/TCP/CommonPackages.hpp
         common/Log.cpp
         common/Log.hpp
         server/src/Route/Arguments.hpp)

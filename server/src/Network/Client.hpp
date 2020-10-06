@@ -10,7 +10,7 @@
 
 #include <memory>
 #include <mutex>
-#include "common/Protocol.hpp"
+#include "common/TCP/CommonPackages.hpp"
 #include "Network.hpp"
 #include "server/src/DB/Database.hpp"
 
