@@ -10,6 +10,7 @@
 #include <client/src/GUI/Modules/FriendBox.hpp>
 #include <client/src/GUI/Modules/FriendsList.hpp>
 #include <client/src/GUI/Modules/UserBox.hpp>
+#include "client/src/GUI/Modules/FriendInfo.hpp"
 
 class MainScene : public AScene
 {
@@ -17,11 +18,15 @@ class MainScene : public AScene
 public:
     explicit MainScene(QObject *parent = Q_NULLPTR);
 
+    void setFriendInfo(FriendBox *_friend);
+
 private:
     void initFriendList();
     void initUser();
     void initFriendInfo();
     void initCall();
+
+//    void notifCall();
 
     enum ContainerList {
         CONT_USER_INFO,
@@ -35,6 +40,12 @@ private:
     QScrollArea *_scroll;
     FriendsList *_friendsList;
     UserBox *_user;
+    FriendInfo *_friendInfo;
+
+//    QLineEdit *notif;
+//    QPushButton *accept_button;
+//    QPushButton *refuse_button;
+//    QPropertyAnimation *anim;
 };
 
 #endif //BABEL_MAINSCENE_HPP

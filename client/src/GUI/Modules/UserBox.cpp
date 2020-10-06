@@ -4,11 +4,10 @@
 
 #include "UserBox.hpp"
 
-UserBox::UserBox(QString name, FriendBox::UserState state, Qt::Alignment alignment)
-    : FriendBox(name, state, alignment)
+UserBox::UserBox(MainScene *scene, QString name, FriendBox::UserState state, Qt::Alignment alignment)
+    : FriendBox(scene, name, state, alignment)
 {
-    setMinimumSize(220, 90);
-    setMaximumSize(350, 90);
+    setFixedSize(350, 90);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     _label->setFont(QFont("Arial", 24));
     _label->setStyleSheet("font-weight: bold;");

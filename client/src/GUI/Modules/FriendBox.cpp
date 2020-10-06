@@ -7,11 +7,14 @@
 #include <QDebug>
 #include <utility>
 #include "FriendBox.hpp"
+#include "client/src/GUI/Scenes/MainScene.hpp"
 
-FriendBox::FriendBox(QString name, UserState state, Qt::Alignment alignment)
-    :   _name(std::move(name)),
+FriendBox::FriendBox(MainScene *scene, QString name, UserState state, Qt::Alignment alignment)
+    :   _name(name),
         Container(new QHBoxLayout, alignment),
-        _state(state)
+        _state(state),
+        _scene(scene),
+        _desc("Ceci est une description set sur le constructeur de FriendBox")
 {
     _label = new QLabel();
     _box = new QGroupBox();
@@ -45,5 +48,19 @@ void FriendBox::setState()
 }
 
 void FriendBox::mousePressEvent(QMouseEvent *event) {
+    _scene->setFriendInfo(this);
     qDebug() << "clicked: " << _name;
+}
+
+QString FriendBox::getName() {
+    return _name;
+}
+
+
+FriendBox::UserState FriendBox::getState() {
+    return _state;
+}
+
+QString FriendBox::getDesc() {
+    return _desc;
 }
