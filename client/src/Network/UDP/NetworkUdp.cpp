@@ -77,6 +77,7 @@ bool NetworkUDP::stopConnection()
 {
     delete _socket;
     _packageManger->end();
+    return true;
 }
 
 
