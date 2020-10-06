@@ -14,9 +14,9 @@ NetworkUDP::NetworkUDP(): _packageManger(std::make_shared<PackageManager>())
 bool NetworkUDP::startConnection(const std::string &ip, const std::string &port)
 {
     _socket = (new QUdpSocket(this));
-    _port = 7755;
+    _port = std::stoi(port);
     _ip = ip;
-    if ( _socket->bind(QHostAddress::LocalHost, _port) == 0)
+    if ( _socket->bind(QHostAddress::Any, _port) == 0)
     {
         throw ThrowError("QUdpSocket bind failed");
     }
@@ -27,7 +27,8 @@ bool NetworkUDP::startConnection(const std::string &ip, const std::string &port)
 
 bool NetworkUDP::write(std::string t)
 {
-    int res = _socket->writeDatagram(t.c_str(), 972, QHostAddress::LocalHost, _port);
+    std::cout << "send" << std::endl;
+    int res = _socket->writeDatagram(t.c_str(), 972, QHostAddress(QString(_ip.c_str())), _port);
     if (res == 972)
         return true;
     return false;
@@ -45,6 +46,7 @@ std::string NetworkUDP::read()
     int size = _socket->readDatagram(buffer.get(), byteToRead, &host, &port);
     if (size == -1)
         throw ThrowError("fail QUdpSocket::read");
+    std::cout << "read" << std::endl;
     _packageManger->handlePackage(buffer.get(), size);
     return std::string(buffer.get(), size);
 }
