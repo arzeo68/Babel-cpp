@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 if(MSVC)
     set(CMAKE_EXE_LINKER_FLAGS
-            "${CMAKE_EXE_LINKER_FLAGS}")
+            "${CMAKE_EXE_LINKER_FLAGS} -D_WIN32_WINNT=0x0601")
 else()
     set(STANDARD_UNIX_CXX_FLAGS "-Wall -g3 -Wextra -Wfatal-errors")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STANDARD_UNIX_CXX_FLAGS}")
@@ -44,11 +44,33 @@ file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
 # UI.h  PATH
 include_directories(test/build)
 
-add_executable(babel_client ${SOURCES_CLIENT} common/Log.cpp common/Log.hpp)
+add_executable(babel_client ${SOURCES_CLIENT} client/main.cpp
+        common/TCP/CommonPackages.hpp
+        common/Log.cpp
+        common/Log.hpp)
 add_executable(babel_server
+        server/src/DB/Database.cpp
+        server/src/DB/Database.hpp
+        server/src/DB/Exception.cpp
+        server/src/Route/Route.cpp
+        server/src/Route/Route.hpp
+        server/src/Router/Router.cpp
+        server/src/Router/Router.hpp
+        server/src/Main.cpp
+        server/src/Network/Client.cpp
+        server/src/Network/Client.hpp
+        server/src/Network/Exception.cpp
+        server/src/Network/Network.cpp
+        server/src/Network/Network.hpp
+        server/src/Route/List/Listing.cpp
+        server/src/Route/List/Listing.hpp
+        server/src/User/Pool.cpp
+        server/src/User/Pool.hpp
+        common/TCP/CommonPackages.hpp
         common/Log.cpp
         common/Log.hpp
-        server/src/Main.cpp)
+        server/src/Route/Arguments.hpp)
+
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
     set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)
@@ -64,4 +86,3 @@ target_include_directories(babel_client PRIVATE inc ../common/inc)
 
 #############################################################
 target_link_libraries(babel_server ${CONAN_LIBS})
-#target_link_libraries(babel_server Qt5::Widgets Qt5::Network Qt5::Core Qt5::Gui)
