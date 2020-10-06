@@ -4,7 +4,7 @@
 
 #include "PackageUdp.hpp"
 
-std::string &PackageUdp::toString(Babel::Audio::packageAudio_t *t)
+std::string PackageUdp::toString(Babel::Audio::packageAudio_t *t)
 {
     std::string str((char *)t);
     return str;

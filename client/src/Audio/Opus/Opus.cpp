@@ -46,7 +46,6 @@ std::shared_ptr<Babel::Audio::soundEncoded>Opus::encode(std::shared_ptr<Babel::A
         throw ThrowError("OPUS","failed to encode");
     }
     encoded->setSize(err);
-    std::cout << "size:  "<<encoded->getEncodedBuffer().size() << std::endl;
     return encoded;
 }
 

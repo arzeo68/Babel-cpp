@@ -12,7 +12,7 @@
 class PackageUdp: public IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>
 {
     public:
-    std::string &toString(Babel::Audio::packageAudio_t *t) override;
+    std::string toString(Babel::Audio::packageAudio_t *t) override;
 
     Babel::Audio::packageAudio_t *toPackage(std::string &string) override;
 };

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstring>
 #include <utility>
+#include <common/Error/ThrowError.hpp>
 
 #include "PortAudio.hpp"
 
@@ -17,14 +18,12 @@ PortAudio::PortAudio()
     _listening = false;
     // Init
     if (Pa_Initialize() != paNoError) {
-        std::cout << "Can't Pa_Initialize" << std::endl;
-        return;
+        throw ThrowError("PortAudio failed to initialize PortAudio");
     }
     // Input
     inputParams.device = Pa_GetDefaultInputDevice();
     if (inputParams.device == paNoDevice) {
-        std::cout << "Can't Pa_GetDefaultInputDevice" << std::endl;
-        return;
+        throw ThrowError("PortAudio failed to get input default device");
     }
     inputParams.channelCount = NUM_CHANNEL;
     inputParams.sampleFormat = paFloat32;
@@ -33,17 +32,15 @@ PortAudio::PortAudio()
     // Output
     outputParams.device = Pa_GetDefaultOutputDevice();
     if (outputParams.device == paNoDevice) {
-        std::cout << "Can't Pa_GetDefaultOutputDevice" << std::endl;
-        return;
+        throw ThrowError("PortAudio failed to get output default device");
     }
     outputParams.channelCount = NUM_CHANNEL;
     outputParams.sampleFormat = paFloat32;
     outputParams.suggestedLatency = Pa_GetDeviceInfo(outputParams.device)->defaultLowOutputLatency;
     outputParams.hostApiSpecificStreamInfo = NULL;
     _init = true;
-    std::cout << "Port audio initialized." << std::endl;
 }
-
+#include "../../Network/UDP/NetworkUdp.hpp"
 int PortAudio::recordCallBack(const void *tmp_buff, void *, unsigned long frm, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *obj)
 {
     PortAudio *p = reinterpret_cast<PortAudio *>(obj);
@@ -54,6 +51,8 @@ int PortAudio::recordCallBack(const void *tmp_buff, void *, unsigned long frm, c
         );
     p->_recordQueue.push(std::move(wptr));
     p->_m.unlock();
+    if (p->_soundCallBack != nullptr)
+        p->_soundCallBack->packageReadyToSendCallback();
     return 0;
 }
 
@@ -79,12 +78,10 @@ void PortAudio::startRecording()
         return;
     if (Pa_OpenStream(&stat, &inputParams, NULL, SAMPLE_RATE, BUFFER_SIZE,
         paClipOff, PortAudio::recordCallBack, this) != paNoError) {
-        std::cout << "Can't Pa_GetDefaultInputDevice" << std::endl;
-        return;
+        throw ThrowError("PortAudio failed to open record stream");
     }
     if (Pa_StartStream(stat) != paNoError) {
-        std::cout << "Can't Pa_StartStream" << std::endl;
-        return;
+        throw ThrowError("PortAudio failed to start record stream");
     }
     _recording = true;
 }
@@ -93,9 +90,8 @@ void PortAudio::stopRecording()
 {
     if (!_recording || !_init)
         return;
-    if (Pa_CloseStream(stat) != paNoError) {
-        std::cout << "Can't Pa_CloseStream" << std::endl;
-        return;
+    if ((_err = Pa_CloseStream(stat)) != paNoError) {
+        throw ThrowError("PortAudio failed to close record stream");
     }
     _recording = false;
 }
@@ -105,12 +101,10 @@ void PortAudio::startPlaying()
     if (_listening || !_init)
         return;
     if (Pa_OpenStream(&stout, NULL, &outputParams, SAMPLE_RATE, BUFFER_SIZE, paClipOff, PortAudio::playCallBack, this) != paNoError) {
-        std::cout << "Can't Pa_OpenStream" << std::endl;
-        return;
+        throw ThrowError("PortAudio failed to open play stream");
     }
     if (Pa_StartStream(stout) != paNoError) {
-        std::cout << "Can't Pa_StartStream" << std::endl;
-        return;
+        throw ThrowError("PortAudio failed to start play stream");
     }
     _listening = true;
 }
@@ -119,9 +113,8 @@ void PortAudio::stopPlaying()
 {
     if (!_listening || !_init)
         return;
-    if (Pa_CloseStream(stat) != paNoError) {
-        std::cout << "Can't Pa_CloseStream" << std::endl;
-        return;
+    if ((_err = Pa_CloseStream(stout)) != paNoError) {
+        throw ThrowError("PortAudio failed to close play stream");
     }
     _listening = false;
 }
@@ -149,5 +142,15 @@ void PortAudio::addSoundToQueue(const std::shared_ptr<Babel::Audio::soundDecoded
         _playQueue.push(data->getSoundBuffer());
     }
     _m.unlock();
+}
+
+NetworkUDP *PortAudio::getSoundCallBack() const
+{
+    return _soundCallBack;
+}
+
+void PortAudio::setSoundCallBack(NetworkUDP *soundCallBack)
+{
+    _soundCallBack = soundCallBack;
 }
 
