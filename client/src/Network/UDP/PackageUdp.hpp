@@ -11,7 +11,7 @@
 class PackageUdp: public IPackage<std::string &, std::string &>
 {
     public:
-    const std::string &toString(std::string &send) override;
+    std::string toString(std::string &send) override;
 
     std::string &toPackage(std::string &string) override;
 };

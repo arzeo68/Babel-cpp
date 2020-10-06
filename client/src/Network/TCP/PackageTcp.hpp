@@ -10,11 +10,12 @@
 #include "common/TCP/CommonPackages.hpp"
 
 
-class PackageTcp: public IPackage<Common::PackageServer *, Common::Response *> {
+class PackageTcp: public IPackage<Common::PackageServer *, Common::Response> {
     public:
-    const std::string &toString(Common::PackageServer *send) override;
+    std::string toString(Common::PackageServer *send) override;
+    const char *toString2(Common::PackageServer *send);
 
-    Common::Response *toPackage(std::string &string) override;
+    Common::Response toPackage(std::string &string) override;
 };
 
 #endif //BABEL_PACKAGETCP_HPP
