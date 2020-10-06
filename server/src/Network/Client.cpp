@@ -55,7 +55,7 @@ void Server::Network::Client::Read(const boost::system::error_code &error,
                         std::to_string(bytes_transferred), " - ", std::to_string(sizeof(Common::PackageServer)));
     if (bytes_transferred != sizeof(Common::PackageServer)) {
         this->Write(Common::Response {
-            Common::HTTPCodes_e::FORBIDDEN,
+            Common::HTTPCodes_e::HTTP_FORBIDDEN,
             "Forbidden"
         });
     } else {

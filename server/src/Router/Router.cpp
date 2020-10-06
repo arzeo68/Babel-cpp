@@ -13,12 +13,12 @@ Common::Response Server::Router::Execute(const Common::PackageServer &protocol,
                                          Server::Network::Client& client) {
     if (protocol.id >= MAX_ROUTE_ID)
         return (Common::Response {
-            Common::HTTPCodes_e::NOT_FOUND,
+            Common::HTTPCodes_e::HTTP_NOT_FOUND,
             "Unknown route"
         });
     else if (protocol.magic != Common::g_MagicNumber)
         return (Common::Response {
-            Common::HTTPCodes_e::FORBIDDEN,
+            Common::HTTPCodes_e::HTTP_FORBIDDEN,
             "Forbidden"
         });
     else

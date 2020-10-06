@@ -20,11 +20,11 @@ Common::Response
 Server::Route::Listing::User(Server::Network::Client &client,
                              const Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
-        Common::HTTPCodes_e::OK,
+        Common::HTTPCodes_e::HTTP_OK,
         "false",
     };
     switch (arg.method) {
-        case Common::GET:
+        case Common::HTTP_GET:
             if (arg.body.empty())
                 return Common::BadRequestTemplate;
             if (client.GetDatabase().UserExists(arg.body[0]))
@@ -41,19 +41,19 @@ Common::Response
 Server::Route::Listing::Login(Server::Network::Client &client,
                               const Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
-        Common::HTTPCodes_e::OK,
+        Common::HTTPCodes_e::HTTP_OK,
         "false",
     };
     uint32_t id;
 
     switch (arg.method) {
-        case Common::POST:
+        case Common::HTTP_POST:
             if (arg.body.size() != 2)
                 return Common::BadRequestTemplate;
             if (client.GetUserData().IsConnected() ||
                 !client.GetDatabase().ConnectUser(arg.body[0], arg.body[1]))
                 return (Common::Response {
-                    Common::HTTPCodes_e::UNAUTHORIZED,
+                    Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
                     "false",
                 });
             id = client.GetNetwork()->AddUserToPool(client.shared_from_this());
@@ -69,19 +69,19 @@ Common::Response
 Server::Route::Listing::Register(Server::Network::Client &client,
                                  const Server::Route::Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
-        Common::HTTPCodes_e::OK,
+        Common::HTTPCodes_e::HTTP_OK,
         "false",
     };
     uint32_t id;
 
     switch (arg.method) {
-        case Common::POST:
+        case Common::HTTP_POST:
             if (arg.body.size() != 2)
                 return Common::BadRequestTemplate;
             if (client.GetUserData().IsConnected() ||
                 !client.GetDatabase().AddUser(arg.body[0], arg.body[1]))
                 return (Common::Response {
-                    Common::HTTPCodes_e::UNAUTHORIZED,
+                    Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
                     "false",
                 });
             id = client.GetNetwork()->AddUserToPool(client.shared_from_this());
@@ -97,17 +97,17 @@ Common::Response
 Server::Route::Listing::SetStatus(Server::Network::Client &client,
                                   const Server::Route::Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
-        Common::HTTPCodes_e::OK,
+        Common::HTTPCodes_e::HTTP_OK,
         "true",
     };
 
     switch (arg.method) {
-        case Common::POST:
+        case Common::HTTP_POST:
             if (arg.body.empty())
                 return Common::BadRequestTemplate;
             if (!client.GetUserData().IsConnected())
                 return (Common::Response {
-                    Common::HTTPCodes_e::UNAUTHORIZED,
+                    Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
                     "false",
                 });
             client.GetDatabase().UpdateStatus(client.GetUserData().GetName(), arg.body[0]);

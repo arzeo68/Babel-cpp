@@ -18,13 +18,13 @@ namespace Common {
     const static constexpr uint16_t g_maxMessageLength = 256u;
 
     enum class HTTPCodes_e : uint16_t {
-        OK = 200,
-        BAD_REQUEST = 400,
-        UNAUTHORIZED = 401,
-        FORBIDDEN = 403,
-        NOT_FOUND = 404,
-        METHOD_NOT_ALLOWED = 405,
-        INTERNAL_SERVER_ERROR = 500,
+        HTTP_OK = 200,
+        HTTP_BAD_REQUEST = 400,
+        HTTP_UNAUTHORIZED = 401,
+        HTTP_FORBIDDEN = 403,
+        HTTP_NOT_FOUND = 404,
+        HTTP_METHOD_NOT_ALLOWED = 405,
+        HTTP_INTERNAL_SERVER_ERROR = 500,
     };
 
     #pragma pack(push, 1)
@@ -35,21 +35,21 @@ namespace Common {
     #pragma pack(pop)
 
     static const Response InvalidMethodTemplate = {
-        HTTPCodes_e::METHOD_NOT_ALLOWED,
+        HTTPCodes_e::HTTP_METHOD_NOT_ALLOWED,
         "Method not allowed",
     };
 
     static const Response BadRequestTemplate = {
-        HTTPCodes_e::BAD_REQUEST,
+        HTTPCodes_e::HTTP_BAD_REQUEST,
         "Missing argument",
     };
 
     typedef uint8_t HTTPMethod_t;
     enum Method : HTTPMethod_t {
-        GET,
-        DELETE,
-        POST,
-        PUT
+        HTTP_GET,
+        HTTP_DELETE,
+        HTTP_POST,
+        HTTP_PUT
     };
 
     #pragma pack(push, 1)
