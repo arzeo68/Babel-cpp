@@ -44,9 +44,6 @@ namespace Server::Database {
         void ExecuteQuery(const std::string& query,
                           DatabaseCallback_t callback = nullptr,
                           void *callback_arg = nullptr);
-
-        static const constexpr char* USER_TABLE = "user";
-        #define USER_TABLE_STR std::string(Server::Database::Database::USER_TABLE)
     };
 
     namespace Exception {

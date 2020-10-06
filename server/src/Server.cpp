@@ -19,7 +19,7 @@ void Server::Server::Run() {
     try {
         this->_network->Run();
     } catch (const Database::Exception::Query &e) {
-        this->_logger.Error("Query error? ", e.what());
+        this->_logger.Error(e.what());
     }
 }
 

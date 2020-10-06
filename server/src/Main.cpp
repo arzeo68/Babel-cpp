@@ -13,7 +13,11 @@ int main (const int ac, const char **av) {
     if (ac != 1)
         port = std::stoi(av[1], nullptr);
 
-    Server::Server server(port);
-    server.Run();
+    try {
+        Server::Server server(port);
+        server.Run();
+    } catch (const Server::Database::Exception::Query &e) {
+        std::cerr << e.what() << std::endl;
+    }
     return (0);
 }
