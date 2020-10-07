@@ -12,8 +12,10 @@
 #include <cstdint>
 
 namespace Server::Network {
+    template<typename S>
     class Client;
 
+    template<typename S>
     class INetwork {
         public:
         virtual ~INetwork() = default;
@@ -21,9 +23,9 @@ namespace Server::Network {
         virtual void Run() = 0;
         virtual void Stop() = 0;
         virtual uint32_t
-        AddUserToPool(const std::shared_ptr<Client>& client) = 0;
-        virtual void RemoveUserFromPool(const Client *client) = 0;
-        virtual void RemoveClient(const Client *client) = 0;
+        AddUserToPool(const std::shared_ptr<Client<S>>& client) = 0;
+        virtual void RemoveUserFromPool(const Client<S> *client) = 0;
+        virtual void RemoveClient(const Client<S> *client) = 0;
 
     };
 }

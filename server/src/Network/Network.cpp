@@ -15,21 +15,24 @@
 #include "../User/Pool.hpp"
 
 
-Server::Network::Network::Network(uint32_t port, Common::Log::Log& logger) :
+template<typename S>
+Server::Network::Network<S>::Network(uint32_t port, Common::Log::Log& logger) :
     _acceptor(_service,
               boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
     _signalSet(_service, SIGINT),
     _database(Database::Database(logger)),
     _logger(logger) {
-    this->_router = std::make_shared <Server::Router>();
+    this->_router = std::make_shared<Server::Router>();
     this->_pool = std::make_shared<Server::User::Pool>();
 }
 
-void Server::Network::Network::Run() {
+template<typename S>
+void Server::Network::Network<S>::Run() {
     this->_is_running = true;
     this->_signalSet.async_wait(
-        [self = shared_from_this()](const boost::system::error_code &error,
-                                    int /*signal*/) {
+        [self = this->shared_from_this()](
+            const boost::system::error_code& error,
+            int /*signal*/) {
             if (error)
                 std::cerr << "Error during catching signals: " << error
                           << std::endl;
@@ -37,17 +40,19 @@ void Server::Network::Network::Run() {
                 self->Stop();
         });
     try {
-        SharedPtrClient_t client = std::make_shared <Client>(this->_service,
-                                                             this->_database,
-                                                             *this->_router,
-                                                             this,
-                                                             this->_logger);
+        SharedPtrSocket_t socket = std::make_shared<>()
+        SharedPtrClient_t client = std::make_shared<Client<boost::asio::ip::tcp::socket>>(
+            this->_service,
+            this->_database,
+            *this->_router,
+            this,
+            this->_logger);
         this->_clients.emplace_back(client);
         this->_logger.Debug(client.get(), " - Waiting for new client on ",
                             this->_acceptor.local_endpoint().port(), "...");
         this->_acceptor.async_accept(*client->GetSocket(),
                                      [self = this->shared_from_this(), client](
-                                         const boost::system::error_code &err) {
+                                         const boost::system::error_code& err) {
                                          self->AcceptClient(err, client);
                                      });
         this->_service.run();
@@ -64,21 +69,24 @@ void Server::Network::Network::Run() {
     }
 }
 
-void
-Server::Network::Network::AcceptClient(const boost::system::error_code &error,
-                                       SharedPtrClient_t client) {
+template<typename S>
+void Server::Network::Network<S>::AcceptClient(
+    const boost::system::error_code& error,
+    SharedPtrClient_t client) {
     if (error) {
         this->_logger.Error("Err accept client: ", error.message());
         throw InternalError(error);
     }
     this->_logger.Info(client.get(), " - Incoming connection from: ",
                        client->GetSocket()->remote_endpoint().address().to_string());
-    client->GetUserData().SetUserIp(client->GetSocket()->remote_endpoint().address().to_string());
+    client->GetUserData().SetUserIp(
+        client->GetSocket()->remote_endpoint().address().to_string());
     client->StartRead();
     this->Run();
 }
 
-void Server::Network::Network::Stop() {
+template<typename S>
+void Server::Network::Network<S>::Stop() {
     if (!this->_is_running)
         return;
     this->_mutex.lock();
@@ -98,8 +106,9 @@ void Server::Network::Network::Stop() {
     this->_logger.Info("Server stopped!");
 }
 
-uint32_t
-Server::Network::Network::AddUserToPool(const std::shared_ptr<Client> &client) {
+template<typename S>
+uint32_t Server::Network::Network<S>::AddUserToPool(
+    const std::shared_ptr<Client<S>>& client) {
     if (!this->_mutex.try_lock())
         throw std::exception();
     uint32_t id = this->_pool->AddClient(client);
@@ -107,13 +116,15 @@ Server::Network::Network::AddUserToPool(const std::shared_ptr<Client> &client) {
     return (id);
 }
 
-void Server::Network::Network::RemoveUserFromPool(const Client *client) {
+template<typename S>
+void Server::Network::Network<S>::RemoveUserFromPool(const Client<S> *client) {
     this->_pool->RemoveClient(client);
 }
 
-void Server::Network::Network::RemoveClient(const Client *client) {
+template<typename S>
+void Server::Network::Network<S>::RemoveClient(const Client<S> *client) {
     this->_mutex.lock();
-    for (auto &i : this->_clients)
+    for (auto& i : this->_clients)
         if (i.get() == client) {
             i->Shutdown();
             this->RemoveUserFromPool(client);
@@ -123,3 +134,4 @@ void Server::Network::Network::RemoveClient(const Client *client) {
         }
     this->_mutex.unlock();
 }
+

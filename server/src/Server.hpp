@@ -23,7 +23,7 @@ namespace Server {
 
         private:
         Common::Log::Log _logger;
-        std::shared_ptr<Network::Network> _network;
+        std::shared_ptr<Network::Network<boost::asio::ip::tcp::socket>> _network;
     };
 }
 

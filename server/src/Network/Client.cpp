@@ -10,12 +10,13 @@
 #include "Client.hpp"
 #include "server/src/Router/Router.hpp"
 
-Server::Network::Client::Client(Server::Database::Database& database,
-                                Server::Router& router,
-                                Network *network,
-                                Common::Log::Log& logger)
+template<typename S>
+Server::Network::Client<S>::Client(Server::Database::Database& database,
+                                   Server::Router& router,
+                                   Network<S> *network,
+                                   Common::Log::Log& logger)
     :
-    _socket(std::make_shared<boost::asio::ip::tcp::socket>(service)),
+    _socket(std::make_shared<S>()),
     _database(database),
     _router(router),
     _network_parent(network),
@@ -23,34 +24,38 @@ Server::Network::Client::Client(Server::Database::Database& database,
     this->_logger.Debug("Client constructor, ptr: ", this);
 }
 
-Server::Network::Client::SharedPtrSocket_t
-Server::Network::Client::GetSocket() {
+template<typename S>
+typename Server::Network::Client<S>::SharedPtrSocket_t
+Server::Network::Client<S>::GetSocket() {
     return (this->_socket);
 }
 
 
-void Server::Network::Client::StartRead() {
+template<typename S>
+void Server::Network::Client<S>::StartRead() {
     std::shared_ptr<MessageArr_t> message = std::make_shared<MessageArr_t>();
 
     this->_socket->async_receive(boost::asio::buffer(*message),
                                  [self = shared_from_this(), message](
-                                     const boost::system::error_code &err,
+                                     const boost::system::error_code& err,
                                      std::size_t bytes_transferred) {
                                      self->Read(err, bytes_transferred,
                                                 message);
                                  });
 }
 
-void Server::Network::Client::Read(const boost::system::error_code &error,
-                                   std::size_t bytes_transferred,
-                                   const std::shared_ptr<MessageArr_t>& message) {
+template<typename S>
+void Server::Network::Client<S>::Read(const boost::system::error_code& error,
+                                      std::size_t bytes_transferred,
+                                      const std::shared_ptr<MessageArr_t>& message) {
     if (error) {
         this->_logger.Warning("[client] read: ", error.message());
         this->_network_parent->RemoveClient(this);
         throw InternalError(error);
     }
     this->_logger.Debug("Bytes transferred: ",
-                        std::to_string(bytes_transferred), " - ", std::to_string(sizeof(Common::PackageServer)));
+                        std::to_string(bytes_transferred), " - ",
+                        std::to_string(sizeof(Common::PackageServer)));
     if (bytes_transferred != sizeof(Common::PackageServer)) {
         this->Write(Common::Response {
             Common::HTTPCodes_e::HTTP_FORBIDDEN,
@@ -68,24 +73,28 @@ void Server::Network::Client::Read(const boost::system::error_code &error,
     this->StartRead();
 }
 
-void Server::Network::Client::Write(const Common::Response &response) {
-    std::vector <boost::asio::const_buffer> buffers;
+template<typename S>
+void Server::Network::Client<S>::Write(const Common::Response& response) {
+    std::vector<boost::asio::const_buffer> buffers;
     buffers.emplace_back(boost::asio::buffer(&response, sizeof(response)));
     this->_socket->async_send(buffers,
-                              [this](const boost::system::error_code &error,
+                              [this](const boost::system::error_code& error,
                                      std::size_t) {
                                   if (error) {
-                                      this->_logger.Error("[client->] write ", error.message());
+                                      this->_logger.Error("[client->] write ",
+                                                          error.message());
                                       this->_network_parent->RemoveClient(this);
                                   }
                               });
 }
 
-Server::Database::Database &Server::Network::Client::GetDatabase() {
+template<typename S>
+Server::Database::Database& Server::Network::Client<S>::GetDatabase() {
     return (this->_database);
 }
 
-Server::Network::Client::~Client() {
+template<typename S>
+Server::Network::Client<S>::~Client() {
     this->_logger.Debug(this, " [->|client] destructor called");
 }
 

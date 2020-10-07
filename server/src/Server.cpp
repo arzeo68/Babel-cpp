@@ -11,14 +11,15 @@ Server::Server::Server(uint32_t port) :
     _logger("server", "server.log",
             Common::Log::Log::g_AllLogLevel,
             std::ios_base::trunc),
-    _network(std::make_shared<Network::Network>(port, this->_logger)) {
-    this->_logger.Info("Launching server...");
+    _network(std::make_shared<Network::Network < boost::asio::ip::tcp::socket>>
+(port, this->_logger)) {
+this->_logger.Info("Launching server...");
 }
 
 void Server::Server::Run() {
     try {
         this->_network->Run();
-    } catch (const Database::Exception::Query &e) {
+    } catch (const Database::Exception::Query& e) {
         this->_logger.Error(e.what());
     }
 }

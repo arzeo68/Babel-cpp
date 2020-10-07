@@ -29,12 +29,14 @@ namespace Server {
 }
 
 namespace Server::Network {
+    template<typename S>
     class Client;
 
+    template<typename S>
     class Network
-        : public std::enable_shared_from_this<Network>, public INetwork {
+        : public std::enable_shared_from_this<Network<S>>, public INetwork<S> {
         public:
-        typedef std::shared_ptr<Client> SharedPtrClient_t;
+        typedef std::shared_ptr<Client<S>> SharedPtrClient_t;
 
         explicit Network(uint32_t port, Common::Log::Log& logger);
         ~Network() override = default;
@@ -42,9 +44,10 @@ namespace Server::Network {
 
         void Run() override;
         void Stop() override;
-        uint32_t AddUserToPool(const std::shared_ptr<Client>& client) override;
-        void RemoveUserFromPool(const Client *client) override;
-        void RemoveClient(const Client *client) override;
+        uint32_t
+        AddUserToPool(const std::shared_ptr<Client<S>>& client) override;
+        void RemoveUserFromPool(const Client<S> *client) override;
+        void RemoveClient(const Client<S> *client) override;
 
         private:
         void AcceptClient(const boost::system::error_code& error,

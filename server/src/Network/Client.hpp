@@ -16,20 +16,21 @@
 #include "server/src/User/User.hpp"
 
 namespace Server::Network {
-    class Client : public std::enable_shared_from_this<Client> {
+    template<typename S>
+    class Client : public std::enable_shared_from_this<Client<S>> {
         public:
         typedef std::shared_ptr<boost::asio::ip::tcp::socket> SharedPtrSocket_t;
         typedef std::array<char, sizeof(Common::PackageServer)> MessageArr_t;
 
         explicit Client(Server::Database::Database& database,
                         Server::Router& router,
-                        Network *network,
+                        Network<S> *network,
                         Common::Log::Log& logger);
         ~Client();
         Client(const Client& obj) = delete;
 
         SharedPtrSocket_t GetSocket();
-        Network* GetNetwork();
+        Network<S> *GetNetwork();
         void StartRead();
         void Write(const Common::Response& response);
         Server::Database::Database &GetDatabase();
@@ -44,7 +45,7 @@ namespace Server::Network {
         SharedPtrSocket_t _socket;
         Server::Database::Database& _database;
         Server::Router& _router;
-        Network* _network_parent;
+        Network<S> *_network_parent;
         Common::Log::Log& _logger;
         User::User _user;
     };
