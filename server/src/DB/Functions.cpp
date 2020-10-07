@@ -9,19 +9,15 @@
 
 bool Server::Database::Database::AddUser(const std::string& name,
                                          const std::string& password) {
-    this->_logger.Debug("Checking if user " + name + " exists in the database...");
+    this->_logger.Debug(
+        "Checking if user " + name + " exists in the database...");
     if (this->UserExists(name))
         return (false);
     this->ExecuteQuery(
         "INSERT INTO 'user' ('name', 'password')"
         " VALUES ('" + name + "', '" + password + "');");
-    this->_logger.Info("User " + name + " added to the database");
+    this->_logger.Info("UserExists " + name + " added to the database");
     return (true);
-}
-
-[[maybe_unused]] void Server::Database::Database::DeleteUsers() {
-    this->ExecuteQuery("DELETE FROM 'user';"
-                       "DELETE FROM SQLITE_SEQUENCE WHERE name='user';");
 }
 
 bool Server::Database::Database::UserExists(const std::string& name) {

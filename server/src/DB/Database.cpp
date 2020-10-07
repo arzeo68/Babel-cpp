@@ -33,15 +33,15 @@ void Server::Database::Database::ExecuteQuery(const std::string &query,
 }
 
 void Server::Database::Database::RegisterTables() {
-    this->ExecuteQuery("CREATE TABLE IF NOT EXISTS \"user\" (\n"
-                       "    'id'       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n"
-                       "    'name'     TEXT                              NOT NULL,\n"
-                       "    'password' TEXT                              NOT NULL,\n"
-                       "    'status'   TEXT NOT NULL DEFAULT ''\n"
+    this->ExecuteQuery("CREATE TABLE IF NOT EXISTS \"user\" (\r\n"
+                       "    'id'       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\r\n"
+                       "    'name'     TEXT                              NOT NULL,\r\n"
+                       "    'password' TEXT                              NOT NULL,\r\n"
+                       "    'status'   TEXT NOT NULL DEFAULT ''\r\n"
                        ");"
-                       "CREATE TABLE IF NOT EXISTS \"friend\" (\n"
-                       "    'name'       TEXT NOT NULL,\n"
-                       "    'friend'     TEXT NOT NULL\n"
+                       "CREATE TABLE IF NOT EXISTS \"friend\" (\r\n"
+                       "    'name'       TEXT NOT NULL,\r\n"
+                       "    'friend'     TEXT NOT NULL\r\n"
                        ");");
     this->_logger.Info("Tables created in the database");
 }

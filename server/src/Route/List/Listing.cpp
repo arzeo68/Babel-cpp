@@ -17,9 +17,9 @@ void Server::Route::Listing::CopyCString(char* dest, const char* source) {
 }
 
 Common::Response
-Server::Route::Listing::User(Server::Network::Client &client,
-                             const Arguments::RouteHandlerArgs &arg) {
-    Common::Response response {
+Server::Route::Listing::UserExists(Server::Network::Client& client,
+                                   const Arguments::RouteHandlerArgs& arg) {
+    Common::Response response{
         Common::HTTPCodes_e::HTTP_OK,
         "false",
     };
