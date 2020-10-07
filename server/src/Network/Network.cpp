@@ -9,6 +9,7 @@
 #include <iostream>
 #include <boost/asio/error.hpp>
 #include "server/src/Router/Router.hpp"
+#include "server/src/DB/Database.hpp"
 #include "Network.hpp"
 #include "Client.hpp"
 #include "../User/Pool.hpp"
@@ -18,7 +19,7 @@ Server::Network::Network::Network(uint32_t port, Common::Log::Log& logger) :
     _acceptor(_service,
               boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
     _signalSet(_service, SIGINT),
-    _database(logger),
+    _database(Database::Database(logger)),
     _logger(logger) {
     this->_router = std::make_shared <Server::Router>();
     this->_pool = std::make_shared<Server::User::Pool>();

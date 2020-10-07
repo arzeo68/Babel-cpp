@@ -21,13 +21,12 @@ namespace Server::Network {
         typedef std::shared_ptr<boost::asio::ip::tcp::socket> SharedPtrSocket_t;
         typedef std::array<char, sizeof(Common::PackageServer)> MessageArr_t;
 
-        explicit Client(boost::asio::io_service &service,
-                        Server::Database::Database &database,
-                        Server::Router &router,
+        explicit Client(Server::Database::Database& database,
+                        Server::Router& router,
                         Network *network,
                         Common::Log::Log& logger);
         ~Client();
-        Client(Client &obj);
+        Client(const Client& obj) = delete;
 
         SharedPtrSocket_t GetSocket();
         Network* GetNetwork();
@@ -47,7 +46,6 @@ namespace Server::Network {
         Server::Router& _router;
         Network* _network_parent;
         Common::Log::Log& _logger;
-        boost::asio::io_service& _service;
         User::User _user;
     };
 

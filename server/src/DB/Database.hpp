@@ -24,10 +24,9 @@ namespace Server::Database {
             STATUS = 3
         };
     }
+
     class Database : public IDatabase {
         public:
-        typedef int (*DatabaseCallback_t)(void *, int, char **, char **);
-
         explicit Database(Common::Log::Log& logger);
         ~Database() override;
 
@@ -41,9 +40,9 @@ namespace Server::Database {
         void RegisterTables();
 
         private:
+        typedef int (*DatabaseCallback_t)(void *, int, char **, char **);
         sqlite3 *_handler;
         Common::Log::Log _logger;
-
 
         void ExecuteQuery(const std::string& query,
                           DatabaseCallback_t callback = nullptr,
@@ -54,7 +53,6 @@ namespace Server::Database {
         class Opening : std::exception {
             public:
             explicit Opening(uint32_t code);
-
             ~Opening() override = default;
 
             const char *what() const noexcept override;
@@ -66,7 +64,6 @@ namespace Server::Database {
         class Query : std::exception {
             public:
             Query(uint32_t code, char *error, const std::string& query);
-
             ~Query() override = default;
 
             const char *what() const noexcept override;

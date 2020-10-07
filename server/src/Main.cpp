@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "Server.hpp"
+#include "server/src/DB/Database.hpp"
 
 int main (const int ac, const char **av) {
     uint32_t port = 4242;

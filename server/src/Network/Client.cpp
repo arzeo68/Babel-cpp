@@ -10,18 +10,16 @@
 #include "Client.hpp"
 #include "server/src/Router/Router.hpp"
 
-Server::Network::Client::Client(boost::asio::io_service &service,
-                                Server::Database::Database &database,
-                                Server::Router &router,
+Server::Network::Client::Client(Server::Database::Database& database,
+                                Server::Router& router,
                                 Network *network,
-                                Common::Log::Log &logger)
+                                Common::Log::Log& logger)
     :
-    _socket(std::make_shared <boost::asio::ip::tcp::socket>(service)),
+    _socket(std::make_shared<boost::asio::ip::tcp::socket>(service)),
     _database(database),
     _router(router),
     _network_parent(network),
-    _logger(logger),
-    _service(service) {
+    _logger(logger) {
     this->_logger.Debug("Client constructor, ptr: ", this);
 }
 
@@ -111,12 +109,6 @@ void Server::Network::Client::Shutdown() {
 
 Server::Network::Network *Server::Network::Client::GetNetwork() {
     return (this->_network_parent);
-}
-
-Server::Network::Client::Client(Server::Network::Client &obj) :
-    Client(obj._service, obj._database, obj._router, obj._network_parent,
-           obj._logger) {
-    this->_logger.Debug("COPY constructor, ptr: ", this);
 }
 
 Server::User::User& Server::Network::Client::GetUserData() {

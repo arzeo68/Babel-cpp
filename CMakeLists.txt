@@ -47,7 +47,7 @@ include_directories(test/build)
 add_executable(babel_client ${SOURCES_CLIENT} client/main.cpp
         common/TCP/CommonPackages.hpp
         common/Log.cpp
-        common/Log.hpp)
+        common/Log.hpp server/src/Network/Client/Socket.cpp server/src/Network/Client/Socket.hpp)
 add_executable(babel_server
         server/src/DB/Database.cpp
         server/src/DB/Database.hpp
@@ -69,7 +69,14 @@ add_executable(babel_server
         common/TCP/CommonPackages.hpp
         common/Log.cpp
         common/Log.hpp
-        server/src/Route/Arguments.hpp server/src/Server.cpp server/src/Server.hpp server/src/DB/Functions.cpp server/src/User/User.cpp server/src/User/User.hpp server/src/DB/IDatabase.hpp)
+        server/src/Route/Arguments.hpp
+        server/src/Server.cpp
+        server/src/Server.hpp
+        server/src/DB/Functions.cpp
+        server/src/User/User.cpp
+        server/src/User/User.hpp
+        server/src/DB/IDatabase.hpp
+        server/src/Network/INetwork.hpp)
 
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
