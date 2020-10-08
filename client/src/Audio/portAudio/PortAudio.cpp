@@ -137,7 +137,7 @@ std::shared_ptr<Babel::Audio::soundDecoded> PortAudio::getNextSound()
 void PortAudio::addSoundToQueue(const std::shared_ptr<Babel::Audio::soundDecoded>& data)
 {
     _m.lock();
-    if (data->getSize() != 0)
+    if (data->getSize() > 0)
     {
         _playQueue.push(data->getSoundBuffer());
     }

@@ -21,7 +21,7 @@ class NetworkUDP: public INetwork<std::string, std::string>
     bool stopConnection();
 
     bool write(std::string t) override;
-    void sendSound(std::shared_ptr<Babel::Audio::soundDecoded> data);
+    void sendSound(Babel::Audio::soundDecoded &data);
 
     std::string read() override;
 
@@ -32,6 +32,7 @@ class NetworkUDP: public INetwork<std::string, std::string>
     std::string _ip;
     std::shared_ptr<PackageManager> _packageManger;
     QUdpSocket *_socket;
+    uint32_t _nextPackageSize = 0;
 
     public slots:
         void markAsReadable(void);
