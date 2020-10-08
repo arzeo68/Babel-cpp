@@ -31,13 +31,21 @@ void PackageManager::handlePackage(char *pack, int size)
 {
     std::string str(pack, size);
     Babel::Audio::packageAudio_t *package = _packageBuilder->toPackage(str);
-    // check magic byte + time stamp
-    std::shared_ptr<Babel::Audio::soundEncoded> encoded = std::make_shared<Babel::Audio::soundEncoded>();
+    if (package->magicByte != 0x12b)
+    if (lastPackageTimestamp == 0)
+        lastPackageTimestamp = package->timestamp;
+    if (package->timestamp < lastPackageTimestamp)
+    {
+        delete package;
+        return;
+    }
     // todo if sound bug try to replace 960 by size
-    std::vector<unsigned char> voice(package->voice, package->voice + 960);
-    encoded->setEncodedBuffer(voice);
-    encoded->setSize(960);
-    _player->addSoundToQueue(_encoder->decode(encoded));
+    int voiceSize = 0;
+    for(; package->voice[voiceSize] != 0; voiceSize++);
+    std::vector<unsigned char> voice(package->voice, package->voice + voiceSize);
+    Babel::Audio::soundEncoded encoded(voice, voiceSize);
+    encoded.setEncodedBuffer(voice);
+    _player->addSoundToQueue(std::make_shared<Babel::Audio::soundDecoded>(_encoder->decode(encoded)));
 }
 
 std::shared_ptr<PortAudio> PackageManager::getPa()
