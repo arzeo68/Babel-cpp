@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 {
 //    QCoreApplication a(argc, argv);
 //    NetworkUDP p;
-//    p.startConnection("127.0.0.1", "80");
+//    p.startConnection(argv[1], argv[2]);
 //    return a.exec();
 }
 

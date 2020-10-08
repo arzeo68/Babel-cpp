@@ -25,6 +25,7 @@ class PackageManager
     const std::shared_ptr<IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>> &getPackageBuilder() const;
 
     private:
+    std::time_t lastPackageTimestamp = 0;
     std::shared_ptr<IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>> _packageBuilder;
     std::shared_ptr<Opus> _encoder;
     std::shared_ptr<PortAudio> _player;

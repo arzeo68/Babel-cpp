@@ -27,8 +27,7 @@ bool NetworkUDP::startConnection(const std::string &ip, const std::string &port)
 
 bool NetworkUDP::write(std::string t)
 {
-    std::cout << "send" << std::endl;
-    int res = _socket->writeDatagram(t.c_str(), 972, QHostAddress(QString(_ip.c_str())), _port);
+    int res = _socket->writeDatagram(t.c_str(), _nextPackageSize, QHostAddress(QString(_ip.c_str())), _port);
     if (res == 972)
         return true;
     return false;
@@ -46,14 +45,14 @@ std::string NetworkUDP::read()
     int size = _socket->readDatagram(buffer.get(), byteToRead, &host, &port);
     if (size == -1)
         throw ThrowError("fail QUdpSocket::read");
-    std::cout << "read" << std::endl;
     _packageManger->handlePackage(buffer.get(), size);
     return std::string(buffer.get(), size);
 }
 
 void NetworkUDP::packageReadyToSendCallback()
 {
-    sendSound(_packageManger->getPaNextSound());
+    std::shared_ptr<Babel::Audio::soundDecoded> sound = _packageManger->getPaNextSound();
+    sendSound(*sound);
 
 }
 
@@ -62,17 +61,20 @@ void NetworkUDP::markAsReadable(void)
     read();
 }
 
-void NetworkUDP::sendSound(std::shared_ptr<Babel::Audio::soundDecoded> data)
+void NetworkUDP::sendSound(Babel::Audio::soundDecoded &data)
 {
-    std::shared_ptr<Babel::Audio::soundEncoded> encoded = _packageManger->getEncoder()->encode(std::move(data));
+    Babel::Audio::soundEncoded encoded = _packageManger->getEncoder()->encode(data);
     Babel::Audio::packageAudio_t *package = new Babel::Audio::packageAudio_t;
-    std::vector<unsigned char> tmp = encoded->getEncodedBuffer();
-    for(int i = 0; i < 960; i++)
+    std::vector<unsigned char> tmp = encoded.getEncodedBuffer();
+    package->size = encoded.getSize();
+    for(int i = 0; i < package->size; i++)
         package->voice[i] = tmp[i];
     package->timestamp = std::time(nullptr);
     char *buffer  = (char *)package;
-    std::string toString(buffer, 972);
+    _nextPackageSize = 12 + package->size;
+    std::string toString(buffer, _nextPackageSize);
     write(toString);
+    delete package;
 }
 
 bool NetworkUDP::stopConnection()
