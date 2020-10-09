@@ -7,12 +7,15 @@
 
 #include <QtNetwork/QTcpSocket>
 #include "PackageTcp.hpp"
-#include "PackageManagerTcp.hpp"
+
+class GUIController;
+
+class PackageManagerTcp;
 
 class NetworkTcp: public INetwork<std::string &, std::string> {
     Q_OBJECT
     public:
-    NetworkTcp(PackageManagerTcp &packageManager) : _packageManager(packageManager) {};
+    NetworkTcp(GUIController *g) : _guiController(g) {};
     ~NetworkTcp() override { delete _socket; };
     bool startConnection(const std::string &ip, const std::string &port) override;
 
@@ -23,11 +26,11 @@ class NetworkTcp: public INetwork<std::string &, std::string> {
     void connected();
     void disconnected();
     void readyRead();
-    void write(Common::PackageServer *, std::string &, Common::Method);
+    void write(const char *pkg);
 
     private:
+    GUIController *_guiController;
     QTcpSocket *_socket;
-    PackageManagerTcp _packageManager;
 };
 
 #endif //BABEL_NETWORKTCP_HPP

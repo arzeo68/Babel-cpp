@@ -6,29 +6,35 @@
 #define BABEL_GUICONTROLLER_HPP
 
 
-#include "common/TCP/CommonPackages.hpp"
 #include <map>
 #include <iostream>
+#include "client/src/Network/TCP/PackageManagerTcp.hpp"
+#include "client/src/Network/TCP/NetworkTcp.hpp"
+#include "common/TCP/CommonPackages.hpp"
 
 class GUIController {
 public:
-    GUIController() = default;
+    GUIController();
+
     typedef bool (*callback)(Common::Response, Common::Method);
 
-
-    bool handler(Common::Response response, Common::Method method, std::string const &route);
+    // GUI Receiver / Sender
+    void handler(std::string &str);
+    void call(Common::Method method, uint8_t route, Common::PackageServer *pkg);
 
     // Routes Callback
-    static bool User(Common::Response r, Common::Method m);
-    static bool Login(Common::Response r, Common::Method m);
-    static bool Register(Common::Response r, Common::Method m);
+    bool User(Common::Response r, Common::Method m);
+    bool Login(Common::Response r, Common::Method m);
+    bool Register(Common::Response r, Common::Method m);
 
 private:
-    std::map<std::string, callback> _fctPtr = {
-            {"user", User},
-            {"login", Login},
-            {"register", Register},
-    };
+    NetworkTcp _network;
+    PackageTcp _package;
+
+    std::queue<uint8_t> _routes;
+    std::queue<Common::Method> _methods;
+
+    std::map<uint8_t , bool (GUIController::*)(Common::Response, Common::Method)> _fctPtr;
 };
 
 

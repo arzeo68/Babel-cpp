@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QtNetwork/QHostAddress>
 #include "NetworkTcp.hpp"
+#include "client/src/GUI/GUIController/GUIController.hpp"
 
 // ip should be a QHostAddress & port should be an int (and should maybe return the UUID of client)
 bool NetworkTcp::startConnection(const std::string &ip, const std::string &port) {
@@ -34,9 +35,9 @@ void NetworkTcp::disconnected() {
 void NetworkTcp::readyRead() {
     std::cout << "socket " << &_socket << " is ready to read" << std::endl;
     std::string str = _socket->read(sizeof(Common::Response)).toStdString();
-    _packageManager.decodePackage(str);
+    _guiController->handler(str);
 }
 
-void NetworkTcp::write(Common::PackageServer *pkg, std::string &str, Common::Method m) {
-    _socket->write(_packageManager.addRoute(pkg, str, m), sizeof(Common::PackageServer));
+void NetworkTcp::write(const char *pkg) {
+    _socket->write(pkg, sizeof(Common::PackageServer));
 }

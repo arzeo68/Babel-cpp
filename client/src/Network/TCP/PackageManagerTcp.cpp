@@ -4,17 +4,17 @@
 
 #include "PackageManagerTcp.hpp"
 
-PackageManagerTcp::PackageManagerTcp(GUIController guiController) : _guiController(guiController)
+PackageManagerTcp::PackageManagerTcp()
 {
 
 }
 
-bool PackageManagerTcp::decodePackage(std::string &str) {
+Common::Response PackageManagerTcp::decodePackage(std::string &str) {
     std::string const r = _routes.front();
     Common::Method m = _methods.front();
     _routes.pop();
     _methods.pop();
-    return _guiController.handler(_package.toPackage(str), m, r);
+    return _package.toPackage(str);
 }
 
 const char *PackageManagerTcp::addRoute(Common::PackageServer *pkg, std::string &route, Common::Method method) {

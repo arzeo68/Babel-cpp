@@ -5,13 +5,33 @@
 #include <iostream>
 #include "GUIController.hpp"
 
-bool GUIController::handler(Common::Response response, Common::Method method, std::string const &route) {
-    if (_fctPtr.find(route) != _fctPtr.end()) {
-        std::string msg(response.msg);
+GUIController::GUIController() : _network(this) {
+    _fctPtr[0] = &GUIController::User;
+    _fctPtr[1] = &GUIController::Login;
+    _fctPtr[2] = &GUIController::Register;
+    _network.startConnection("", "");
+}
+
+void GUIController::handler(std::string &str) {
+    uint8_t const r = _routes.front();
+    Common::Method m = _methods.front();
+    Common::Response res = _package.toPackage(str);
+
+    _routes.pop();
+    _methods.pop();
+    if (_fctPtr.find(r) != _fctPtr.end()) {
+        std::string msg(res.msg);
         //if (msg != "Unknown route")
-            return _fctPtr[route](response, method);
+            (this->*_fctPtr[r])(res, m);
     }
-    return false;
+}
+
+void GUIController::call(Common::Method method, uint8_t route, Common::PackageServer *pkg) {
+    std::string string = _package.toString(pkg);
+
+    _routes.push(route);
+    _methods.push(method);
+    _network.write(string.c_str());
 }
 
 bool GUIController::User(Common::Response r, Common::Method m) {
