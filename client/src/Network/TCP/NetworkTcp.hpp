@@ -20,7 +20,6 @@ class NetworkTcp: public INetwork<std::string &, std::string> {
     bool startConnection(const std::string &ip, const std::string &port) override;
 
     signals:
-
     public slots:
 
     void connected();
