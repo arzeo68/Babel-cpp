@@ -2,9 +2,9 @@
 // Created by alexis on 20/09/2020.
 //
 
-#include "PortAudio.hpp"
 #include <iostream>
 #include <cstring>
+#include "PortAudio.hpp"
 
 #include "PortAudio.hpp"
 
