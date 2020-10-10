@@ -48,6 +48,8 @@ void FriendInfo::initWidgets()
     _layout->addWidget(_desc);
     _layout->addWidget(_containers.at(CONT_BUTTONS));
     setLayout(_layout);
+
+    connect(_buttons.at(BT_DELETE), SIGNAL(clicked()), this, SLOT(deleteFriend()));
 }
 
 QString FriendInfo::setFriendStyleSheet(FriendBox::UserState state)
@@ -68,4 +70,10 @@ void FriendInfo::setNewFriendInfo(FriendBox *friendBox)
     _desc->setText(friendBox->getDesc());
     _box->setStyleSheet(setFriendStyleSheet(friendBox->getState()));
     _friend = friendBox;
+}
+
+void FriendInfo::deleteFriend()
+{
+    qDebug() << "deleted: " << _friend->getName() << endl;
+
 }
