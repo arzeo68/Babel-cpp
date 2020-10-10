@@ -62,10 +62,10 @@ bool FriendsList::fillFriendsList(Common::Response response)
         pos = str.find(delimiter);
         token = str.substr(0, pos);
         if (token == "1") {
-            fillFriend();
+            loopFriendInfo();
             break;
         } else if (token == "0") {
-            fillFriend();
+            loopFriendInfo();
             break;
             // A CHANGER
         }
