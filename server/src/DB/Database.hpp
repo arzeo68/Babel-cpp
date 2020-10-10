@@ -62,13 +62,14 @@ namespace Server::Database {
                                 const std::string &addressee,
                                 const Common::FriendStatus &status);
 
-        std::vector <std::string> GetFriends(const std::string &author);
+        typedef std::pair<std::vector<std::string>, std::vector<std::string>> FriendListData_t;
+        FriendListData_t GetFriends(const std::string &author);
 
         private:
         typedef int (*DatabaseCallback_t)(void *, int, char **, char **);
 
         sqlite3 *_handler;
-        std::shared_ptr <Common::Log::Log> _logger;
+        std::shared_ptr<Common::Log::Log> _logger;
 
         void ExecuteQuery(const std::string &query,
                           DatabaseCallback_t callback = nullptr,

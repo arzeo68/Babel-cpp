@@ -11,6 +11,7 @@
 #include <list>
 #include <memory>
 #include <thread>
+#include <optional>
 #include "Network.hpp"
 #include "common/Log.hpp"
 

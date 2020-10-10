@@ -32,11 +32,7 @@ void Server::Worker::Run() {
         }
         this->_logger->Debug("I've ", this->_tasks.size(), " task(s) to do");
         for (auto &task : this->_tasks) {
-            if (!this->_mutex.try_lock()) {
-                std::cerr << "I CANNOT LOCK - TASKS STILL REMAINING"
-                          << std::endl;
-                break;
-            }
+            this->_mutex.lock();
             for (auto &client: this->_network->GetClients()) {
                 if (client->GetUserData().GetName() == task.second) {
                     std::cerr << "Sending data to user '" << task.second << "'"
@@ -47,8 +43,7 @@ void Server::Worker::Run() {
             }
             this->_mutex.unlock();
         }
-        this->_logger->Warning("I've ", this->_tasks.size(),
-                               " tasks uncompleted. I'm removing them");
+        this->_logger->Debug("Removing current tasks...");
         this->_tasks.clear();
     }
 }

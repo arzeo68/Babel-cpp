@@ -44,10 +44,8 @@ Server::Route::Listing::Login(std::shared_ptr <Server::Network::Client> client,
                               const Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
         Common::HTTPCodes_e::HTTP_OK,
-        "false",
+        "true",
     };
-    uint32_t id;
-
     switch (arg.method) {
         case Common::HTTP_POST:
             if (arg.body.size() != 2)
@@ -58,11 +56,7 @@ Server::Route::Listing::Login(std::shared_ptr <Server::Network::Client> client,
                     Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
                     "false",
                 });
-            id = client->GetNetwork()->AddUserToPool(
-                client->shared_from_this());
             client->GetUserData().SetUserName(arg.body[0]);
-            _strcpyC(response.msg,
-                     std::string(std::to_string(id)).c_str());
             return response;
         default:
             return Common::InvalidMethodTemplate;
@@ -129,9 +123,9 @@ Server::Route::Listing::SetStatus(
 Common::Response Server::Route::Listing::HandleFriend(
     std::shared_ptr <Server::Network::Client> client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
-    if (arg.body.empty())
-        return Common::BadRequestTemplate;
     if (arg.method != Common::HTTP_GET) {
+        if (arg.body.empty())
+            return Common::BadRequestTemplate;
         if (!client->GetUserData().IsConnected())
             return (Common::Response {
                 Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
@@ -177,15 +171,14 @@ Common::Response Server::Route::Listing::IsFriendConnected(
             Common::HTTPCodes_e::HTTP_NOT_FOUND,
             "false",
         });
-    for (auto &k: client->GetNetwork()->GetClients())
-        if (k->GetUserData().GetName() == arg.body[0] &&
-            k->GetUserData().IsConnected())
-            return (Common::Response {
-                Common::HTTPCodes_e::HTTP_OK,
-                "true",
-            });
-    return (Common::Response {
-        Common::HTTPCodes_e::HTTP_OK,
-        "false",
-    });
+    if (client->GetNetwork()->IsUserConnected(arg.body[0]))
+        return (Common::Response {
+            Common::HTTPCodes_e::HTTP_OK,
+            "true",
+        });
+    else
+        return (Common::Response {
+            Common::HTTPCodes_e::HTTP_OK,
+            "false",
+        });
 }

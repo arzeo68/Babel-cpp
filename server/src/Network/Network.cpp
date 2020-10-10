@@ -90,7 +90,6 @@ void Server::Network::Network::AcceptClient(
 void Server::Network::Network::Stop() {
     if (!this->_is_running)
         return;
-    //this->_mutex.lock();
     this->_logger->Info("Server start to shut down.");
     this->_logger->Info("Stopping all services...");
     this->_worker->Stop();
@@ -104,7 +103,6 @@ void Server::Network::Network::Stop() {
         i->Shutdown();
     }
     this->_clients.clear();
-    //this->_mutex.unlock();
     this->_logger->Info("Server stopped!");
 }
 
@@ -138,3 +136,19 @@ void Server::Network::Network::PreRun() {
     this->_logger->Debug("Pre-run launched");
     this->_worker->SetNetwork(this->shared_from_this());
 }
+
+bool Server::Network::Network::IsUserConnected(const std::string &name) {
+    if (!this->_mutex.try_lock()) {
+        this->_logger->Warning(
+            "Cannot lock mutex using function: IsUserConnected w/ ", name);
+        return (false);
+    }
+    auto find = std::find_if(this->_clients.begin(), this->_clients.end(),
+                             [&name](const std::shared_ptr<Client> &client) {
+                                 return (client->GetUserData().GetName() ==
+                                         name);
+                             });
+    this->_mutex.unlock();
+    return (find != this->_clients.end());
+}
+

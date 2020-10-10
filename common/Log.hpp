@@ -93,13 +93,14 @@ namespace Common::Log {
         void Write(LogLevel_e level, variadic &&... args) {
             if ((level & this->_level) == 0)
                 return;
+            this->_mutex.lock();
             std::string prefix("[" + Common::Log::Log::GetCurrentTime() + "/" +
                                this->_title + "/" +
                                _map.find(level)->second + "] ");
             std::cout << prefix;
             (std::cout << ... << args) << std::endl;
-            if (!this->_mutex.try_lock())
-                return;
+            //if (!this->_mutex.try_lock())
+            //    return;
             this->_file << prefix;
             (this->_file << ... << args) << std::endl;
             this->_mutex.unlock();

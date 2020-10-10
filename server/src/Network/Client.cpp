@@ -125,3 +125,4 @@ Server::User::User &Server::Network::Client::GetUserData() {
 std::shared_ptr <Server::Worker> Server::Network::Client::GetWorker() {
     return (this->_worker->shared_from_this());
 }
+

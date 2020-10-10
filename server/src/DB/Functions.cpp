@@ -107,18 +107,25 @@ void Server::Database::Database::UpdateFriendStatus(const std::string &name,
         this->DeleteFriend(name, addressee);
 }
 
-std::vector <std::string>
+Server::Database::Database::FriendListData_t
 Server::Database::Database::GetFriends(const std::string &author) {
-    std::vector <std::string> friendList;
+    std::pair<FriendListData_t, std::string> friendList = {
+        {}, author
+    };
     this->ExecuteQuery(
         "SELECT * FROM 'friend' WHERE name='" + author + "' OR friend='" +
         author + "';",
         [](void *arg, int, char **data, char **) -> int {
-            auto *friendList = reinterpret_cast<std::vector <std::string> *>(arg);
-            (*friendList).emplace_back(
-                std::string(data[User::Data::F_NAME]) + "|" +
-                data[User::Data::F_FRIEND] + "|" + data[User::Data::F_STATUS]);
+            auto *friendList = reinterpret_cast<std::pair<FriendListData_t, std::string> *>(arg);
+            if (data[User::Data::F_NAME] == (*friendList).second)
+                (*friendList).first.first.emplace_back(
+                    std::string(data[User::Data::F_FRIEND]));
+            else
+                (*friendList).first.first.emplace_back(
+                    std::string(data[User::Data::F_NAME]));
+            (*friendList).first.second.emplace_back(
+                std::string(data[User::Data::F_STATUS]));
             return (0);
         }, &friendList);
-    return (friendList);
+    return (friendList.first);
 }

@@ -85,10 +85,9 @@ Common::Response Server::Route::Listing::Friend::Delete(
     Server::Route::Listing::_strcpyC(notification.msg, std::string(
         "FRIEND|REMOVE|" + userName).c_str());
     client->GetWorker()->AddNotification(notification, arg.body[0]);
-    return (Common::Response {
-        Common::HTTPCodes_e::HTTP_OK,
-        "true"
-    });
+    Server::Route::Listing::_strcpyC(notification.msg, arg.body[0].c_str());
+    notification.code = Common::HTTPCodes_e::HTTP_OK;
+    return (notification);
 }
 
 Common::Response Server::Route::Listing::Friend::Get(
@@ -101,8 +100,11 @@ Common::Response Server::Route::Listing::Friend::Get(
     auto friendList = client->GetDatabase().GetFriends(
         client->GetUserData().GetName());
     std::string formattedFriendList = "FRIEND|LIST|";
-    for (auto &i: friendList) {
-        if ((formattedFriendList.size() + i.size()) >
+    for (auto i = friendList.first.begin(); i != friendList.first.end(); ++i) {
+        std::string encodeText =
+            *i + "|" + friendList.second[i - friendList.first.begin()] + "|" +
+            std::to_string(client->GetNetwork()->IsUserConnected(*i));
+        if ((formattedFriendList.size() + encodeText.size()) >
             Common::g_maxMessageLength) {
             formattedFriendList.erase(formattedFriendList.end() - 1);
             Server::Route::Listing::_strcpyC(response.msg,
@@ -112,11 +114,9 @@ Common::Response Server::Route::Listing::Friend::Get(
                                                  client->GetUserData().GetName());
             formattedFriendList = "FRIEND|LIST|";
         }
-        formattedFriendList += i + "-";
+        formattedFriendList += encodeText + "-";
     }
     formattedFriendList.erase(formattedFriendList.end() - 1);
     Server::Route::Listing::_strcpyC(response.msg, formattedFriendList.c_str());
-    if (response.code == Common::HTTPCodes_e::FAKE_HTTP_PAGINATION)
-        response.code = Common::HTTPCodes_e::FAKE_HTTP_END_PAGINATION;
     return (response);
 }

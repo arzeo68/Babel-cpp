@@ -56,6 +56,7 @@ namespace Server::Network {
         void RemoveUserFromPool(const Client *client) override;
 
         void RemoveClient(const Client *client) override;
+        bool IsUserConnected(const std::string &name);
 
         std::list <SharedPtrClient_t> &GetClients() {
             return (this->_clients);

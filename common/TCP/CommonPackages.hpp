@@ -20,7 +20,6 @@ namespace Common {
     enum class HTTPCodes_e : uint16_t {
         FAKE_HTTP_NOTIFICATION = 100,
         FAKE_HTTP_PAGINATION = 101,
-        FAKE_HTTP_END_PAGINATION = 102,
         HTTP_OK = 200,
         HTTP_BAD_REQUEST = 400,
         HTTP_UNAUTHORIZED = 401,
