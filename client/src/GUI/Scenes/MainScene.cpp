@@ -21,7 +21,7 @@ MainScene::MainScene(QObject *parent)
 
     std::cout << "MainScene Constructor" << std::endl;
 
-    setLayout(_layout);
+    setLayout(_layout.get());
 }
 
 void MainScene::initFriendList()

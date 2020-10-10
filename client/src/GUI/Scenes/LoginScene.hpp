@@ -19,6 +19,7 @@ class LoginScene : public AScene
     Q_OBJECT
 
 public:
+    ~LoginScene() = default;
     explicit LoginScene(MainWindow *parent = Q_NULLPTR);
 
     bool userExist(Common::Response response);
