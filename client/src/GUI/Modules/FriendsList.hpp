@@ -22,7 +22,7 @@ public:
 
     bool fillFriendsList(Common::Response response);
     bool fillFriend(Common::Response response);
-    
+
 private:
     MainScene *_scene;
     UserGUI *_user;
