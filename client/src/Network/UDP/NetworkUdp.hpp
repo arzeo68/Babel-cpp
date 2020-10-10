@@ -20,10 +20,10 @@ class NetworkUDP: public INetwork<std::string, std::string>
     bool startConnection(const std::string &ip, const std::string &port) override;
     bool stopConnection();
 
-    bool write(std::string t) override;
+    bool write(std::string t);
     void sendSound(Babel::Audio::soundDecoded &data);
 
-    std::string read() override;
+    std::string read();
 
     void packageReadyToSendCallback();
 

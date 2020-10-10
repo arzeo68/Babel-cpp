@@ -7,7 +7,7 @@
 
 #include "client/src/Audio/data.hpp"
 #include "client/src/Network/INetwork.hpp"
-#include "../../../common/Package/IPackage.hpp"
+#include "client/src/package/IPackage.hpp"
 
 class PackageUdp: public IPackage<Babel::Audio::packageAudio_t *, Babel::Audio::packageAudio_t *>
 {
