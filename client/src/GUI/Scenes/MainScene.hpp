@@ -17,6 +17,7 @@ class MainScene : public AScene
     Q_OBJECT
 public:
     explicit MainScene(GUIController *guiController, QWidget *parent = Q_NULLPTR);
+    FriendsList *getFriendsList();
 
     void initScene(UserGUI user) override;
 

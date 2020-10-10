@@ -23,11 +23,14 @@ public:
     bool fillFriendsList(Common::Response response);
     bool fillFriend(Common::Response response);
 
+    bool deleteFriend(Common::Response response);
+
 private:
     MainScene *_scene;
     UserGUI *_user;
     std::vector<std::string> _friendsNames;
     QList<FriendBox *> _friend;
+    std::map<std::string, FriendBox *> _friends;
     Container *_overlay;
     InputText *_friendAdd;
     QLabel *_response;

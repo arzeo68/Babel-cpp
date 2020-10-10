@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <client/src/Utils/Utils.hpp>
 #include "FriendsList.hpp"
 #include "client/src/GUI/Scenes/MainScene.hpp"
 
@@ -23,7 +24,7 @@ FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiCont
 
     pkg->magic = Common::g_MagicNumber;
     pkg->id = _user->_id;
-    pkg->method = Common::GET;
+    pkg->method = Common::HTTP_GET;
     pkg->command = 4; //FRIEND
 
     setTitle("                    Friends List     ");
@@ -43,34 +44,21 @@ FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiCont
 
     connect(_submitFriendAdd, SIGNAL(clicked()), this, SLOT(addNewFriend()));
 
-    // en dessouse : call gui controller
+    _guiController->call(Common::HTTP_GET, 4, pkg);
     Common::Response response;
-
-    response.code = Common::HTTPCodes_e::OK;
-    strncpy(response.msg, "Clément|JG_la_famax|Arzeo|1", Common::g_maxMessageLength);
+    strncpy(response.msg, "FRIEND|LIST|Clément|2|1-JG|1|1-Alexis|2|0", Common::g_maxMessageLength);
     fillFriendsList(response);
 }
 
 bool FriendsList::fillFriendsList(Common::Response response)
 {
     std::string str(response.msg);
-    std::string token;
-    size_t pos = 0;
-    char delimiter = '|';
 
-    while (str.length() != 0) {
-        pos = str.find(delimiter);
-        token = str.substr(0, pos);
-        if (token == "1") {
-            loopFriendInfo();
-            break;
-        } else if (token == "0") {
-            loopFriendInfo();
-            break;
-            // A CHANGER
-        }
-        _friendsNames.push_back(token);
-        str.erase(0, pos + 1);
+    str = str.substr(12);
+    std::vector<std::string> friends = Babel::Utils::split(str, "-");
+
+    for (auto it : friends) {
+        std::cout << it << std::endl;
     }
     return true;
 }
@@ -97,14 +85,14 @@ void FriendsList::loopFriendInfo()
     Common::PackageServer *pkg = new Common::PackageServer;
     pkg->magic = Common::g_MagicNumber;
     pkg->id = _user->_id;
-    pkg->method = Common::GET;
+    pkg->method = Common::HTTP_GET;
     pkg->command = 1000; // FRIEND_INFO
 
     for (auto newFriend : _friendsNames) {
         strncpy(pkg->args, newFriend.c_str(), Common::g_maxMessageLength);
         // call avec le GUI CONTROLLER
         Common::Response response;
-        response.code = Common::HTTPCodes_e::OK;
+        response.code = Common::HTTPCodes_e::HTTP_OK;
         std::string str = newFriend;
         newFriend.append("|0");
         strncpy(response.msg, newFriend.c_str(), Common::g_maxMessageLength);
@@ -117,13 +105,26 @@ void FriendsList::addNewFriend()
     Common::PackageServer *pkg = new Common::PackageServer;
     pkg->magic = Common::g_MagicNumber;
     pkg->id = _user->_id;
-    pkg->method = Common::PUT;
+    pkg->method = Common::HTTP_PUT;
     pkg->command = 4; // FRIEND
 
 
     std::string str = _friendAdd->text().toStdString();
     strncpy(pkg->args, str.c_str(), Common::g_maxMessageLength);
-    _guiController->call(Common::PUT, 4, pkg);
+    _guiController->call(Common::HTTP_PUT, 4, pkg);
     _friendAdd->setText("");
+}
+
+bool FriendsList::deleteFriend(Common::Response response) {
+    std::string str(response.msg);
+    std::string name;
+    size_t pos = 0;
+    char delimiter = '|';
+
+    pos = str.find(delimiter);
+    name = str.substr(0, pos);
+
+    // delete dans la map d'amis
+    return true;
 }
 

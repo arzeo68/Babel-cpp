@@ -3,6 +3,7 @@
 //
 
 #include "LoginScene.hpp"
+#include "client/src/GUI/GUIController/GUIController.hpp"
 #include <QDebug>
 #include <iostream>
 #include <common/TCP/CommonPackages.hpp>
@@ -78,10 +79,10 @@ void LoginScene::submitLogin()
         } else {
             QByteArray ba = _inputs.at(IN_USERNAME)->text().toLocal8Bit();
             pkg->magic = Common::g_MagicNumber;
-            pkg->method = Common::GET;
+            pkg->method = Common::HTTP_GET;
             pkg->command = 0; //USER_EXIST
             strcpy(pkg->args, ba.data());
-            // call GUI CONTROLLER
+            _guiController->call(Common::HTTP_GET, 0, pkg);
         }
     }
 
@@ -90,10 +91,10 @@ void LoginScene::submitLogin()
                 + '|'
                 + _inputs.at(IN_PASS)->text()).toLocal8Bit();
         pkg->magic = Common::g_MagicNumber;
-        pkg->method = Common::POST;
+        pkg->method = Common::HTTP_POST;
         pkg->command = 1; //USER_LOGIN
         strcpy(pkg->args, ba.data());
-        // call GUI CONTROLLER
+        _guiController->call(Common::HTTP_POST, 1, pkg);
     }
 
     if (_state == STATE_NOREG) {
@@ -112,10 +113,10 @@ void LoginScene::submitLogin()
                              + '|'
                              + _inputs.at(IN_PASS)->text()).toLocal8Bit();
             pkg->magic = Common::g_MagicNumber;
-            pkg->method = Common::POST;
+            pkg->method = Common::HTTP_POST;
             pkg->command = 2; //USER_REGISTER
             strcpy(pkg->args, ba.data());
-            // call GUI CONTROLLER
+            _guiController->call(Common::HTTP_POST, 2, pkg);
         }
     }
 }
@@ -164,7 +165,7 @@ bool LoginScene::userLogin(Common::Response response)
 {
     std::string str(response.msg);
 
-    if (response.code != Common::HTTPCodes_e::OK) {
+    if (response.code != Common::HTTPCodes_e::HTTP_OK) {
         _info.setStyleSheet("QLabel {color : red; }");
         _info.setText("Wrong username or password");
         _inputs.at(IN_PASS)->setText("");
