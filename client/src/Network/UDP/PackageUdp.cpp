@@ -6,7 +6,7 @@
 
 
 
-const std::string &PackageUdp::toString(std::string &send)
+std::string PackageUdp::toString(std::string &send)
 {
 }
 
