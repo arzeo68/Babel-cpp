@@ -7,15 +7,17 @@
 
 
 #include <common/TCP/CommonPackages.hpp>
+#include <client/src/GUI/GUIController/GUIController.hpp>
 #include "Container.hpp"
 #include "UserGUI.hpp"
 #include "FriendBox.hpp"
+#include "InputText.hpp"
 
 class MainScene;
 class FriendsList : public Container
 {
 public:
-    FriendsList(MainScene *scene, UserGUI *user);
+    FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController);
 
     bool fillFriendsList(Common::Response response);
     bool addFriend(Common::Response response);
@@ -26,8 +28,16 @@ private:
     std::vector<std::string> _friendsNames;
     QList<FriendBox *> _friend;
     Container *_overlay;
+    InputText *_friendAdd;
+    QLabel *_response;
+    Button *_submitFriendAdd;
+    GUIController *_guiController;
 
     void loopFriendInfo();
+
+private slots:
+    void addNewFriend();
+
 };
 
 

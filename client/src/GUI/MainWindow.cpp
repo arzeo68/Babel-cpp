@@ -13,18 +13,20 @@
 #include <client/src/GUI/Scenes/LoginScene.hpp>
 #include <QtWidgets/QComboBox>
 #include <iostream>
+#include <client/src/GUI/GUIController/GUIController.hpp>
 
-MainWindow::MainWindow(QWidget *parent)
-        : QMainWindow(parent)
+MainWindow::MainWindow(GUIController *guiController)
+    :   _userID(0),
+        _guiController(guiController)
 {
     resize(1280, 720);
     setMinimumSize(900, 600);
     setWindowTitle("Babel");
 
     std::cout << "MainWindow constructor" << std::endl;
-    _sceneManager.addScene(new LoginScene(this), "login");
+    _sceneManager.addScene(new LoginScene(_guiController, this), "login");
     std::cout << "MainWindow constructor 2" << std::endl;
-    _sceneManager.addScene(new MainScene(this), "main");
+    _sceneManager.addScene(new MainScene(_guiController, this), "main");
     std::cout << "MainWindow constructor 3" << std::endl;
     setCentralWidget(&_sceneManager);
 }

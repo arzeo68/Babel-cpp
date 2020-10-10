@@ -20,7 +20,7 @@ class LoginScene : public AScene
 
 public:
     ~LoginScene() = default;
-    explicit LoginScene(MainWindow *parent = Q_NULLPTR);
+    explicit LoginScene(GUIController *guiController, MainWindow *parent = Q_NULLPTR);
 
     bool userExist(Common::Response response);
 
@@ -66,6 +66,7 @@ private:
     QLabel _info;
     MainWindow *_parent;
     LoginState _state;
+    GUIController *_guiController;
 };
 
 

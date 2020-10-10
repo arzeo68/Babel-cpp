@@ -6,15 +6,20 @@
 #include "FriendsList.hpp"
 #include "client/src/GUI/Scenes/MainScene.hpp"
 
-FriendsList::FriendsList(MainScene *scene, UserGUI *user)
-    :   Container(new QHBoxLayout),
+FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController)
+    :   Container(new QVBoxLayout),
         _scene(scene),
-        _user(user)
+        _user(user),
+        _response(new QLabel),
+        _overlay(new Container),
+        _friendAdd(new InputText("Add a new friend", 18)),
+        _submitFriendAdd(new Button("Add", QSize(50, 20))),
+        _guiController(guiController)
 {
     QSpacerItem *spacer = new QSpacerItem(12, 10);
     Common::PackageServer *pkg = new Common::PackageServer;
 
-    _overlay = new Container();
+    _response->setText("");
 
     pkg->magic = Common::g_MagicNumber;
     pkg->id = _user->_id;
@@ -31,9 +36,12 @@ FriendsList::FriendsList(MainScene *scene, UserGUI *user)
 //    QString name = QString("BabelUser déco");
 //    FriendBox *le_s = new FriendBox(_scene, name, FriendBox::UserState::DISCONNECTED);
 //    _overlay->addWidget(le_s);
-    _layout->addWidget(_overlay);
-    _layout->addItem(spacer);
 
+    _layout->addWidget(_friendAdd);
+    _layout->addWidget(_submitFriendAdd);
+    _layout->addWidget(_overlay);
+
+    connect(_submitFriendAdd, SIGNAL(clicked()), this, SLOT(addNewFriend()));
 
     // en dessouse : call gui controller
     Common::Response response;
@@ -103,3 +111,17 @@ void FriendsList::loopFriendInfo()
         addFriend(response);
     }
 }
+
+void FriendsList::addNewFriend()
+{
+    Common::PackageServer *pkg = new Common::PackageServer;
+    pkg->magic = Common::g_MagicNumber;
+    pkg->id = _user->_id;
+    pkg->method = Common::PUT;
+    pkg->command = 4; // FRIEND
+
+    std::string str = _friendAdd->text().toStdString();
+    strncpy(pkg->args, str.c_str(), Common::g_maxMessageLength);
+    _guiController->call(Common::PUT, 4, pkg);
+}
+
