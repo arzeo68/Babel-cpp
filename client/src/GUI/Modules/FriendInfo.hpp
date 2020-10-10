@@ -8,14 +8,16 @@
 
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <client/src/GUI/GUIController/GUIController.hpp>
 #include "Container.hpp"
 #include "FriendBox.hpp"
+#include "UserGUI.hpp"
 
 class FriendInfo : public Container
 {
     Q_OBJECT
 public:
-    FriendInfo(FriendBox *friendBox);
+    FriendInfo(FriendBox *friendBox, UserGUI *user, GUIController *guiController);
 
     void setNewFriendInfo(FriendBox *friendBox);
 
@@ -42,6 +44,8 @@ private:
     FriendBox *_friend;
     std::array<Container *, 2> _containers;
     std::array<QPushButton *, 2> _buttons;
+    GUIController *_guiController;
+    UserGUI *_user;
 };
 
 

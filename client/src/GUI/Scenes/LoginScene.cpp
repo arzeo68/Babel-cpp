@@ -9,15 +9,16 @@
 #include <cstring>
 
 
-LoginScene::LoginScene(MainWindow *parent)
+LoginScene::LoginScene(GUIController *guiController, MainWindow *parent)
     :   _buttons({std::make_unique<Button>("Submit", QSize(80, 50)),
                   std::make_unique<Button>("Reset", QSize(80, 50))}),
         _inputs({std::make_unique<InputText>("Username", 20),
                  std::make_unique<InputText>("Password", 20),
                  std::make_unique<InputText>("Confirm Password", 20)}),
         _containers({new Container(), new Container(new QHBoxLayout(), Qt::AlignHCenter)}),
+        _info(new QLabel),
         _parent(parent),
-        _info(new QLabel)
+        _guiController(guiController)
 {
     _inputs.at(IN_PASS)->setEchoMode(QLineEdit::Password);
     _inputs.at(IN_CONF_PASS)->setEchoMode(QLineEdit::Password);

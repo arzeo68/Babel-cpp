@@ -7,12 +7,14 @@
 #include <QtWidgets/QLineEdit>
 #include <QtCore/QPropertyAnimation>
 
-FriendInfo::FriendInfo(FriendBox *friendBox)
+FriendInfo::FriendInfo(FriendBox *friendBox, UserGUI *user, GUIController *guiController)
     :   _containers({new Container(new QHBoxLayout),
                      new Container(new QHBoxLayout)}),
          _buttons({new QPushButton("Start a call"),
                    new QPushButton("Delete friend")}),
-        _friend(friendBox)
+        _friend(friendBox),
+        _guiController(guiController),
+        _user(user)
 {
     initWidgets();
 }
@@ -75,5 +77,12 @@ void FriendInfo::setNewFriendInfo(FriendBox *friendBox)
 void FriendInfo::deleteFriend()
 {
     qDebug() << "deleted: " << _friend->getName() << endl;
+    Common::PackageServer *pkg = new Common::PackageServer;
+    pkg->magic = Common::g_MagicNumber;
+    pkg->id = _user->_id;
+    pkg->method = Common::DELETE;
+    pkg->command = 4; // FRIEND
 
+    strncpy(pkg->args, _friend->getName().toStdString().c_str(), Common::g_maxMessageLength);
+    _guiController->call(Common::DELETE, 4, pkg);
 }

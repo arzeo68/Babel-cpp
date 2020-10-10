@@ -13,6 +13,13 @@ Container::Container(QBoxLayout *layout, Qt::Alignment alignment1, Qt::Alignment
 QWidget *Container::addWidget(QWidget *widget, Qt::Alignment alignment) {
     setAlignment(alignment);
     _layout->addWidget(widget);
-    _list.push_back(widget);
+    _listWidget.push_back(widget);
     return (widget);
+}
+
+QLayoutItem *Container::addItem(QLayoutItem *item, Qt::Alignment alignment) {
+    setAlignment(alignment);
+    _layout->addItem(item);
+    _listItem.push_back(item);
+    return (item);
 }
