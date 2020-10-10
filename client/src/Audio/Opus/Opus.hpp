@@ -11,7 +11,6 @@
 #include <opus.h>
 #include <cstdio>
 #include <iostream>
-
 #include "../data.hpp"
 
 class Opus
