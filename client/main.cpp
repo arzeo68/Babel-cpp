@@ -17,8 +17,7 @@ void readSocket(boost::asio::ip::tcp::socket *socket) {
               << std::endl;
     std::cout << "HTTP code: " << std::to_string(static_cast<uint16_t>(r.code))
               << std::endl;
-    if (r.code == Common::HTTPCodes_e::FAKE_HTTP_END_PAGINATION ||
-        r.code == Common::HTTPCodes_e::FAKE_HTTP_PAGINATION)
+    if (r.code == Common::HTTPCodes_e::FAKE_HTTP_PAGINATION)
         readSocket(socket);
     else if (r.code != Common::HTTPCodes_e::HTTP_OK) {
         delete socket;
@@ -104,8 +103,8 @@ int main(int UNUSED(argc), char **argv) {
         Common::g_MagicNumber,
         0,
         Common::HTTP_GET,
-        5,
-        "world"
+        4,
+        ""
     });
     //writeSocket(socket, Common::PackageServer{
     //    Common::g_MagicNumber,
