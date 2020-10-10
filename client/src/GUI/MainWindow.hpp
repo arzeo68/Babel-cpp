@@ -11,6 +11,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QStackedWidget>
+#include <client/src/GUI/GUIController/GUIController.hpp>
 #include "client/src/GUI/Scenes/SceneManager.hpp"
 
 namespace Ui {
@@ -21,6 +22,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
+    ~MainWindow() = default;
     explicit MainWindow(QWidget *parent = 0);
     void setScene(std::string name, UserGUI user);
 
@@ -33,6 +35,7 @@ private slots:
 private:
     SceneManager _sceneManager;
     uint16_t _userID;
+    GUIController _guiController;
 };
 
 
