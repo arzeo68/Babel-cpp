@@ -4,7 +4,6 @@
 
 #include "PackageManager.hpp"
 
-
 PackageManager::PackageManager() : _packageBuilder(std::make_shared<PackageUdp>()), _encoder(std::make_shared<Opus>()), _player(std::make_shared<PortAudio>())
 {
 }

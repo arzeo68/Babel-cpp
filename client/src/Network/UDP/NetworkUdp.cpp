@@ -2,10 +2,9 @@
 // Created by alexis on 04/10/2020.
 //
 
+#include <utility>
 #include "common/Error/ThrowError.hpp"
 #include "NetworkUdp.hpp"
-
-#include <utility>
 
 NetworkUDP::NetworkUDP(): _packageManger(std::make_shared<PackageManager>())
 {
