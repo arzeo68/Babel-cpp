@@ -67,4 +67,5 @@ void FriendInfo::setNewFriendInfo(FriendBox *friendBox)
                          "QLabel {color : gray; }" : "QLabel {color : black; }");
     _desc->setText(friendBox->getDesc());
     _box->setStyleSheet(setFriendStyleSheet(friendBox->getState()));
+    _friend = friendBox;
 }
