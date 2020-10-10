@@ -15,7 +15,8 @@ LoginScene::LoginScene(GUIController *guiController, MainWindow *parent)
                   std::make_unique<Button>("Reset", QSize(80, 50))}),
         _inputs({std::make_unique<InputText>("Username", 20),
                  std::make_unique<InputText>("Password", 20),
-                 std::make_unique<InputText>("Confirm Password", 20)}),
+                 std::make_unique<InputText>("Confirm Password", 20),
+                 std::make_unique<InputText>("IP: 0.0.0.0", 20)}),
         _containers({new Container(), new Container(new QHBoxLayout(), Qt::AlignHCenter)}),
         _info(new QLabel),
         _parent(parent),
@@ -42,6 +43,7 @@ void LoginScene::initWidgets()
     QSpacerItem *spacer = new QSpacerItem(_parent->size().width() / 2 - 150,
                                           _parent->size().height() / 2 - 150);
 
+    _containers.at(CONT_INPUT)->addWidget(_inputs.at(IN_IP).get());
     _containers.at(CONT_INPUT)->addWidget(_inputs.at(IN_USERNAME).get());
     _containers.at(CONT_INPUT)->addWidget(_inputs.at(IN_PASS).get());
     _containers.at(CONT_INPUT)->addWidget(_inputs.at(IN_CONF_PASS).get());
@@ -69,8 +71,8 @@ void LoginScene::submitLogin()
     std::cout << "SubmitLogin" << std::endl;
     Common::PackageServer *pkg = new Common::PackageServer;
 
-    UserGUI user;
-    user._name = "tqt";
+    UserGUI *user = new UserGUI();
+    user->_name = _inputs.at(IN_USERNAME)->text().toStdString();
     _parent->setScene("main", user);
     if (_state == STATE_USER) {
         if (_inputs.at(IN_USERNAME)->text().length() < 4) {
@@ -171,15 +173,15 @@ bool LoginScene::userLogin(Common::Response response)
         _inputs.at(IN_PASS)->setText("");
         _inputs.at(IN_CONF_PASS)->setText("");
     } else {
-        UserGUI user;
-        user._name = str;
+        UserGUI *user;
+        user->_name = str;
         _parent->setScene("main", user);
     }
 
     return true;
 }
 
-void LoginScene::initScene(UserGUI user)
+void LoginScene::initScene(UserGUI *user)
 {
 
 }

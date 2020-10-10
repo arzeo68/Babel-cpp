@@ -15,7 +15,7 @@ class AScene : public QWidget
 public:
     AScene();
     virtual ~AScene();
-    virtual void initScene(UserGUI user) = 0;
+    virtual void initScene(UserGUI *user) = 0;
 
 protected:
     std::shared_ptr<QGridLayout> _layout;

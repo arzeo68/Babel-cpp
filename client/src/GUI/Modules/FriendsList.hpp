@@ -24,6 +24,8 @@ public:
     bool fillFriend(Common::Response response);
 
     bool deleteFriend(Common::Response response);
+    bool requestFriend(Common::Response response);
+    bool pendingFriend(Common::Response response);
 
 private:
     MainScene *_scene;

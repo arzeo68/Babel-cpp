@@ -11,7 +11,7 @@ int SceneManager::addScene(AScene *scene, std::string name)
     return QStackedWidget::addWidget(scene);
 }
 
-void SceneManager::setScene(std::string name, UserGUI user) {
+void SceneManager::setScene(std::string name, UserGUI *user) {
     std::cout << "init scene started" << std::endl;
     _scenes.at(name)->initScene(user);
     std::cout << "init scene finished" << std::endl;

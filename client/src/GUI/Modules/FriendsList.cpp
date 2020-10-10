@@ -45,20 +45,30 @@ FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiCont
     connect(_submitFriendAdd, SIGNAL(clicked()), this, SLOT(addNewFriend()));
 
     _guiController->call(Common::HTTP_GET, 4, pkg);
-    Common::Response response;
-    strncpy(response.msg, "FRIEND|LIST|Clément|2|1-JG|1|1-Alexis|2|0", Common::g_maxMessageLength);
-    fillFriendsList(response);
+    Common::Response resp;
+    strncpy(resp.msg, "FRIEND|LIST|Clément|Alexis|1|0-Clément|JG|1|1-Clem|Clément|1|0-Dems|Clément|2|1", Common::g_maxMessageLength);
+    fillFriendsList(resp);
 }
 
 bool FriendsList::fillFriendsList(Common::Response response)
 {
     std::string str(response.msg);
+    int state;
 
     str = str.substr(12);
     std::vector<std::string> friends = Babel::Utils::split(str, "-");
 
     for (auto it : friends) {
-        std::cout << it << std::endl;
+        std::vector<std::string> newFriend = Babel::Utils::split(it, "|");
+        if (newFriend[0] == _user->_name) {
+            state = stoi(newFriend[2]) == 1 ? 0 : 2;
+            _friends[newFriend[1]] = new FriendBox(_scene, QString::fromUtf8(newFriend[1].c_str()), (FriendBox::UserState)stoi(newFriend[3]), state);
+            _overlay->addWidget(_friends[newFriend[1]]);
+        } else {
+            state = stoi(newFriend[2]) == 1 ? 1 : 2;
+            _friends[newFriend[0]] = new FriendBox(_scene, QString::fromUtf8(newFriend[0].c_str()), (FriendBox::UserState)stoi(newFriend[3]), state);
+            _overlay->addWidget(_friends[newFriend[0]]);
+        }
     }
     return true;
 }
@@ -117,14 +127,9 @@ void FriendsList::addNewFriend()
 
 bool FriendsList::deleteFriend(Common::Response response) {
     std::string str(response.msg);
-    std::string name;
-    size_t pos = 0;
-    char delimiter = '|';
 
-    pos = str.find(delimiter);
-    name = str.substr(0, pos);
-
-    // delete dans la map d'amis
+    _overlay->removeWidget(_friends[str]);
+    _friends.erase(str);
     return true;
 }
 

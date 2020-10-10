@@ -19,7 +19,7 @@ public:
     explicit MainScene(GUIController *guiController, QWidget *parent = Q_NULLPTR);
     FriendsList *getFriendsList();
 
-    void initScene(UserGUI user) override;
+    void initScene(UserGUI *user) override;
 
     void setFriendInfo(FriendBox *_friend);
 
