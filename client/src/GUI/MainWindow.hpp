@@ -22,7 +22,9 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void setScene(std::string name);
+    void setScene(std::string name, UserGUI user);
+
+    uint16_t getID();
 
 public slots:
 
@@ -30,6 +32,7 @@ private slots:
 
 private:
     SceneManager _sceneManager;
+    uint16_t _userID;
 };
 
 

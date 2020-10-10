@@ -18,6 +18,8 @@ class MainScene : public AScene
 public:
     explicit MainScene(QObject *parent = Q_NULLPTR);
 
+    void initScene(UserGUI user) override;
+
     void setFriendInfo(FriendBox *_friend);
 
 private:
@@ -39,8 +41,9 @@ private:
     std::array<Container *, 5> _containers;
     QScrollArea *_scroll;
     FriendsList *_friendsList;
-    UserBox *_user;
+    UserBox *_userBox;
     FriendInfo *_friendInfo;
+    UserGUI *_user;
 
 //    QLineEdit *notif;
 //    QPushButton *accept_button;

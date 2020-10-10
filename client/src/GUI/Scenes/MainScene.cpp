@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <client/src/GUI/Modules/UserBox.hpp>
 #include <iostream>
+#include <common/TCP/CommonPackages.hpp>
 
 MainScene::MainScene(QObject *parent)
     :   _containers({new Container(),
@@ -19,21 +20,17 @@ MainScene::MainScene(QObject *parent)
     _layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
     std::cout << "MainScene Constructor" << std::endl;
-    initFriendList();
-    initUser();
-    initFriendInfo();
-    initCall();
-    notifCall();
+
     setLayout(_layout);
 }
 
 void MainScene::initFriendList()
 {
     QSpacerItem *spacer = new QSpacerItem(10, 25);
-    //std::cout << "before friendlist" << std::endl;
-    _friendsList = new FriendsList(this);
+
+    _friendsList = new FriendsList(this, _user);
     _scroll = new QScrollArea();
-    std::cout << "after friendlist" << std::endl;
+
     _scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _scroll->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
     _scroll->setWidget(_friendsList);
@@ -43,9 +40,9 @@ void MainScene::initFriendList()
 }
 
 void MainScene::initUser() {
-    _user = new UserBox(this, "UserName", FriendBox::UserState::CONNECTED, Qt::AlignHCenter);
+    _userBox = new UserBox(this, QString::fromUtf8(_user->_name.c_str()), FriendBox::UserState::CONNECTED, Qt::AlignHCenter);
 
-    _layout->addWidget(_user, 0, 0, 1, 2);
+    _layout->addWidget(_userBox, 0, 0, 1, 2);
 }
 
 void MainScene::initFriendInfo()
@@ -63,6 +60,7 @@ void MainScene::initCall()
     _containers.at(CONT_CALL)->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     _layout->addWidget(_containers.at(CONT_CALL), 2, 2);
+
 }
 
 void MainScene::setFriendInfo(FriendBox *_friend) {
@@ -77,6 +75,19 @@ void MainScene::setFriendInfo(FriendBox *_friend) {
 //    notif->setText(name);
 //    anim->start();
 
+}
+void MainScene::initScene(UserGUI user)
+{
+    _user = new UserGUI(user);
+    initFriendList();
+    std::cout << "initFriendList passed" << std::endl;
+    initUser();
+    std::cout << "initUser passed" << std::endl;
+    initFriendInfo();
+    std::cout << "initFriendInfo passed" << std::endl;
+    initCall();
+    std::cout << "initCall passed" << std::endl;
+//    notifCall();
 }
 
 

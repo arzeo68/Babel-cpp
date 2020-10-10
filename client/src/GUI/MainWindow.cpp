@@ -22,14 +22,20 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Babel");
 
     std::cout << "MainWindow constructor" << std::endl;
-//    _sceneManager.addScene(new LoginScene(this), "login");
-    _sceneManager.addScene(new MainScene(), "main");
+    _sceneManager.addScene(new LoginScene(this), "login");
     std::cout << "MainWindow constructor 2" << std::endl;
+    _sceneManager.addScene(new MainScene(this), "main");
+    std::cout << "MainWindow constructor 3" << std::endl;
     setCentralWidget(&_sceneManager);
 }
 
-void MainWindow::setScene(std::string name) {
-    _sceneManager.setScene(name);
+void MainWindow::setScene(std::string name, UserGUI user)
+{
+    _sceneManager.setScene(name, user);
+}
+
+uint16_t MainWindow::getID() {
+    return _userID;
 }
 
 //void MainWindow::notificationManager()
