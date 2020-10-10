@@ -40,6 +40,10 @@ uint16_t MainWindow::getID() {
     return _userID;
 }
 
+SceneManager &MainWindow::getSceneManager() {
+    return _sceneManager;
+}
+
 //void MainWindow::notificationManager()
 //{
 //    QPushButton *notif_button = new QPushButton("Notif", this);

@@ -25,6 +25,7 @@ public:
     ~MainWindow() = default;
     explicit MainWindow(GUIController *guiController);
     void setScene(std::string name, UserGUI user);
+    SceneManager &getSceneManager();
 
     uint16_t getID();
 

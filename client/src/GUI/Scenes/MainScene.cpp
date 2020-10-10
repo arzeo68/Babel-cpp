@@ -92,6 +92,10 @@ void MainScene::initScene(UserGUI user)
 //    notifCall();
 }
 
+FriendsList *MainScene::getFriendsList() {
+    return _friendsList;
+}
+
 
 
 
