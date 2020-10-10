@@ -12,8 +12,10 @@
 #include <cstdint>
 #include <string>
 #include <sqlite3.h>
+#include <vector>
 #include "common/Log.hpp"
 #include "IDatabase.hpp"
+#include "common/FriendStatus.hpp"
 
 namespace Server::Database {
     namespace User {
@@ -21,30 +23,54 @@ namespace Server::Database {
             ID = 0,
             NAME = 1,
             PASSWORD = 2,
-            STATUS = 3
+            STATUS = 3,
+
+            F_NAME = 0,
+            F_FRIEND = 1,
+            F_STATUS = 2,
         };
     }
 
     class Database : public IDatabase {
         public:
-        explicit Database(Common::Log::Log& logger);
+        explicit Database(std::shared_ptr <Common::Log::Log> logger);
+
         ~Database() override;
 
-        bool ConnectUser(const std::string& name,
-                         const std::string& password) override;
-        bool
-        AddUser(const std::string& name, const std::string& password) override;
-        bool UserExists(const std::string& name) override;
-        void UpdateStatus(const std::string& name,
-                          const std::string& status) override;
         void RegisterTables();
+
+        bool ConnectUser(const std::string &name,
+                         const std::string &password) override;
+
+        bool
+        AddUser(const std::string &name, const std::string &password) override;
+
+        bool UserExists(const std::string &name) override;
+
+        void UpdateStatus(const std::string &name,
+                          const std::string &status) override;
+
+        Common::FriendStatus
+        GetFriendStatus(const std::string &name, const std::string &opponent);
+
+        bool AddFriend(const std::string &name, const std::string &addressee);
+
+        void
+        DeleteFriend(const std::string &name, const std::string &addressee);
+
+        void UpdateFriendStatus(const std::string &name,
+                                const std::string &addressee,
+                                const Common::FriendStatus &status);
+
+        std::vector <std::string> GetFriends(const std::string &author);
 
         private:
         typedef int (*DatabaseCallback_t)(void *, int, char **, char **);
-        sqlite3 *_handler;
-        Common::Log::Log _logger;
 
-        void ExecuteQuery(const std::string& query,
+        sqlite3 *_handler;
+        std::shared_ptr <Common::Log::Log> _logger;
+
+        void ExecuteQuery(const std::string &query,
                           DatabaseCallback_t callback = nullptr,
                           void *callback_arg = nullptr);
     };

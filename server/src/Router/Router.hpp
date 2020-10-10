@@ -20,22 +20,29 @@
 namespace Server {
     class Router {
         public:
-        static const constexpr uint8_t MAX_ROUTE_ID = 4;
+        static const constexpr uint8_t MAX_ROUTE_ID = 6;
+
         Router() = default;
+
         ~Router() = default;
 
-        static Common::PackageServer FormatRouteArgs(const std::string& string);
-        static Route::Arguments::RouteHandlerArgs SplitRawData(const Common::PackageServer& protocol);
+        static Common::PackageServer FormatRouteArgs(const std::string &string);
+
+        static Route::Arguments::RouteHandlerArgs
+        SplitRawData(const Common::PackageServer &protocol);
+
         Common::Response Execute(const Common::PackageServer &protocol,
                                  Route::Arguments::RouteHandlerArgs const &args,
-                                 Server::Network::Client& client);
+                                 std::shared_ptr <Server::Network::Client> client);
 
         private:
-        std::array<Route::Route, MAX_ROUTE_ID> _routes = {
-            Route::Route{"USER", &Route::Listing::UserExists},
-            Route::Route{"LOGIN", &Route::Listing::Login},
-            Route::Route{"REGISTER", &Route::Listing::Register},
-            Route::Route{"STATUS", &Route::Listing::SetStatus},
+        std::array <Route::Route, MAX_ROUTE_ID> _routes = {
+            Route::Route {"USER", &Route::Listing::UserExists},
+            Route::Route {"LOGIN", &Route::Listing::Login},
+            Route::Route {"REGISTER", &Route::Listing::Register},
+            Route::Route {"STATUS", &Route::Listing::SetStatus},
+            Route::Route {"FRIEND", &Route::Listing::HandleFriend},
+            Route::Route {"IS_CONNECTED", &Route::Listing::IsFriendConnected},
         };
     };
 }

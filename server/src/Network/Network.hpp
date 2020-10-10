@@ -23,46 +23,60 @@
 
 namespace Server {
     class Router;
+
+    class Worker;
     namespace User {
         class Pool;
     }
 }
 
 namespace Server::Network {
-    template<typename S>
     class Client;
 
-    template<typename S>
     class Network
-        : public std::enable_shared_from_this<Network<S>>, public INetwork<S> {
+        : public std::enable_shared_from_this <Network>, public INetwork {
         public:
-        typedef std::shared_ptr<Client<S>> SharedPtrClient_t;
+        typedef std::shared_ptr <Client> SharedPtrClient_t;
 
-        explicit Network(uint32_t port, Common::Log::Log& logger);
+        explicit Network(uint32_t port,
+                         std::shared_ptr <Common::Log::Log> logger);
+
         ~Network() override = default;
-        Network(const Network& network) = delete;
+
+        Network(const Network &network) = delete;
 
         void Run() override;
+
+        void PreRun();
+
         void Stop() override;
-        uint32_t
-        AddUserToPool(const std::shared_ptr<Client<S>>& client) override;
-        void RemoveUserFromPool(const Client<S> *client) override;
-        void RemoveClient(const Client<S> *client) override;
+
+        uint32_t AddUserToPool(const std::shared_ptr <Client> &client) override;
+
+        void RemoveUserFromPool(const Client *client) override;
+
+        void RemoveClient(const Client *client) override;
+
+        std::list <SharedPtrClient_t> &GetClients() {
+            return (this->_clients);
+        }
 
         private:
-        void AcceptClient(const boost::system::error_code& error,
+        void AcceptClient(const boost::system::error_code &error,
                           SharedPtrClient_t client);
 
         bool _is_running = false;
         boost::asio::io_service _service;
         boost::asio::ip::tcp::acceptor _acceptor;
-        std::list<SharedPtrClient_t> _clients;
-        std::shared_ptr<Server::Router> _router;
+        std::list <SharedPtrClient_t> _clients;
+        std::shared_ptr <Server::Router> _router;
         boost::asio::signal_set _signalSet;
         Server::Database::Database _database;
         std::mutex _mutex;
-        std::shared_ptr<User::Pool> _pool;
-        Common::Log::Log& _logger;
+        std::shared_ptr <User::Pool> _pool;
+        std::shared_ptr <Common::Log::Log> _logger;
+
+        std::shared_ptr <Worker> _worker;
     };
 }
 

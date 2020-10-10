@@ -13,8 +13,9 @@ Server::Route::Route::Route(const std::string &name,
 }
 
 Common::Response
-Server::Route::Route::ExecuteHandler(Server::Network::Client& client,
-                                     Arguments::RouteHandlerArgs const &args) const {
+Server::Route::Route::ExecuteHandler(
+    std::shared_ptr <Server::Network::Client> client,
+    Arguments::RouteHandlerArgs const &args) const {
     return (this->_handler(client, args));
 }
 

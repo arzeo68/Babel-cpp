@@ -8,18 +8,18 @@
 #include <iostream>
 #include "Database.hpp"
 
-Server::Database::Database::Database(Common::Log::Log& logger) : _handler(nullptr), _logger(logger) {
+Server::Database::Database::Database(std::shared_ptr <Common::Log::Log> logger)
+    : _handler(nullptr), _logger(logger) {
     uint32_t code = sqlite3_open("database.db", &this->_handler);
     if (code != SQLITE_OK)
         throw Exception::Opening(code);
-    this->_logger.Info("Successfully connected to the database");
+    this->_logger->Info("Successfully connected to the database");
     this->RegisterTables();
 }
 
 Server::Database::Database::~Database() {
     sqlite3_close(this->_handler);
 }
-
 
 void Server::Database::Database::ExecuteQuery(const std::string &query,
                                               DatabaseCallback_t callback,
@@ -41,7 +41,8 @@ void Server::Database::Database::RegisterTables() {
                        ");"
                        "CREATE TABLE IF NOT EXISTS \"friend\" (\r\n"
                        "    'name'       TEXT NOT NULL,\r\n"
-                       "    'friend'     TEXT NOT NULL\r\n"
+                       "    'friend'     TEXT NOT NULL,\r\n"
+                       "    'status'     INTEGER NOT NULL DEFAULT '0'\r\n"
                        ");");
-    this->_logger.Info("Tables created in the database");
+    this->_logger->Info("Tables created in the database");
 }

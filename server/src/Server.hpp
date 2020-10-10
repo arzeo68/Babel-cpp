@@ -16,14 +16,16 @@ namespace Server {
     class Server {
         public:
         explicit Server(uint32_t port);
+
         ~Server();
+
         Server(const Server &obj) = default;
 
         void Run();
 
         private:
-        Common::Log::Log _logger;
-        std::shared_ptr<Network::Network<boost::asio::ip::tcp::socket>> _network;
+        std::shared_ptr <Common::Log::Log> _logger;
+        std::shared_ptr <Network::Network> _network;
     };
 }
 

@@ -10,7 +10,7 @@
 
 Common::Response Server::Router::Execute(const Common::PackageServer &protocol,
                                          Route::Arguments::RouteHandlerArgs const &args,
-                                         Server::Network::Client& client) {
+                                         std::shared_ptr <Server::Network::Client> client) {
     if (protocol.id >= MAX_ROUTE_ID)
         return (Common::Response {
             Common::HTTPCodes_e::HTTP_NOT_FOUND,
@@ -22,7 +22,8 @@ Common::Response Server::Router::Execute(const Common::PackageServer &protocol,
             "Forbidden"
         });
     else
-        return (this->_routes[protocol.command].ExecuteHandler(client, args));
+        return (this->_routes[protocol.command].ExecuteHandler(
+            client->shared_from_this(), args));
 }
 
 Common::PackageServer Server::Router::FormatRouteArgs(const std::string &string) {
@@ -32,12 +33,11 @@ Common::PackageServer Server::Router::FormatRouteArgs(const std::string &string)
 Server::Route::Arguments::RouteHandlerArgs
 Server::Router::SplitRawData(const Common::PackageServer &protocol) {
     Route::Arguments::RouteHandlerArgs handler;
-    std::vector<std::string> subStr;
+    std::vector <std::string> subStr;
     // TODO: Escape split character: |
     boost::split(subStr, std::string(protocol.args), boost::is_any_of("|"));
-
-    if (!subStr.empty())
-        for (auto& k : subStr)
+    if (!subStr[0].empty())
+        for (auto &k : subStr)
             handler.body.push_back(k);
     handler.method = protocol.method;
     return (handler);

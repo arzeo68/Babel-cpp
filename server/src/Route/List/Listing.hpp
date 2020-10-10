@@ -20,19 +20,44 @@
 #include "server/src/Route/Arguments.hpp"
 
 namespace Server::Route::Listing {
-    void CopyCString(char *dest, const char *source);
+    void _strcpyC(char *dest, const char *source);
 
-    Common::Response UserExists(Server::Network::Client& client,
-                                const Arguments::RouteHandlerArgs& arg);
+    Common::Response
+    UserExists(std::shared_ptr <Server::Network::Client> client,
+               const Arguments::RouteHandlerArgs &arg);
 
-    Common::Response Login(Server::Network::Client& client,
-                           const Arguments::RouteHandlerArgs& arg);
+    Common::Response Login(std::shared_ptr <Server::Network::Client> client,
+                           const Arguments::RouteHandlerArgs &arg);
 
-    Common::Response Register(Server::Network::Client& client,
-                              const Arguments::RouteHandlerArgs& arg);
+    Common::Response Register(std::shared_ptr <Server::Network::Client> client,
+                              const Arguments::RouteHandlerArgs &arg);
 
-    Common::Response SetStatus(Server::Network::Client& client,
-                               const Arguments::RouteHandlerArgs& arg);
+    Common::Response SetStatus(std::shared_ptr <Server::Network::Client> client,
+                               const Arguments::RouteHandlerArgs &arg);
+
+    Common::Response
+    HandleFriend(std::shared_ptr <Server::Network::Client> client,
+                 const Arguments::RouteHandlerArgs &arg);
+
+    namespace Friend {
+        Common::Response Add(std::shared_ptr <Server::Network::Client> client,
+                             const Server::Route::Arguments::RouteHandlerArgs &arg);
+
+        Common::Response
+        UpdateStatus(std::shared_ptr <Server::Network::Client> client,
+                     const Server::Route::Arguments::RouteHandlerArgs &arg);
+
+        Common::Response
+        Delete(std::shared_ptr <Server::Network::Client> client,
+               const Server::Route::Arguments::RouteHandlerArgs &arg);
+
+        Common::Response Get(std::shared_ptr <Server::Network::Client> client,
+                             const Server::Route::Arguments::RouteHandlerArgs &arg);
+    }
+
+    Common::Response
+    IsFriendConnected(std::shared_ptr <Server::Network::Client> client,
+                      const Server::Route::Arguments::RouteHandlerArgs &arg);
 }
 
 #endif

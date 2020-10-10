@@ -5,6 +5,7 @@
 ** TODO: CHANGE DESCRIPTION.
 */
 
+#include <iostream>
 #include "User.hpp"
 
 void Server::User::User::SetUserName(const std::string &name) {
