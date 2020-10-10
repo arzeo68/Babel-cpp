@@ -16,12 +16,13 @@
 class MainScene;
 class FriendsList : public Container
 {
+    Q_OBJECT
 public:
     FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController);
 
     bool fillFriendsList(Common::Response response);
-    bool addFriend(Common::Response response);
-
+    bool fillFriend(Common::Response response);
+    
 private:
     MainScene *_scene;
     UserGUI *_user;
@@ -37,7 +38,6 @@ private:
 
 private slots:
     void addNewFriend();
-
 };
 
 

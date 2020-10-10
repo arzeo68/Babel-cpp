@@ -62,10 +62,10 @@ bool FriendsList::fillFriendsList(Common::Response response)
         pos = str.find(delimiter);
         token = str.substr(0, pos);
         if (token == "1") {
-            loopFriendInfo();
+            fillFriend();
             break;
         } else if (token == "0") {
-            loopFriendInfo();
+            fillFriend();
             break;
             // A CHANGER
         }
@@ -75,7 +75,7 @@ bool FriendsList::fillFriendsList(Common::Response response)
     return true;
 }
 
-bool FriendsList::addFriend(Common::Response response)
+bool FriendsList::fillFriend(Common::Response response)
 {
     std::string str(response.msg);
     std::string name;
@@ -108,7 +108,7 @@ void FriendsList::loopFriendInfo()
         std::string str = newFriend;
         newFriend.append("|0");
         strncpy(response.msg, newFriend.c_str(), Common::g_maxMessageLength);
-        addFriend(response);
+        fillFriend(response);
     }
 }
 
@@ -120,8 +120,10 @@ void FriendsList::addNewFriend()
     pkg->method = Common::PUT;
     pkg->command = 4; // FRIEND
 
+
     std::string str = _friendAdd->text().toStdString();
     strncpy(pkg->args, str.c_str(), Common::g_maxMessageLength);
     _guiController->call(Common::PUT, 4, pkg);
+    _friendAdd->setText("");
 }
 
