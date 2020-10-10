@@ -44,7 +44,6 @@ private:
     UserBox *_userBox;
     FriendInfo *_friendInfo;
     UserGUI *_user;
-
 //    QLineEdit *notif;
 //    QPushButton *accept_button;
 //    QPushButton *refuse_button;

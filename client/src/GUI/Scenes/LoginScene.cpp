@@ -167,6 +167,7 @@ bool LoginScene::userLogin(Common::Response response)
         _info.setStyleSheet("QLabel {color : red; }");
         _info.setText("Wrong username or password");
         _inputs.at(IN_PASS)->setText("");
+        _inputs.at(IN_CONF_PASS)->setText("");
     } else {
         UserGUI user;
         user._name = str;

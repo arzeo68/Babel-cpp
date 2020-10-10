@@ -13,10 +13,14 @@
 
 class FriendInfo : public Container
 {
+    Q_OBJECT
 public:
     FriendInfo(FriendBox *friendBox);
 
     void setNewFriendInfo(FriendBox *friendBox);
+
+public slots:
+    void deleteFriend();
 
 private:
     void initWidgets();

@@ -8,6 +8,7 @@
 
 #include <QtWidgets/QLabel>
 #include "Container.hpp"
+#include "Button.hpp"
 
 class MainScene;
 class FriendBox : public Container
@@ -36,7 +37,6 @@ protected:
     void setState();
     void mousePressEvent(QMouseEvent *event) override;
 
-private:
 };
 
 
