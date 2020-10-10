@@ -9,13 +9,13 @@
 #include <iostream>
 #include <common/TCP/CommonPackages.hpp>
 
-MainScene::MainScene(QObject *parent)
+MainScene::MainScene(GUIController *guiController, QWidget *parent)
     :   _containers({new Container(),
                      new Container(),
                      new Container(),
                      new Container(new QVBoxLayout, Qt::AlignTop),
                      new Container()}),
-        _friendInfo(new FriendInfo(new FriendBox(this, "name", FriendBox::UserState::CONNECTED)))
+        _guiController(guiController)
 {
     _layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -28,7 +28,7 @@ void MainScene::initFriendList()
 {
     QSpacerItem *spacer = new QSpacerItem(10, 25);
 
-    _friendsList = new FriendsList(this, _user);
+    _friendsList = new FriendsList(this, _user, _guiController);
     _scroll = new QScrollArea();
 
     _scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -47,6 +47,8 @@ void MainScene::initUser() {
 
 void MainScene::initFriendInfo()
 {
+    _friendInfo = new FriendInfo(new FriendBox(this, "name", FriendBox::UserState::CONNECTED), _user, _guiController);
+
     _containers.at(CONT_FRIEND_INFO)->setFixedSize(300, 450);
     _containers.at(CONT_FRIEND_INFO)->addWidget(_friendInfo);
     _containers.at(CONT_FRIEND_INFO)->hide();

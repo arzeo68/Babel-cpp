@@ -16,7 +16,7 @@ class MainScene : public AScene
 {
     Q_OBJECT
 public:
-    explicit MainScene(QObject *parent = Q_NULLPTR);
+    explicit MainScene(GUIController *guiController, QWidget *parent = Q_NULLPTR);
 
     void initScene(UserGUI user) override;
 
@@ -44,6 +44,7 @@ private:
     UserBox *_userBox;
     FriendInfo *_friendInfo;
     UserGUI *_user;
+    GUIController *_guiController;
 //    QLineEdit *notif;
 //    QPushButton *accept_button;
 //    QPushButton *refuse_button;
