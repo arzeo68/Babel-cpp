@@ -9,8 +9,6 @@
 
 #include "PortAudio.hpp"
 
-#include "PortAudio.hpp"
-
 PortAudio::PortAudio()
 {
     _inCall = false;
