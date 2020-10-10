@@ -6,6 +6,8 @@
 #define BABEL_DATA_HPP
 
 #include <vector>
+#include <iostream>
+#include <ctime>
 
 namespace Babel
 {
@@ -14,7 +16,14 @@ namespace Babel
         class soundEncoded
         {
             public:
-            soundEncoded(int size = 0, std::vector<unsigned char> buffer = {}) {
+            soundEncoded(int size = 0,const std::vector<unsigned char> &buffer = {}): _size(size) {
+                _encodedBuffer = buffer;
+            }
+
+            soundEncoded(std::vector<unsigned char> buffer, int size ): _size(size) {
+                _encodedBuffer.resize(_size);
+                for(int i = 0; i < _size; i++)
+                    _encodedBuffer[i] = buffer[i];
 
             }
             int getSize() const
@@ -56,7 +65,6 @@ namespace Babel
             };
 
             ~soundDecoded() {
-                _soundBuffer.clear();
             };
 
             int getSize() const {
@@ -89,6 +97,14 @@ namespace Babel
             int _size;
             std::vector<float> _soundBuffer;
         };
+        #pragma pack(push,1)
+        typedef struct packageAudio_s {
+            uint16_t magicByte = 0x12b;  //2
+            uint16_t size;   //2
+            std::time_t timestamp;   //8
+            unsigned char voice[960];   //960
+        } packageAudio_t;
+        #pragma pack(pop)
     }
 }
 

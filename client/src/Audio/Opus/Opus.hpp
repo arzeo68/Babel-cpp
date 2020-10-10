@@ -11,7 +11,6 @@
 #include <opus.h>
 #include <cstdio>
 #include <iostream>
-
 #include "../data.hpp"
 
 class Opus
@@ -19,8 +18,8 @@ class Opus
     public:
     Opus();
     ~Opus();
-    std::shared_ptr<Babel::Audio::soundEncoded>encode (std::shared_ptr<Babel::Audio::soundDecoded>);
-    std::shared_ptr<Babel::Audio::soundDecoded>decode (std::shared_ptr<Babel::Audio::soundEncoded>);
+    Babel::Audio::soundEncoded encode (Babel::Audio::soundDecoded &);
+    Babel::Audio::soundDecoded decode (Babel::Audio::soundEncoded &);
 
     private:
     OpusEncoder *_encoder;
