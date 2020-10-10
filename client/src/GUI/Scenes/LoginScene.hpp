@@ -11,6 +11,7 @@
 #include <client/src/GUI/Modules/Container.hpp>
 #include <client/src/GUI/Modules/InputText.hpp>
 #include <QtWidgets/QLabel>
+#include <common/TCP/CommonPackages.hpp>
 
 
 class LoginScene : public AScene
@@ -20,14 +21,18 @@ class LoginScene : public AScene
 public:
     explicit LoginScene(MainWindow *parent = Q_NULLPTR);
 
-    void initWidgets();
-    void initConnect();
+    bool userExist(Common::Response response);
+
+    bool userLogin(Common::Response response);
 
 private slots:
     void submitLogin();
     void resetLogin();
 
 private:
+    void initWidgets();
+    void initConnect();
+
     enum InputList {
         IN_USERNAME,
         IN_PASS,
@@ -43,6 +48,10 @@ private:
         BT_SUBMIT,
         BT_RESET
     };
+public:
+    void initScene(UserGUI user) override;
+
+private:
 
     typedef enum {
         STATE_USER,

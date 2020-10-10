@@ -7,12 +7,15 @@
 
 #include <QWidget>
 #include <QtWidgets/QGridLayout>
+#include <client/src/GUI/Modules/UserGUI.hpp>
 
 class AScene : public QWidget
 {
     Q_OBJECT
 public:
     AScene();
+
+    virtual void initScene(UserGUI user) = 0;
 
 protected:
     QGridLayout *_layout;
