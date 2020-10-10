@@ -12,6 +12,7 @@
 class SceneManager : public QStackedWidget
 {
 public:
+    ~SceneManager();
     int addScene(AScene *scene, std::string name);
     void setScene(std::string name, UserGUI user);
 

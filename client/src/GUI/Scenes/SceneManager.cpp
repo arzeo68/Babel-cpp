@@ -21,3 +21,10 @@ void SceneManager::setScene(std::string name, UserGUI user) {
 std::map<std::string, AScene *> SceneManager::getScenes() {
     return _scenes;
 }
+
+SceneManager::~SceneManager()
+{
+    for (auto it = _scenes.begin() ; it != _scenes.end(); it++)
+        delete it->second;
+    _scenes.clear();
+}

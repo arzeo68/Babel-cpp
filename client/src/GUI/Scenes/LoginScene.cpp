@@ -27,7 +27,7 @@ LoginScene::LoginScene(MainWindow *parent)
     _state = STATE_USER;
     _info.setText("");
     _layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    _info.setStyleSheet("QLabel {color : green; }");
+//    _info.setStyleSheet("QLabel {color : green; }");
 
 
     initWidgets();
@@ -53,7 +53,7 @@ void LoginScene::initWidgets()
 
     _buttons.at(BT_RESET)->hide();
 
-    setLayout(_layout);
+    setLayout(_layout.get());
 }
 
 void LoginScene::initConnect()
