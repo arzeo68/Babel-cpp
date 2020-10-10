@@ -71,7 +71,12 @@ void FriendInfo::setNewFriendInfo(FriendBox *friendBox)
                          "QLabel {color : gray; }" : "QLabel {color : black; }");
     _desc->setText(friendBox->getDesc());
     _box->setStyleSheet(setFriendStyleSheet(friendBox->getState()));
+    if (friendBox->getState() != FriendBox::CONNECTED)
+        _buttons.at(BT_CALL)->hide();
+    else
+        _buttons.at(BT_CALL)->show();
     _friend = friendBox;
+    show();
 }
 
 void FriendInfo::deleteFriend()
@@ -85,4 +90,5 @@ void FriendInfo::deleteFriend()
 
     strncpy(pkg->args, _friend->getName().toStdString().c_str(), Common::g_maxMessageLength);
     _guiController->call(Common::HTTP_DELETE, 4, pkg);
+    hide();
 }

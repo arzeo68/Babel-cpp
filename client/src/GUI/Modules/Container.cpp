@@ -23,3 +23,13 @@ QLayoutItem *Container::addItem(QLayoutItem *item, Qt::Alignment alignment) {
     _listItem.push_back(item);
     return (item);
 }
+
+QWidget *Container::removeWidget(QWidget *widget) {
+    _layout->removeWidget(widget);
+    for (int i = 0; i < _listWidget.size(); i++) {
+        if (_listWidget[i] == widget) {
+            _listWidget.erase(_listWidget.begin() + i);
+            break;
+        }
+    }
+}

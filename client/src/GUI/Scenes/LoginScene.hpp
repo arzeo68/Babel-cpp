@@ -37,7 +37,8 @@ private:
     enum InputList {
         IN_USERNAME,
         IN_PASS,
-        IN_CONF_PASS
+        IN_CONF_PASS,
+        IN_IP
     };
 
     enum ContainerList {
@@ -50,7 +51,7 @@ private:
         BT_RESET
     };
 public:
-    void initScene(UserGUI user) override;
+    void initScene(UserGUI *user) override;
 
 private:
 
@@ -61,7 +62,7 @@ private:
     } LoginState;
 
     std::array<std::unique_ptr<Button>, 2> _buttons;
-    std::array<std::unique_ptr<InputText>, 3> _inputs;
+    std::array<std::unique_ptr<InputText>, 4> _inputs;
     std::array<Container *, 2> _containers;
     QLabel _info;
     MainWindow *_parent;

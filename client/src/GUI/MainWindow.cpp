@@ -31,7 +31,7 @@ MainWindow::MainWindow(GUIController *guiController)
     setCentralWidget(&_sceneManager);
 }
 
-void MainWindow::setScene(std::string name, UserGUI user)
+void MainWindow::setScene(std::string name, UserGUI *user)
 {
     _sceneManager.setScene(name, user);
 }

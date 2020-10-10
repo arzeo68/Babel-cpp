@@ -78,9 +78,9 @@ void MainScene::setFriendInfo(FriendBox *_friend) {
 //    anim->start();
 
 }
-void MainScene::initScene(UserGUI user)
+void MainScene::initScene(UserGUI *user)
 {
-    _user = new UserGUI(user);
+    _user = user;
     initFriendList();
     std::cout << "initFriendList passed" << std::endl;
     initUser();
