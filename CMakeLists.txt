@@ -46,6 +46,7 @@ include_directories(test/build)
 
 add_executable(babel_client ${SOURCES_CLIENT} common/Log.cpp common/Log.hpp common/Error/ThrowError.cpp common/Error/ThrowError.hpp client/src/GUI/GUIController/GUIController.cpp client/src/GUI/GUIController/GUIController.hpp)
 add_executable(babel_server
+        server/src/Main.cpp
         server/src/DB/Database.cpp
         server/src/DB/Database.hpp
         server/src/DB/Exception.cpp
@@ -53,7 +54,6 @@ add_executable(babel_server
         server/src/Route/Route.hpp
         server/src/Router/Router.cpp
         server/src/Router/Router.hpp
-        server/src/Main.cpp
         server/src/Network/Client.cpp
         server/src/Network/Client.hpp
         server/src/Network/Network.cpp
