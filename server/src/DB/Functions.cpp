@@ -90,7 +90,7 @@ void Server::Database::Database::DeleteFriend(const std::string &name,
     this->ExecuteQuery(
         "DELETE FROM 'friend 'WHERE (name='" + name + "' AND friend='" +
         addressee + "') OR (name='" + addressee + "' AND friend='" + name +
-        "') LIMIT 1;");
+        "');");
 }
 
 void Server::Database::Database::UpdateFriendStatus(const std::string &name,
