@@ -73,6 +73,7 @@ bool CallGUI::acceptedCall(Common::Response response) {
         string.append(args[0].c_str());
         _text->setText(string);
         runTimer();
+        _scene->startUdpCall();
     } else if (args[1] == "3") {
         QString string  = QString(args[0].c_str());
         string.append(" declined your call.");
