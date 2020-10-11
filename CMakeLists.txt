@@ -46,9 +46,40 @@ include_directories(test/build)
 
 add_executable(babel_client ${SOURCES_CLIENT} common/Log.cpp common/Log.hpp common/Error/ThrowError.cpp common/Error/ThrowError.hpp client/src/Network/TCP/PackageManagerTcp.cpp client/src/Network/TCP/PackageManagerTcp.hpp client/src/GUI/GUIController/GUIController.cpp client/src/GUI/GUIController/GUIController.hpp)
 add_executable(babel_server
+        server/src/DB/Database.cpp
+        server/src/DB/Database.hpp
+        server/src/DB/Exception.cpp
+        server/src/Route/Route.cpp
+        server/src/Route/Route.hpp
+        server/src/Router/Router.cpp
+        server/src/Router/Router.hpp
+        server/src/Main.cpp
+        server/src/Network/Client.cpp
+        server/src/Network/Client.hpp
+        server/src/Network/Network.cpp
+        server/src/Network/Network.hpp
+        server/src/Route/List/Callback.cpp
+        server/src/Route/List/Callback.hpp
+        server/src/User/Pool.cpp
+        server/src/User/Pool.hpp
+        common/TCP/CommonPackages.hpp
         common/Log.cpp
         common/Log.hpp
-        server/src/Main.cpp)
+        server/src/Route/Arguments.hpp
+        server/src/Server.cpp
+        server/src/Server.hpp
+        server/src/DB/Functions.cpp
+        server/src/User/User.cpp
+        server/src/User/User.hpp
+        server/src/DB/IDatabase.hpp
+        server/src/Network/INetwork.hpp
+        server/src/Network/Worker.cpp
+        server/src/Network/Worker.hpp
+        server/src/Route/List/Friend.cpp
+        server/src/Route/List/Call.cpp
+        server/src/Route/List/Utils.cpp
+        server/src/Route/List/Utils.hpp)
+
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)
     set_target_properties(babel_server PROPERTIES LINK_FLAGS /MACHINE:X64)
