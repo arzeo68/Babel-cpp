@@ -88,7 +88,7 @@ bool Server::Database::Database::AddFriend(const std::string &name,
 void Server::Database::Database::DeleteFriend(const std::string &name,
                                               const std::string &addressee) {
     this->ExecuteQuery(
-        "DELETE FROM 'friend 'WHERE (name='" + name + "' AND friend='" +
+        "DELETE FROM 'friend' WHERE (name='" + name + "' AND friend='" +
         addressee + "') OR (name='" + addressee + "' AND friend='" + name +
         "');");
 }
