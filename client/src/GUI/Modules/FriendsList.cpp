@@ -182,3 +182,21 @@ void FriendsList::initList(std::map<std::string, FriendBox *> friends) {
         _overlay->addWidget(it.second);
 }
 
+bool FriendsList::responseRequest(Common::Response response) {
+    std::string str(response.msg);
+
+    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+        return false;
+
+    if (str == "false") {
+        return false;
+    } else {
+        std::vector<std::string> args = Babel::Utils::split(str, "|");
+        if (args[1] == "0")
+            deleteFriend(args[0]);
+        else if (args[0] == "1")
+            _friends[str]->setPendingState(2);
+    }
+    return true;
+}
+

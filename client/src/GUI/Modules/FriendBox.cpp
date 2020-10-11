@@ -71,7 +71,8 @@ void FriendBox::setState()
 }
 
 void FriendBox::mousePressEvent(QMouseEvent *event) {
-    _scene->setFriendInfo(this);
+    if (_statePending == STATE_FRIEND)
+        _scene->setFriendInfo(this);
     qDebug() << "clicked: " << _name;
 }
 

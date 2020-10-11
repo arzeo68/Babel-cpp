@@ -28,6 +28,8 @@ public:
     bool statusFriend(Common::Response response);
     bool deleteFriendNotif(Common::Response response);
 
+    bool responseRequest(Common::Response response);
+
 private:
     MainScene *_scene;
     UserGUI *_user;
