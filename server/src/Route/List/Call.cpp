@@ -55,6 +55,7 @@ Common::Response Server::Route::Listing::StartCall(
             client->GetUserData().GetIP() +
             "|" + std::to_string(port)).c_str());
         client->GetWorker()->AddNotification(request, arg.body[0]);
+        Utils::NotifyUserStatusToFriends(client, Utils::UserState::BUSY);
         (*destClient)->GetUserData().SetCallState(Common::CallState::PENDING,
                                                   client->GetUserData().GetName());
         client->GetUserData().SetCallState(Common::CallState::PENDING,
