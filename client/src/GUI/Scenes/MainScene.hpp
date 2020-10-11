@@ -26,11 +26,11 @@ public:
     void setFriendInfo(FriendBox *friendBox);
     void refreshFriendsList(std::map<std::string, FriendBox *> list);
     void setCallInfo(FriendBox *friendBox);
-    void removeCallGUI();
-    void startUdpCall(std::string ip, std::string port);
+    void startUdpCall();
 
     bool callNotification(Common::Response response);
     bool endCall(Common::Response response);
+    bool infosCall(Common::Response response);
 
 private slots:
     void acceptCall();

@@ -182,7 +182,7 @@ void GUIController::CallStatus(Common::Response r) {
 }
 
 void GUIController::StartCall(Common::Response r, Common::Method m) {
-
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->infosCall(r);
 }
 
 void GUIController::EndCall(Common::Response r, Common::Method m) {
