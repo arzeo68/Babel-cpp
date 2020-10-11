@@ -8,9 +8,17 @@
 
 #include <QtWidgets/QPushButton>
 
+/**
+ * Encapsulation of QPushButton
+ */
 class Button : public QPushButton
 {
 public:
+    /**
+     * Constructor for Button
+     * @param name
+     * @param size
+     */
     Button(QString name, QSize size);
 };
 

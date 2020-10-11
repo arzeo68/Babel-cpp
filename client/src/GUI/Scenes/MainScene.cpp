@@ -182,13 +182,14 @@ void MainScene::acceptCall() {
     _layout->removeWidget(notif);
     initNotif();
     setCallInfo(_friendsList->getFriends()[_name]);
-    std::string string = std::string("CALL|STATUS|");
-    string.append(_name);
-    string.append("|2");
-    Common::Response response;
-    response.code = Common::HTTPCodes_e::HTTP_OK;
-    strncpy(response.msg, string.c_str(), Common::g_maxMessageLength);
-    _call->acceptedCall(response);
+//    std::string string = std::string("CALL|STATUS|");
+//    string.append(_name);
+//    string.append("|2");
+//    Common::Response response;
+//    response.code = Common::HTTPCodes_e::HTTP_OK;
+//    strncpy(response.msg, string.c_str(), Common::g_maxMessageLength);
+//    _call->acceptedCall(response);
+    std::cout << _ip << "|" << _port << std::endl;
     _guiController->getUdp().startConnection(_ip, _port);
 }
 
@@ -218,9 +219,17 @@ bool MainScene::endCall(Common::Response response) {
     _guiController->getUdp().stopConnection();
 }
 
-void MainScene::startUdpCall(std::string ip, std::string port) {
-    _ip = ip;
-    _port = port;
-    _guiController->getUdp().startConnection(ip, port);
+void MainScene::startUdpCall() {
+    std::cout << "INFOS CALL START UDP: " << _ip << "|" << _port << std::endl;
 
+    _guiController->getUdp().startConnection(_ip, _port);
+}
+
+bool MainScene::infosCall(Common::Response response) {
+    std::string str(response.msg);
+
+    std::cout << "INFOS CALL:" << str << std::endl;
+    std::vector<std::string> args = split(str, "|");
+    _ip = args[0];
+    _port = args[1];
 }
