@@ -34,3 +34,10 @@ cmake ..;
 make;
 ```
 Your binary will be create in `/build/bin/`.
+
+### Documentation
+
+You can found the documentation inside the doc folder.
+Inside the doc folder you have:
+- a html folder with an index.html that you can open
+- a UML folder with the UML Datagram for the client & server
