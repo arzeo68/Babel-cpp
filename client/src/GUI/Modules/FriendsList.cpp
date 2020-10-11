@@ -57,6 +57,8 @@ bool FriendsList::fillFriendsList(Common::Response response)
     std::string str(response.msg);
     int state;
 
+    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+        return false;
     str = str.substr(12);
     std::vector<std::string> friends = Babel::Utils::split(str, "-");
 
@@ -82,6 +84,8 @@ bool FriendsList::fillFriend(Common::Response response)
     size_t pos = 0;
     char delimiter = '|';
 
+    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+        return false;
     pos = str.find(delimiter);
     name = str.substr(0, pos);
     str.erase(0, pos + 1);
@@ -120,11 +124,6 @@ void FriendsList::addNewFriend()
     pkg->method = Common::HTTP_PUT;
     pkg->command = 4; // FRIEND
 
-
-        Common::Response resp;
-        strncpy(resp.msg, _friendAdd->text().toStdString().c_str(), Common::g_maxMessageLength);
-        deleteFriend(resp);
-
     std::string str = _friendAdd->text().toStdString();
     if (str == "")
         return;
@@ -136,7 +135,9 @@ void FriendsList::addNewFriend()
 bool FriendsList::deleteFriend(Common::Response response) {
     std::string str(response.msg);
     std::map<std::string, FriendBox *>::iterator it;
-
+    
+    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+        return false;
     it = _friends.find(str);
     if (it == _friends.end())
         return false;
