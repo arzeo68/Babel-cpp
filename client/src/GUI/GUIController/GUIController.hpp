@@ -10,67 +10,201 @@
 #include <iostream>
 #include "client/src/Network/UDP/NetworkUdp.hpp"
 #include "client/src/GUI/MainWindow.hpp"
-#include "client/src/Network/TCP/PackageManagerTcp.hpp"
 #include "client/src/Network/TCP/NetworkTcp.hpp"
 #include "common/TCP/CommonPackages.hpp"
 
-//! GUIController class
-/*!
-  The GUI Controller is the main class of the GUI, it manage all GUI:
-  - Network
-  - Scenes
-  - Window
-*/
+/**
+ * The GUI Controller is the main class of the GUI, it manage all GUI:
+ * - Communication with the server
+ * - Scenes
+ * - Updates
+ * - Window
+ */
 class GUIController {
 public:
+
+    /**
+     * constructor
+     */
     GUIController();
 
+    /**
+     * run GUI
+     */
     void run();
 
     // GUI Receiver / Sender
+    /**
+     * handle the TCP server responses
+     * @param str the encoded package received by the server
+     */
     void handler(std::string &str);
+
+    /**
+     * handle the TCP server notifications responses
+     * @param res the decoded package received by the server
+     */
     void handleNotifications(Common::Response res);
+
+    /**
+     * make a request to the server
+     * @param method the request method
+     * @param route the request route
+     * @param pkg the decoded package to send to the server
+     */
     void call(Common::Method method, uint8_t route, Common::PackageServer *pkg);
 
     // Routes Callback
-    void User(Common::Response r /**< [in] the response sent by the server. */, Common::Method m /**< [in] the method initially called */);
-    void Login(Common::Response r /**< [in] the response sent by the server. */, Common::Method m /**< [in] the method initially called */);
-    void Register(Common::Response r /**< [in] the response sent by the server. */, Common::Method m /**< [in] the method initially called */);
-    void UpdateStatus(Common::Response r /**< [in] the response sent by the server. */, Common::Method m /**< [in] the method initially called */);
-    void Friends(Common::Response r /**< [in] the response sent by the server. */, Common::Method m /**< [in] the method initially called */);
-    void FriendIsConnected(Common::Response r /**< [in] the response sent by the server. */, Common::Method m /**< [in] the method initially called */);
-    void StartCall(Common::Response r /**< [in] the response sent by the server. */, Common::Method m /**< [in] the method initially called */);
-    void EndCall(Common::Response r /**< [in] the response sent by the server. */, Common::Method m /**< [in] the method initially called */);
+    /**
+     * function response to the user request
+     * @param r the request response decoded
+     * @param m the request method
+     */
+    void User(Common::Response r, Common::Method m);
+
+    /**
+     * function response to the login request
+     * @param r the request response decoded
+     * @param m the request method
+     */
+    void Login(Common::Response r, Common::Method m);
+
+    /**
+     * function response to the register request
+     * @param r the request response decoded
+     * @param m the request method
+     */
+    void Register(Common::Response r, Common::Method m);
+
+    /**
+     * function response to the UpdateStatus request
+     * @param r the request response decoded
+     * @param m the request method
+     */
+    void UpdateStatus(Common::Response r, Common::Method m);
+
+    /**
+     * function response to the Friend's request
+     * @param r the request response decoded
+     * @param m the request method
+     */
+    void Friends(Common::Response r, Common::Method m);
+
+    /**
+     * function response to the FriendIsConnected request
+     * @param r the request response decoded
+     * @param m the request method
+     */
+    void FriendIsConnected(Common::Response r, Common::Method m);
+
+    /**
+     * function response to the StartCall request
+     * @param r the request response decoded
+     * @param m the request method
+     */
+    void StartCall(Common::Response r, Common::Method m);
+
+    /**
+     * function response to the EndCall request
+     * @param r the request response decoded
+     * @param m the request method
+     */
+    void EndCall(Common::Response r, Common::Method m);
 
     // SubRoutes Callback
-    void PutFriend(Common::Response r /**< [in] the response sent by the server. */);
-    void PostFriend(Common::Response r /**< [in] the response sent by the server. */);
-    void DeleteFriend(Common::Response r /**< [in] the response sent by the server. */);
-    void GetFriends(Common::Response r /**< [in] the response sent by the server. */);
+    /**
+     * function response to the PutFriend request
+     * @param r the request response decoded
+     */
+    void PutFriend(Common::Response r);
+
+    /**
+     * function response to the PostFriend request
+     * @param r the request response decoded
+     */
+    void PostFriend(Common::Response r);
+
+    /**
+     * function response to the DeleteFriend request
+     * @param r the request response decoded
+     */
+    void DeleteFriend(Common::Response r);
+
+    /**
+     * function response to the GetFriends request
+     * @param r the request response decoded
+     */
+    void GetFriends(Common::Response r);
 
     // Notifications Callback
-    void FriendRequest(Common::Response r /**< [in] the response sent by the server. */);
-    void FriendStatus(Common::Response r /**< [in] the response sent by the server. */);
-    void FriendRemoved(Common::Response r /**< [in] the response sent by the server. */);
-    void FriendList(Common::Response r /**< [in] the response sent by the server. */);
-    void FriendConnect(Common::Response r /**< [in] the response sent by the server. */);
-    void FriendDisconnect(Common::Response r /**< [in] the response sent by the server. */);
-    void FriendBusy(Common::Response r /**< [in] the response sent by the server. */);
-    void CallStart(Common::Response r /**< [in] the response sent by the server. */);
-    void CallStatus(Common::Response r /**< [in] the response sent by the server. */);
+    /**
+     * function of the FriendRequest notification
+     * @param r the request response decoded
+     */
+    void FriendRequest(Common::Response r);
+
+    /**
+     * function of the FriendStatus notification
+     * @param r the request response decoded
+     */
+    void FriendStatus(Common::Response r);
+
+    /**
+     * function of the FriendRemoved notification
+     * @param r the request response decoded
+     */
+
+
+    void FriendRemoved(Common::Response r);
+
+    /**
+     * function of the FriendList notification
+     * @param r the request response decoded
+     */
+    void FriendList(Common::Response r);
+
+    /**
+     * function of the FriendConnect notification
+     * @param r
+     */
+    void FriendConnect(Common::Response r);
+
+    /**
+     * function of the FriendDisconnect notification
+     * @param r
+     */
+    void FriendDisconnect(Common::Response r);
+
+    /**
+     * function of the FriendBusy notification
+     * @param r
+     */
+    void FriendBusy(Common::Response r);
+
+    /**
+     * function of the CallStart notification
+     * @param r
+     */
+    void CallStart(Common::Response r);
+
+    /**
+     * function of the CallStatus notification
+     * @param r
+     */
+    void CallStatus(Common::Response r);
 
 private:
 
-    NetworkTcp _network; //!< manage TCP Communication (sender/receiver)
-    PackageTcp _package; //!< encode and decode packages send and received
-    MainWindow _mainWindow; //!< manage GUI
+    NetworkTcp _network;
+    PackageTcp _package;
+    MainWindow _mainWindow;
 
-    std::queue<uint8_t> _routes; //!< queue of actual routes called
-    std::queue<Common::Method> _methods; //!<queue of actual methods called
+    std::queue<uint8_t> _routes;
+    std::queue<Common::Method> _methods;
 
-    std::map<uint8_t , void (GUIController::*)(Common::Response, Common::Method)> _fctPtr; //!< map of functions ptr for simple routes
-    std::map<std::string, void (GUIController::*)(Common::Response)> _notificationHandlers; //!< map of functions ptr for notifications
-    std::map<Common::Method, void (GUIController::*)(Common::Response)> _friendsHandlers; //!< map of functions ptr for sub-routes friends (GET, PUT, DELETE...)
+    std::map<uint8_t , void (GUIController::*)(Common::Response, Common::Method)> _fctPtr;
+    std::map<std::string, void (GUIController::*)(Common::Response)> _notificationHandlers;
+    std::map<Common::Method, void (GUIController::*)(Common::Response)> _friendsHandlers;
 };
 
 
