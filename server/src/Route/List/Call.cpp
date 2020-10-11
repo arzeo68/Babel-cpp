@@ -18,7 +18,7 @@ Common::Response Server::Route::Listing::StartCall(
     if (arg.method != Common::HTTP_POST)
         return Common::InvalidMethodTemplate;
     std::cerr << "Dest " << client->GetUserData().GetName() << " w/ " <<
-              client->GetUserData().GetCallState() << " and "
+              std::to_string(client->GetUserData().GetCallState()) << " and "
               << client->GetUserData().GetCallerName() << std::endl;
     if (client->GetUserData().GetCallState() != Common::NONE)
         return (Common::Response{
@@ -67,7 +67,8 @@ Common::Response Server::Route::Listing::StartCall(
         client->GetUserData().SetCallState(Common::CallState::PENDING,
                                            (*destClient)->GetUserData().GetName());
         std::cerr << "Dest " << (*destClient)->GetUserData().GetName() << " w/ "
-                  << (*destClient)->GetUserData().GetCallState() <<
+                  << std::to_string((*destClient)->GetUserData().GetCallState())
+                  <<
                   " and " << (*destClient)->GetUserData().GetCallerName()
                   << std::endl;
         _strcpyC(request.msg,
