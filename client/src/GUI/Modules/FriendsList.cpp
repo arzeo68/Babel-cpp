@@ -198,9 +198,30 @@ bool FriendsList::responseRequest(Common::Response response) {
         std::vector<std::string> args = Babel::Utils::split(str, "|");
         if (args[1] == "0")
             deleteFriend(args[0]);
-        else if (args[1] == "1")
+        else if (args[1] == "1") {
             _friends[args[0]]->setPendingState(2);
+            Common::PackageServer *pkg = new Common::PackageServer;
+            pkg->magic = Common::g_MagicNumber;
+            pkg->id = _user->_id;
+            pkg->method = Common::HTTP_GET;
+            pkg->command = 5; // FRIEND_IS_CONNECTED
+            strncpy(pkg->args, args[0].c_str(), Common::g_maxMessageLength);
+            _guiController->call(Common::HTTP_GET, 5, pkg);
+        }
     }
     return true;
+}
+
+bool FriendsList::friendIsConnected(Common::Response response) {
+    std::string str(response.msg);
+
+    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+        return false;
+    std::vector<std::string> args = Babel::Utils::split(str, "|");
+    if (args[1] == "0")
+        _friends[args[0]]->setState(FriendBox::DISCONNECTED);
+    else if (args[1] == "1")
+        _friends[args[0]]->setState(FriendBox::CONNECTED);
+    return false;
 }
 

@@ -110,7 +110,7 @@ void FriendBox::acceptFriend() {
     pkg->command = 4; //FRIEND
 
     std::string arg = _name.toStdString();
-    arg.append("|1");
+    arg.append("|2");
     strncpy(pkg->args, arg.c_str(), Common::g_maxMessageLength);
     _guiController->call(Common::HTTP_POST, 4, pkg);
 }
@@ -124,7 +124,12 @@ void FriendBox::refuseFriend() {
     pkg->command = 4; //FRIEND
 
     std::string arg = _name.toStdString();
-    arg.append("|0");
+    arg.append("|3");
     strncpy(pkg->args, arg.c_str(), Common::g_maxMessageLength);
     _guiController->call(Common::HTTP_POST, 4, pkg);
+}
+
+void FriendBox::setState(FriendBox::UserState state) {
+    _state = state;
+    setState();
 }

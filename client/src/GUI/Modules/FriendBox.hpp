@@ -28,6 +28,7 @@ public:
     QString getName();
     QString getDesc();
     UserState getState();
+    void setState(UserState state);
     void setPendingState(int state);
 
 protected:

@@ -30,6 +30,8 @@ public:
 
     bool responseRequest(Common::Response response);
 
+    bool friendIsConnected(Common::Response response);
+
 private:
     MainScene *_scene;
     UserGUI *_user;
