@@ -41,6 +41,8 @@ FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiCont
     _layout->addWidget(_friendAdd);
     _layout->addWidget(_submitFriendAdd);
     _layout->addWidget(_overlay);
+    _layout->setAlignment(Qt::AlignTop);
+
 
     connect(_submitFriendAdd, SIGNAL(clicked()), this, SLOT(addNewFriend()));
 
@@ -119,16 +121,27 @@ void FriendsList::addNewFriend()
     pkg->command = 4; // FRIEND
 
 
+        Common::Response resp;
+        strncpy(resp.msg, _friendAdd->text().toStdString().c_str(), Common::g_maxMessageLength);
+        deleteFriend(resp);
+
     std::string str = _friendAdd->text().toStdString();
+    if (str == "")
+        return;
+    _friendAdd->setText("");
     strncpy(pkg->args, str.c_str(), Common::g_maxMessageLength);
     _guiController->call(Common::HTTP_PUT, 4, pkg);
-    _friendAdd->setText("");
 }
 
 bool FriendsList::deleteFriend(Common::Response response) {
     std::string str(response.msg);
+    std::map<std::string, FriendBox *>::iterator it;
 
+    it = _friends.find(str);
+    if (it == _friends.end())
+        return false;
     _overlay->removeWidget(_friends[str]);
+    _friends[str]->hide();
     _friends.erase(str);
     return true;
 }

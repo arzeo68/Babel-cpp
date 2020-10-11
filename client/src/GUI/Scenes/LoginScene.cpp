@@ -20,7 +20,8 @@ LoginScene::LoginScene(GUIController *guiController, MainWindow *parent)
         _containers({new Container(), new Container(new QHBoxLayout(), Qt::AlignHCenter)}),
         _info(new QLabel),
         _parent(parent),
-        _guiController(guiController)
+        _guiController(guiController),
+        _user(new UserGUI)
 {
     _inputs.at(IN_PASS)->setEchoMode(QLineEdit::Password);
     _inputs.at(IN_CONF_PASS)->setEchoMode(QLineEdit::Password);
@@ -71,9 +72,9 @@ void LoginScene::submitLogin()
     std::cout << "SubmitLogin" << std::endl;
     Common::PackageServer *pkg = new Common::PackageServer;
 
-    UserGUI *user = new UserGUI();
-    user->_name = _inputs.at(IN_USERNAME)->text().toStdString();
-    _parent->setScene("main", user);
+//    _user->_name = _inputs.at(IN_USERNAME)->text().toStdString();
+//    _parent->setScene("main", _user);
+//    return;
     if (_state == STATE_USER) {
         if (_inputs.at(IN_USERNAME)->text().length() < 4) {
             _info.setStyleSheet("QLabel {color : red; }");
@@ -85,6 +86,7 @@ void LoginScene::submitLogin()
             pkg->command = 0; //USER_EXIST
             strcpy(pkg->args, ba.data());
             _guiController->call(Common::HTTP_GET, 0, pkg);
+            _user->_name = _inputs.at(IN_USERNAME)->text().toStdString();
         }
     }
 
@@ -173,9 +175,7 @@ bool LoginScene::userLogin(Common::Response response)
         _inputs.at(IN_PASS)->setText("");
         _inputs.at(IN_CONF_PASS)->setText("");
     } else {
-        UserGUI *user;
-        user->_name = str;
-        _parent->setScene("main", user);
+        _parent->setScene("main", _user);
     }
 
     return true;

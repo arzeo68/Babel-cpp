@@ -23,7 +23,6 @@ public:
     explicit LoginScene(GUIController *guiController, MainWindow *parent = Q_NULLPTR);
 
     bool userExist(Common::Response response);
-
     bool userLogin(Common::Response response);
 
 private slots:
@@ -68,6 +67,7 @@ private:
     MainWindow *_parent;
     LoginState _state;
     GUIController *_guiController;
+    UserGUI *_user;
 };
 
 
