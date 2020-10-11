@@ -5,9 +5,10 @@
 #ifndef BABEL_PACKAGETCP_HPP
 #define BABEL_PACKAGETCP_HPP
 
+#include <common/TCP/CommonPackages.hpp>
 #include "client/src/Network/INetwork.hpp"
-#include "client/src/Network/IPackage.hpp"
-#include "common/TCP/CommonPackages.hpp"
+#include "../../package/IPackage.hpp"
+
 
 
 class PackageTcp: public IPackage<Common::PackageServer *, Common::Response> {

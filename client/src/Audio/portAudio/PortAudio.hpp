@@ -14,9 +14,7 @@
 
 #include "client/src/Audio/portAudio/AAudio/AAudio.hpp"
 #include "../data.hpp"
-
-
-int portAudioTest(void);
+class NetworkUDP;
 
 #define SAMPLE_RATE  (48000)
 #define BUFFER_SIZE  (480)
@@ -37,6 +35,13 @@ class PortAudio: public AAudio
 
     std::shared_ptr<Babel::Audio::soundDecoded> getNextSound();
     void addSoundToQueue(const std::shared_ptr<Babel::Audio::soundDecoded>& data);
+
+    private:
+    NetworkUDP *_soundCallBack = nullptr;
+    public:
+    NetworkUDP *getSoundCallBack() const;
+
+    void setSoundCallBack(NetworkUDP *soundCallBack);
 
     private:
     static int recordCallBack(const void *tmp_buff, void *, unsigned long frm, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *obj);
