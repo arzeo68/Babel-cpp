@@ -20,7 +20,7 @@ Common::Response Server::Route::Listing::StartCall(
     if (client->GetUserData().GetCallState() != Common::NONE)
         return (Common::Response{
             Common::HTTPCodes_e::HTTP_FORBIDDEN,
-            "false"
+            "false - not in call"
         });
 
     if (auto destClient = client->GetNetwork()->GetClientFromName(
@@ -30,7 +30,10 @@ Common::Response Server::Route::Listing::StartCall(
                 Common::HTTPCodes_e::HTTP_NOT_FOUND,
                 "false",
             });
-
+        std::cerr << "Author: " << client->GetUserData().GetName() << " w/ "
+                  << client->GetUserData().GetName() << " && "
+                  << (*destClient)->GetUserData().GetName() << " w/ "
+                  << (*destClient)->GetUserData().GetCallerName() << std::endl;
         if ((*destClient)->GetUserData().GetCallState() !=
             Common::CallState::NONE) {
             if ((*destClient)->GetUserData().GetCallerName() ==
@@ -40,9 +43,9 @@ Common::Response Server::Route::Listing::StartCall(
                 return (Utils::ChangeStateCall(client, *destClient,
                                                Common::CallState::ACCEPTED));
             else
-                return (Common::Response {
+                return (Common::Response{
                     Common::HTTPCodes_e::HTTP_FORBIDDEN,
-                    "false"
+                    "false - wrong caller"
                 });
         }
         Common::Response request = {
