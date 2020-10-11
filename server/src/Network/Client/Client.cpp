@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** babel
 ** File description:
-** TODO: CHANGE DESCRIPTION.
+** Handle incoming connection inside a client
 */
 
 #include <iostream>

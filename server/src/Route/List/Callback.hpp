@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** babel
 ** File description:
-** TODO: CHANGE DESCRIPTION.
+** Route's handler: non-specific route
 */
 
 #ifndef SRC_ROUTE_DATA_

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** babel
 ** File description:
-** TODO: CHANGE DESCRIPTION.
+** Route's handler: friend route only
 */
 
 #include "common/TCP/CommonPackages.hpp"

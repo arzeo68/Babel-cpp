@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** babel
 ** File description:
-** TODO: CHANGE DESCRIPTION.
+** Worker that notification to client
 */
 
 #ifndef BABEL_WORKER_HPP

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** babel
 ** File description:
-** TODO: CHANGE DESCRIPTION.
+** Main class for the binary
 */
 
 #ifndef BABEL_SERVER_HPP
