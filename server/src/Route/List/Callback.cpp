@@ -161,15 +161,16 @@ Common::Response Server::Route::Listing::IsFriendConnected(
             Common::HTTPCodes_e::HTTP_NOT_FOUND,
             "false",
         });
-    if (client->GetNetwork()->IsUserConnected(arg.body[0]))
-        return (Common::Response {
-            Common::HTTPCodes_e::HTTP_OK,
-            "true",
-        });
-    else
-        return (Common::Response {
-            Common::HTTPCodes_e::HTTP_OK,
-            "false",
-        });
+    Common::Response response {
+        Common::HTTPCodes_e::HTTP_OK,
+        ""
+    };
+    if (client->GetNetwork()->IsUserConnected(arg.body[0])) {
+        _strcpyC(response.msg, std::string(arg.body[0] + "|" + "1").c_str());
+        return (response);
+    } else {
+        _strcpyC(response.msg, std::string(arg.body[0] + "|" + "0").c_str());
+        return (response);
+    }
 }
 
