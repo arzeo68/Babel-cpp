@@ -137,7 +137,7 @@ bool FriendsList::requestFriend(Common::Response response) {
     std::string str(response.msg);
 
     str = str.substr(15);
-    _friends[str] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(str.c_str()), FriendBox::DISCONNECTED, 0);
+    _friends[str] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(str.c_str()), FriendBox::DISCONNECTED, 1);
     _overlay->addWidget(_friends[str]);
     _scene->refreshFriendsList(_friends);
     return true;
