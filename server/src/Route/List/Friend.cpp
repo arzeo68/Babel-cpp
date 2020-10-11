@@ -91,12 +91,13 @@ Common::Response Server::Route::Listing::Friend::Get(
     std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &) {
     Common::Response response = {
-        Common::HTTPCodes_e::HTTP_OK,
+        Common::HTTPCodes_e::FAKE_HTTP_PAGINATION,
         "FRIEND|",
     };
     auto friendList = client->GetDatabase().GetFriends(
         client->GetUserData().GetName());
-    std::string formattedFriendList = "FRIEND|LIST|";
+    const std::string prefix = "FRIEND|LIST|";
+    std::string formattedFriendList = prefix;
     for (auto i = friendList.first.begin(); i != friendList.first.end(); ++i) {
         std::string encodeText;
         if (auto target = client->GetNetwork()->GetClientFromName(*i)) {
@@ -120,11 +121,12 @@ Common::Response Server::Route::Listing::Friend::Get(
             response.code = Common::HTTPCodes_e::FAKE_HTTP_PAGINATION;
             client->GetWorker()->AddNotification(response,
                                                  client->GetUserData().GetName());
-            formattedFriendList = "FRIEND|LIST|";
+            formattedFriendList = prefix;
         }
         formattedFriendList += encodeText + "-";
     }
-    formattedFriendList.erase(formattedFriendList.end() - 1);
+    if (formattedFriendList.size() != prefix.size())
+        formattedFriendList.erase(formattedFriendList.end() - 1);
     Server::Route::Listing::_strcpyC(response.msg, formattedFriendList.c_str());
     return (response);
 }
