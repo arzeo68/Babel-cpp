@@ -25,9 +25,12 @@ public:
     void setFriendCall(FriendBox *friendBox);
     void runTimer();
 
+    bool acceptedCall(Common::Response response);
+
 private slots:
     void timerRefresh();
-    void runTimerSlot();
+
+    void endCall();
 
 private:
     FriendBox *_friend;

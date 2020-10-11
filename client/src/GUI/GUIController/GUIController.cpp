@@ -172,10 +172,12 @@ void GUIController::FriendList(Common::Response r) {
 }
 
 void GUIController::CallStart(Common::Response r) {
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->callNotification(r);
     std::cout << "Notification call start" << std::endl;
 }
 
 void GUIController::CallStatus(Common::Response r) {
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->getCallGUI()->acceptedCall(r);
     std::cout << "Notification call status" << std::endl;
 }
 
@@ -184,7 +186,7 @@ void GUIController::StartCall(Common::Response r, Common::Method m) {
 }
 
 void GUIController::EndCall(Common::Response r, Common::Method m) {
-
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->endCall(r);
 }
 
 void GUIController::FriendConnect(Common::Response r) {
