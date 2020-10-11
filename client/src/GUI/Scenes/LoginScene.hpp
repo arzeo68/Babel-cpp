@@ -5,6 +5,7 @@
 #ifndef BABEL_LOGINSCENE_HPP
 #define BABEL_LOGINSCENE_HPP
 
+#include <array>
 #include <client/src/GUI/MainWindow.hpp>
 #include <QtWidgets/QGroupBox>
 #include <client/src/GUI/Modules/Button.hpp>

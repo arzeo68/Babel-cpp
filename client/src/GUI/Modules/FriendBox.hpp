@@ -5,7 +5,7 @@
 #ifndef BABEL_FRIENDBOX_HPP
 #define BABEL_FRIENDBOX_HPP
 
-
+#include <array>
 #include <QtWidgets/QLabel>
 #include <client/src/GUI/GUIController/GUIController.hpp>
 #include "Container.hpp"

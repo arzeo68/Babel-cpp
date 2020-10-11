@@ -24,7 +24,7 @@ QLayoutItem *Container::addItem(QLayoutItem *item, Qt::Alignment alignment) {
     return (item);
 }
 
-QWidget *Container::removeWidget(QWidget *widget) {
+void Container::removeWidget(QWidget *widget) {
     _layout->removeWidget(widget);
     for (int i = 0; i < _listWidget.size(); i++) {
         if (_listWidget[i] == widget) {

@@ -5,6 +5,7 @@
 #ifndef BABEL_MAINSCENE_HPP
 #define BABEL_MAINSCENE_HPP
 
+#include <array>
 #include <client/src/GUI/MainWindow.hpp>
 #include <client/src/GUI/Modules/Container.hpp>
 #include <client/src/GUI/Modules/FriendBox.hpp>
