@@ -17,9 +17,32 @@ class FriendInfo : public Container
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor for FriendInfo
+     * @param scene
+     * @param friendBox
+     * @param user
+     * @param guiController
+     */
     FriendInfo(MainScene *scene, FriendBox *friendBox, UserGUI *user, GUIController *guiController);
 
+    /**
+     * Set new friend info for update interface
+     * @param friendBox
+     */
     void setNewFriendInfo(FriendBox *friendBox);
+
+    /**
+     * Basic getter
+     * @return
+     */
+    FriendBox *getFriend();
+
+    /**
+     * Basic setter
+     * @param state
+     */
+    void setState(FriendBox::UserState state);
 
 public slots:
     void deleteFriend();

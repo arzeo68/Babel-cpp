@@ -191,6 +191,7 @@ void MainScene::acceptCall() {
 //    _call->acceptedCall(response);
     std::cout << _ip << "|" << _port << std::endl;
     _guiController->getUdp().startConnection(_ip, _port);
+    _userBox->setState(FriendBox::OCCUPIED);
 }
 
 void MainScene::refuseCall() {
@@ -223,6 +224,7 @@ void MainScene::startUdpCall() {
     std::cout << "INFOS CALL START UDP: " << _ip << "|" << _port << std::endl;
 
     _guiController->getUdp().startConnection(_ip, _port);
+    _userBox->setState(FriendBox::OCCUPIED);
 }
 
 bool MainScene::infosCall(Common::Response response) {
@@ -237,4 +239,13 @@ bool MainScene::infosCall(Common::Response response) {
     _ip = args[0];
     _port = args[1];
     return true;
+}
+
+FriendInfo *MainScene::getFriendInfo() {
+    return _friendInfo;
+}
+
+void MainScene::setFriendInfoState(FriendBox::UserState state) {
+    std::cout << "state: " << state << std::endl;
+    _friendInfo->setState(state);
 }

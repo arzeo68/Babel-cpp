@@ -108,3 +108,11 @@ void FriendInfo::callFriend()
     _guiController->call(Common::HTTP_POST, 6, pkg);
     _scene->setCallInfo(_friend);
 }
+
+FriendBox *FriendInfo::getFriend() {
+    return _friend;
+}
+
+void FriendInfo::setState(FriendBox::UserState state) {
+    _friend->setState(state);
+}

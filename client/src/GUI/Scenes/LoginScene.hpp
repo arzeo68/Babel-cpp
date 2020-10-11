@@ -21,9 +21,25 @@ class LoginScene : public AScene
 
 public:
     ~LoginScene() = default;
+    /**
+     * Basic constructor for LoginScene
+     * @param guiController
+     * @param parent
+     */
     explicit LoginScene(GUIController *guiController, MainWindow *parent = Q_NULLPTR);
 
+    /**
+     * user exist callback
+     * @param response
+     * @return
+     */
     bool userExist(Common::Response response);
+
+    /**
+     * user login callback
+     * @param response
+     * @return
+     */
     bool userLogin(Common::Response response);
 
 private slots:

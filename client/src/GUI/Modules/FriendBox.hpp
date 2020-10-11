@@ -17,18 +17,55 @@ class FriendBox : public Container
 {
     Q_OBJECT
 public:
+    /**
+     * Userstate for interface color
+     */
     typedef enum : int {
         DISCONNECTED = 0,
         CONNECTED,
         OCCUPIED,
     } UserState;
 
-
+    /**
+     * Constructor for FriendBox
+     * @param guiController
+     * @param _user
+     * @param scene
+     * @param name
+     * @param state
+     * @param statePending
+     * @param alignment
+     */
     explicit FriendBox(GUIController *guiController, UserGUI *_user, MainScene *scene, QString name, FriendBox::UserState state, int statePending = 1, Qt::Alignment alignment = Qt::AlignLeft);
+
+    /**
+     * Basic getter
+     * @return
+     */
     QString getName();
+
+    /**
+     * Basic getter
+     * @return
+     */
     QString getDesc();
+
+    /**
+     * Basic getter
+     * @return
+     */
     UserState getState();
+
+    /**
+     * Basic setter
+     * @param state
+     */
     void setState(UserState state);
+
+    /**
+     * Basic setter
+     * @param state
+     */
     void setPendingState(int state);
 
 protected:

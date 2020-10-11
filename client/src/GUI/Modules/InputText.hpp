@@ -11,6 +11,11 @@
 class InputText : public QLineEdit
 {
 public:
+    /**
+     * Basic constructor for InputText
+     * @param text
+     * @param size
+     */
     InputText(QString text, int size);
 };
 

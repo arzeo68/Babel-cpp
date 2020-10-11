@@ -13,8 +13,20 @@ class AScene : public QWidget
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor for AScene
+     */
     AScene();
+
+    /**
+     * Destructor for AScene
+     */
     virtual ~AScene();
+
+    /**
+     * initScene for init widget
+     * @param user
+     */
     virtual void initScene(UserGUI *user) = 0;
 
 protected:

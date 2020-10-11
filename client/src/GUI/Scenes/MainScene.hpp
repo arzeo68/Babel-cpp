@@ -18,18 +18,85 @@ class MainScene : public AScene
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor for MainScene
+     * @param guiController
+     * @param parent
+     */
     explicit MainScene(GUIController *guiController, QWidget *parent = Q_NULLPTR);
+
+    /**
+     * Basic getter
+     * @return
+     */
     FriendsList *getFriendsList();
+
+    /**
+     * Basic getter
+     * @return
+     */
     CallGUI *getCallGUI();
 
+    /**
+     * init every widgets
+     * @param user
+     */
     void initScene(UserGUI *user) override;
+
+    /**
+     * Basic setter
+     * @param friendBox
+     */
     void setFriendInfo(FriendBox *friendBox);
+
+    /**
+     * refresh interface friends list
+     * @param list
+     */
     void refreshFriendsList(std::map<std::string, FriendBox *> list);
+
+    /**
+     * Basic setter
+     * @param friendBox
+     */
     void setCallInfo(FriendBox *friendBox);
+
+    /**
+     * start udp call with guiController->udp
+     */
     void startUdpCall();
 
+    /**
+     * Basic getter
+     * @return
+     */
+    FriendInfo *getFriendInfo();
+
+    /**
+     * Basic setter
+     * @param state
+     */
+    void setFriendInfoState(FriendBox::UserState state);
+
+    /**
+     * Notification for incoming call
+     * @param response
+     * @return
+     */
     bool callNotification(Common::Response response);
+
+    /**
+     * end call callback
+     * @param response
+     * @return
+     */
     bool endCall(Common::Response response);
+
+    /**
+     * infos for call callback
+     * @param response
+     * @return
+     */
     bool infosCall(Common::Response response);
 
 private slots:

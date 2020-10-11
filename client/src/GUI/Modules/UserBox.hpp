@@ -11,6 +11,15 @@
 class UserBox : public FriendBox
 {
 public:
+    /**
+     * Basic constructor UserBox
+     * @param guiController
+     * @param user
+     * @param scene
+     * @param name
+     * @param state
+     * @param alignment
+     */
     UserBox(GUIController *guiController, UserGUI *user, MainScene *scene, QString name, FriendBox::UserState state, Qt::Alignment alignment = Qt::AlignLeft);
 };
 

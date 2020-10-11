@@ -248,6 +248,9 @@ bool FriendsList::friendConnectedNotif(Common::Response response) {
     if (!_friends[str])
         return false;
     _friends[str]->setState(FriendBox::CONNECTED);
+    std::cout << "NAME: " << _scene->getFriendInfo()->getFriend()->getName().toStdString() << " && str:" << str << std::endl;
+    if (_scene->getFriendInfo()->getFriend()->getName().toStdString() == str)
+        _scene->setFriendInfoState(FriendBox::CONNECTED);
     return true;
 }
 
@@ -258,6 +261,8 @@ bool FriendsList::friendDisonnectedNotif(Common::Response response) {
     if (!_friends[str])
         return false;
     _friends[str]->setState(FriendBox::DISCONNECTED);
+    if (_scene->getFriendInfo()->getFriend()->getName().toStdString() == str)
+        _scene->setFriendInfoState(FriendBox::DISCONNECTED);
     return true;
 }
 
@@ -268,6 +273,8 @@ bool FriendsList::friendBusyNotif(Common::Response response) {
     if (!_friends[str])
         return false;
     _friends[str]->setState(FriendBox::OCCUPIED);
+    if (_scene->getFriendInfo()->getFriend()->getName().toStdString() == str)
+        _scene->setFriendInfoState(FriendBox::OCCUPIED);
     return true;
 }
 

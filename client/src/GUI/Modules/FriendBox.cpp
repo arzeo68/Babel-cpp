@@ -65,6 +65,7 @@ void FriendBox::setState()
         _label->setStyleSheet("QLabel {color : gray; }");
         return;
     }
+    std::cout << "_state: " << _state << std::endl;
     if (_state == CONNECTED)
         _box->setStyleSheet("border: 1px solid gray; "
                             "background-color: green;");

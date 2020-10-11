@@ -13,9 +13,25 @@ class SceneManager : public QStackedWidget
 {
 public:
     ~SceneManager();
+    /**
+     * add new Scene
+     * @param scene
+     * @param name
+     * @return
+     */
     int addScene(AScene *scene, std::string name);
+
+    /**
+     * set current Scene
+     * @param name
+     * @param user
+     */
     void setScene(std::string name, UserGUI *user);
 
+    /**
+     * Basic getter
+     * @return
+     */
     std::map<std::string, AScene *> getScenes();
 
 private:

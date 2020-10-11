@@ -23,10 +23,29 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     ~MainWindow() = default;
+    /**
+     * Basic constructor for MainWindow
+     * @param guiController
+     */
     explicit MainWindow(GUIController *guiController);
+
+    /**
+     * set current Scene
+     * @param name
+     * @param user
+     */
     void setScene(std::string name, UserGUI *user);
+
+    /**
+     * Basic getter
+     * @return
+     */
     SceneManager &getSceneManager();
 
+    /**
+     * Basic getter
+     * @return
+     */
     uint16_t getID();
 
 public slots:
