@@ -135,15 +135,11 @@ bool FriendsList::deleteFriend(Common::Response response) {
 
 bool FriendsList::requestFriend(Common::Response response) {
     std::string str(response.msg);
-    std::string name;
-    size_t pos = 0;
 
     str = str.substr(15);
-    if (response.code != Common::HTTPCodes_e::HTTP_OK)
-        return false;
-
-    _friend.push_back(new FriendBox(_guiController, _user, _scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED, 1));
-    _overlay->addWidget(_friend.back());
+    _friends[str] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(str.c_str()), FriendBox::DISCONNECTED, 0);
+    _overlay->addWidget(_friends[str]);
+    _scene->refreshFriendsList(_friends);
     return true;
 }
 
@@ -243,5 +239,29 @@ bool FriendsList::responseRequestFriend(Common::Response response) {
         strncpy(pkg->args, args[0].c_str(), Common::g_maxMessageLength);
         _guiController->call(Common::HTTP_GET, 5, pkg);
     }
+}
+
+bool FriendsList::friendConnectedNotif(Common::Response response) {
+    std::string str(response.msg);
+
+    str = str.substr(15);
+    _friends[str]->setState(FriendBox::CONNECTED);
+    return true;
+}
+
+bool FriendsList::friendDisonnectedNotif(Common::Response response) {
+    std::string str(response.msg);
+
+    str = str.substr(18);
+    _friends[str]->setState(FriendBox::DISCONNECTED);
+    return true;
+}
+
+bool FriendsList::friendBusyNotif(Common::Response response) {
+    std::string str(response.msg);
+
+    str = str.substr(12);
+    _friends[str]->setState(FriendBox::OCCUPIED);
+    return true;
 }
 

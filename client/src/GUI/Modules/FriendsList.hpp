@@ -34,6 +34,9 @@ public:
 
     bool responseRequestFriend(Common::Response response);
 
+    bool friendConnectedNotif(Common::Response response);
+    bool friendDisonnectedNotif(Common::Response response);
+    bool friendBusyNotif(Common::Response response);
 private:
     MainScene *_scene;
     UserGUI *_user;
