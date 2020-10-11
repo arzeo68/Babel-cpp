@@ -142,6 +142,8 @@ void LoginScene::resetLogin()
 bool LoginScene::userExist(Common::Response response)
 {
     std::string str(response.msg);
+    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+        return false;
 
     if (str == "true") {
         _info.setStyleSheet("QLabel {color : green; }");
