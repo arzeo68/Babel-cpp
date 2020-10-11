@@ -22,6 +22,5 @@ int main(int argc, char **argv)
 
     GUIController guiController;
     guiController.run();
-    NetworkUDP net;
     return app.exec();
 }
