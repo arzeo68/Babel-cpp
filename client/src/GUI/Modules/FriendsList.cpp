@@ -63,16 +63,20 @@ bool FriendsList::fillFriendsList(Common::Response response)
     std::vector<std::string> friends = Babel::Utils::split(str, "-");
 
     std::cout << "USERNAME: " << _user->_name << std::endl;
+    if (friends.empty())
+        return false;
     for (auto it : friends) {
         std::vector<std::string> newFriend = Babel::Utils::split(it, "|");
         if (newFriend[0] == _user->_name) {
             state = stoi(newFriend[2]) == 1 ? 0 : 2;
             _friends[newFriend[1]] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(newFriend[1].c_str()), (FriendBox::UserState)stoi(newFriend[3]), state);
             _overlay->addWidget(_friends[newFriend[1]]);
-        } else {
+        } else if (newFriend[1] == _user->_name) {
             state = stoi(newFriend[2]) == 1 ? 1 : 2;
             _friends[newFriend[0]] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(newFriend[0].c_str()), (FriendBox::UserState)stoi(newFriend[3]), state);
             _overlay->addWidget(_friends[newFriend[0]]);
+        } else {
+            return false;
         }
     }
     _scene->refreshFriendsList(_friends);
