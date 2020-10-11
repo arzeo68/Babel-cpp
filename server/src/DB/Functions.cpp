@@ -59,10 +59,8 @@ Server::Database::Database::GetFriendStatus(const std::string &name,
                                             const std::string &opponent) {
     Common::FriendStatus status = Common::FriendStatus::NONE;
     this->ExecuteQuery(
-        "SELECT * FROM 'friend' WHERE (name='" + name + "' AND friend='" +
-        opponent + "') OR"
-                   "(name='" + opponent + "' AND friend='" + name +
-        "') LIMIT 1;",
+        "SELECT * FROM 'friend' WHERE name='" + name + "' AND friend='" +
+        opponent + "' LIMIT 1;",
         [](void *arg, int count, char **data, char **) -> int {
             auto *status = reinterpret_cast<Common::FriendStatus *>(arg);
             if (count == 0)
