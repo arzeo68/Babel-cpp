@@ -8,13 +8,14 @@
 #include "Route.hpp"
 
 Server::Route::Route::Route(const std::string &name,
-                          Server::Route::Route::RouteHandler_t handler) :
-                          _name(name), _handler(handler) {
+                            Server::Route::Route::RouteHandler_t handler) :
+    _name(name), _handler(handler) {
 }
 
 Common::Response
-Server::Route::Route::ExecuteHandler(Server::Network::Client& client,
-                                     Arguments::RouteHandlerArgs const &args) const {
+Server::Route::Route::ExecuteHandler(
+    std::shared_ptr<Server::Network::Client> &client,
+    Arguments::RouteHandlerArgs const &args) const {
     return (this->_handler(client, args));
 }
 
@@ -44,7 +45,8 @@ Server::Route::Route::Route(const Route &obj) {
     this->_method = obj._method;
 }
 
-Server::Route::Exception::InvalidRoute::InvalidRoute(const std::string &name) : _name(name) {
+Server::Route::Exception::InvalidRoute::InvalidRoute(const std::string &name)
+    : _name(name) {
 }
 
 const char *Server::Route::Exception::InvalidRoute::what() const noexcept {

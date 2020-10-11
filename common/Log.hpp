@@ -11,6 +11,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <map>
 #include <ctime>
 #include <iomanip>
@@ -24,23 +25,26 @@ namespace Common::Log {
         LOG_ERROR_E = 0b10000u,
     };
 
-    class Log {
+    class Log : public std::enable_shared_from_this <Log> {
         public:
         explicit Log(const std::string &title, const std::string &path,
-                     uint8_t logLevel = LOG_DEBUG_E | LOG_INFO_E | LOG_WARN_E | LOG_ERROR_E,
+                     uint8_t logLevel = LOG_DEBUG_E | LOG_INFO_E | LOG_WARN_E |
+                                        LOG_ERROR_E,
                      std::ios_base::openmode openMode = std::ios::app);
 
         Log(const Log &log);
 
         ~Log() = default;
-        static const constexpr uint8_t g_AllLogLevel = LOG_DEBUG_E | LOG_INFO_E | LOG_WARN_E | LOG_ERROR_E;
 
-        template<typename ...variadic>
+        static const constexpr uint8_t g_AllLogLevel =
+            LOG_DEBUG_E | LOG_INFO_E | LOG_WARN_E | LOG_ERROR_E;
+
+        template <typename ...variadic>
         void Debug(variadic &&... args) {
             return (this->Write(LOG_DEBUG_E, args...));
         }
 
-        template<typename ...variadic>
+        template <typename ...variadic>
         void Debug(variadic &&... args) const {
             return (this->Write(LOG_DEBUG_E, args...));
         }
@@ -91,7 +95,8 @@ namespace Common::Log {
                 return;
             this->_mutex.lock();
             std::string prefix("[" + Common::Log::Log::GetCurrentTime() + "/" +
-                               _map.find(level)->second + "]" + " ");
+                               this->_title + "/" +
+                               _map.find(level)->second + "] ");
             std::cout << prefix;
             (std::cout << ... << args) << std::endl;
             this->_file << prefix;

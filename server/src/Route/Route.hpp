@@ -22,10 +22,9 @@ namespace Server::Route {
     namespace Exception {
         class InvalidRoute : std::exception {
             public:
-            explicit InvalidRoute(const std::string& name);
+            explicit InvalidRoute(const std::string &name);
             ~InvalidRoute() override = default;
-
-            const char* what() const noexcept override;
+            const char *what() const noexcept override;
 
             private:
             std::string _name;
@@ -33,22 +32,23 @@ namespace Server::Route {
     }
     class Route {
         public:
-        typedef Common::Response (*RouteHandler_t)(Server::Network::Client &,
-                           const Arguments::RouteHandlerArgs &);
+        typedef Common::Response (*RouteHandler_t)(
+            std::shared_ptr<Server::Network::Client> &,
+            const Arguments::RouteHandlerArgs &);
 
         Route(const std::string &name, RouteHandler_t handler);
         Route() = default;
         ~Route() = default;
         Route(const Route &obj);
 
-        Common::Response ExecuteHandler(Server::Network::Client& client,
-                                        const Arguments::RouteHandlerArgs &args) const;
+        Common::Response
+        ExecuteHandler(std::shared_ptr<Server::Network::Client> &client,
+                       const Arguments::RouteHandlerArgs &args) const;
         std::string GetName() const;
-
-        bool operator==(const std::string& name) const;
-        bool operator==(const std::string& name);
-        bool operator!=(const std::string& name) const;
-        bool operator!=(const std::string& name);
+        bool operator==(const std::string &name) const;
+        bool operator==(const std::string &name);
+        bool operator!=(const std::string &name) const;
+        bool operator!=(const std::string &name);
 
         private:
         std::string _name;

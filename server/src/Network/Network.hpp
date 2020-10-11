@@ -13,15 +13,19 @@
 #include <memory>
 #include <map>
 #include <mutex>
+#include <optional>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/signal_set.hpp>
 #include "common/TCP/CommonPackages.hpp"
 #include "common/Log.hpp"
 #include "server/src/DB/Database.hpp"
+#include "INetwork.hpp"
 
 namespace Server {
     class Router;
+
+    class Worker;
     namespace User {
         class Pool;
     }
@@ -30,18 +34,27 @@ namespace Server {
 namespace Server::Network {
     class Client;
 
-    class Network : public std::enable_shared_from_this<Network> {
+    class Network
+        : public std::enable_shared_from_this<Network>, public INetwork {
         public:
         typedef std::shared_ptr<Client> SharedPtrClient_t;
 
-        explicit Network(uint32_t port, Common::Log::Log& logger);
-        ~Network() = default;
+        explicit Network(uint32_t port,
+                         std::shared_ptr<Common::Log::Log> logger);
 
-        void Run();
-        void Stop();
-        uint32_t AddUserToPool(const std::shared_ptr<Client> &client);
-        void RemoveUserFromPool(const Client *client);
-        void RemoveClient(const Client *client);
+        ~Network() override = default;
+        Network(const Network &network) = delete;
+
+        void Run() override;
+        void PreRun();
+        void Stop() override;
+        uint32_t AddUserToPool(const std::shared_ptr<Client> &client) override;
+        void RemoveUserFromPool(const Client *client) override;
+        void RemoveClient(const Client *client) override;
+        bool IsUserConnected(const std::string &name);
+        std::optional<std::shared_ptr<Client>>
+        GetClientFromName(const std::string &name);
+        std::list<SharedPtrClient_t> &GetClients();
 
         private:
         void AcceptClient(const boost::system::error_code &error,
@@ -56,7 +69,9 @@ namespace Server::Network {
         Server::Database::Database _database;
         std::mutex _mutex;
         std::shared_ptr<User::Pool> _pool;
-        Common::Log::Log& _logger;
+        std::shared_ptr<Common::Log::Log> _logger;
+
+        std::shared_ptr<Worker> _worker;
     };
 }
 
