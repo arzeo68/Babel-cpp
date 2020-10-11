@@ -6,9 +6,9 @@
 */
 
 #include "common/TCP/CommonPackages.hpp"
-#include "Listing.hpp"
+#include "Callback.hpp"
 #include "server/src/Network/Worker.hpp"
-#include "server/src/Route/List/CallUtils.hpp"
+#include "server/src/Route/List/Utils.hpp"
 
 Common::Response Server::Route::Listing::StartCall(
     std::shared_ptr<Server::Network::Client> &client,
@@ -46,7 +46,7 @@ Common::Response Server::Route::Listing::StartCall(
         };
         int port = rand() % (0xFFFF - 0xFDE8 + 1) + 0xFDE8;
         _strcpyC(request.msg, std::string(
-            "CALL|" + client->GetUserData().GetName() + "|" +
+            "CALL|START|" + client->GetUserData().GetName() + "|" +
             client->GetUserData().GetIP() +
             "|" + std::to_string(port)).c_str());
         client->GetWorker()->AddNotification(request, arg.body[0]);
@@ -54,6 +54,8 @@ Common::Response Server::Route::Listing::StartCall(
                                                   client->GetUserData().GetName());
         client->GetUserData().SetCallState(Common::CallState::PENDING_CALLER,
                                            (*destClient)->GetUserData().GetName());
+        Utils::NotifyUserStatusToFriends(client, Utils::UserState::BUSY);
+        Utils::NotifyUserStatusToFriends((*destClient), Utils::UserState::BUSY);
         _strcpyC(request.msg,
                  std::string((*destClient)->GetUserData().GetIP() + "|" +
                              std::to_string(port)).c_str());
@@ -80,6 +82,9 @@ Server::Route::Listing::EndCall(
         });
     if (auto destClient = client->GetNetwork()->GetClientFromName(
         arg.body[0])) {
+        Utils::NotifyUserStatusToFriends(client, Utils::UserState::CONNECTED);
+        Utils::NotifyUserStatusToFriends((*destClient),
+                                         Utils::UserState::CONNECTED);
         if (client->GetUserData().GetCallState() == Common::CallState::ACCEPTED)
             return (Utils::ChangeStateCall(client, *destClient,
                                            Common::CallState::ENDED));

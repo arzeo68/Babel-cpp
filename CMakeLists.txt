@@ -61,8 +61,8 @@ add_executable(babel_server
         server/src/Network/Client.hpp
         server/src/Network/Network.cpp
         server/src/Network/Network.hpp
-        server/src/Route/List/Listing.cpp
-        server/src/Route/List/Listing.hpp
+        server/src/Route/List/Callback.cpp
+        server/src/Route/List/Callback.hpp
         server/src/User/Pool.cpp
         server/src/User/Pool.hpp
         common/TCP/CommonPackages.hpp
@@ -80,8 +80,8 @@ add_executable(babel_server
         server/src/Network/Worker.hpp
         server/src/Route/List/Friend.cpp
         server/src/Route/List/Call.cpp
-        server/src/Route/List/CallUtils.cpp
-        server/src/Route/List/CallUtils.hpp)
+        server/src/Route/List/Utils.cpp
+        server/src/Route/List/Utils.hpp)
 
 if (MSVC)
     set_target_properties(babel_client PROPERTIES LINK_FLAGS /MACHINE:X64)

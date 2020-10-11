@@ -6,37 +6,34 @@
 */
 
 #include "common/TCP/CommonPackages.hpp"
-#include "Listing.hpp"
+#include "Callback.hpp"
 #include "server/src/Network/Worker.hpp"
 
 Common::Response Server::Route::Listing::Friend::Add(
     std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
     std::string userName = client->GetUserData().GetName();
-    Common::Response notification = {
+    Common::Response response = {
         Common::HTTPCodes_e::FAKE_HTTP_NOTIFICATION,
         "FRIEND|",
     };
     if (client->GetDatabase().GetFriendStatus(userName, arg.body[0]) !=
         Common::FriendStatus::NONE)
         return (Common::Response {
-            Common::HTTPCodes_e::HTTP_NOT_FOUND,
+            Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
             "false",
         });
     if (!client->GetDatabase().AddFriend(userName, arg.body[0]))
         return (Common::Response {
-            Common::HTTPCodes_e::HTTP_OK,
+            Common::HTTPCodes_e::HTTP_NOT_FOUND,
             "false",
         });
-    else {
-        Server::Route::Listing::_strcpyC(notification.msg, std::string(
-            "FRIEND|REQUEST|" + userName).c_str());
-        client->GetWorker()->AddNotification(notification, arg.body[0]);
-        return (Common::Response {
-            Common::HTTPCodes_e::HTTP_OK,
-            "true",
-        });
-    }
+    Server::Route::Listing::_strcpyC(response.msg, std::string(
+        "FRIEND|REQUEST|" + userName).c_str());
+    client->GetWorker()->AddNotification(response, arg.body[0]);
+    response.code = Common::HTTPCodes_e::HTTP_OK;
+    Server::Route::Listing::_strcpyC(response.msg, arg.body[0].c_str());
+    return (response);
 }
 
 Common::Response Server::Route::Listing::Friend::UpdateStatus(
@@ -101,9 +98,20 @@ Common::Response Server::Route::Listing::Friend::Get(
         client->GetUserData().GetName());
     std::string formattedFriendList = "FRIEND|LIST|";
     for (auto i = friendList.first.begin(); i != friendList.first.end(); ++i) {
-        std::string encodeText =
-            *i + "|" + friendList.second[i - friendList.first.begin()] + "|" +
-            std::to_string(client->GetNetwork()->IsUserConnected(*i));
+        std::string encodeText;
+        if (auto target = client->GetNetwork()->GetClientFromName(*i)) {
+            encodeText =
+                *i + "|" + friendList.second[i - friendList.first.begin()] +
+                "|" +
+                ((*target)->GetUserData().IsConnected() ?
+                 ((*target)->GetUserData().GetCallState() != Common::NONE ? "2"
+                                                                          : "1")
+                                                        : "0");
+        } else {
+            encodeText =
+                *i + "|" + friendList.second[i - friendList.first.begin()] +
+                "|0";
+        }
         if ((formattedFriendList.size() + encodeText.size()) >
             Common::g_maxMessageLength) {
             formattedFriendList.erase(formattedFriendList.end() - 1);

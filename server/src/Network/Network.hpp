@@ -54,7 +54,6 @@ namespace Server::Network {
         bool IsUserConnected(const std::string &name);
         std::optional<std::shared_ptr<Client>>
         GetClientFromName(const std::string &name);
-        //auto GetClientFromName(const std::string& name);
         std::list<SharedPtrClient_t> &GetClients();
 
         private:

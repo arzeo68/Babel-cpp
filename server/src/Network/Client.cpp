@@ -11,7 +11,7 @@
 #include "Client.hpp"
 #include "server/src/Router/Router.hpp"
 #include "Worker.hpp"
-#include "server/src/Route/List/CallUtils.hpp"
+#include "server/src/Route/List/Utils.hpp"
 
 Server::Network::Client::Client(Server::Database::Database &database,
                                 Server::Router &router,
@@ -105,6 +105,9 @@ void Server::Network::Client::Shutdown() {
                 Route::Listing::Utils::ChangeStateCall(this->shared_from_this(),
                                                        *i,
                                                        Common::CallState::ENDED);
+        Server::Route::Listing::Utils::NotifyUserStatusToFriends(
+            this->shared_from_this(),
+            Route::Listing::Utils::UserState::DISCONNECTED);
         boost::system::error_code ec;
         this->_socket->shutdown(
             boost::asio::socket_base::shutdown_type::shutdown_both, ec);

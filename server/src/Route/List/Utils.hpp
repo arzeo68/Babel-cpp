@@ -19,6 +19,16 @@ namespace Server::Route::Listing::Utils {
         const std::shared_ptr<Server::Network::Client> &opponent,
         Common::CallState state
     );
+
+    enum class UserState : uint8_t {
+        DISCONNECTED = 0,
+        CONNECTED = 1,
+        BUSY = 2
+    };
+    Common::Response NotifyUserStatusToFriends(
+        const std::shared_ptr<Server::Network::Client> &client,
+        UserState state
+    );
 }
 
 #endif

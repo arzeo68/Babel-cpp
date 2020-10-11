@@ -54,6 +54,7 @@ namespace Server::Database {
                                 const std::string &addressee,
                                 const Common::FriendStatus &status);
 
+        // Vector1: Friend name - Vector2: Friendship status
         typedef std::pair<std::vector<std::string>, std::vector<std::string>> FriendListData_t;
         FriendListData_t GetFriends(const std::string &author);
 

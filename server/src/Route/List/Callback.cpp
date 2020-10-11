@@ -6,8 +6,9 @@
 */
 
 #include "common/TCP/CommonPackages.hpp"
-#include "Listing.hpp"
+#include "Callback.hpp"
 #include "server/src/Network/Worker.hpp"
+#include "Utils.hpp"
 
 void Server::Route::Listing::_strcpyC(char *dest, const char *source) {
     #ifdef _WIN32
@@ -42,25 +43,19 @@ Server::Route::Listing::UserExists(
 Common::Response
 Server::Route::Listing::Login(std::shared_ptr<Server::Network::Client> &client,
                               const Arguments::RouteHandlerArgs &arg) {
-    Common::Response response {
-        Common::HTTPCodes_e::HTTP_OK,
-        "true",
-    };
-    switch (arg.method) {
-        case Common::HTTP_POST:
-            if (arg.body.size() != 2)
-                return Common::BadRequestTemplate;
-            if (client->GetUserData().IsConnected() ||
-                !client->GetDatabase().ConnectUser(arg.body[0], arg.body[1]))
-                return (Common::Response {
-                    Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
-                    "false",
-                });
-            client->GetUserData().SetUserName(arg.body[0]);
-            return response;
-        default:
-            return Common::InvalidMethodTemplate;
-    }
+    if (arg.method != Common::HTTP_POST)
+        return (Common::InvalidMethodTemplate);
+    if (arg.body.size() != 2)
+        return Common::BadRequestTemplate;
+    if (client->GetUserData().IsConnected() ||
+        !client->GetDatabase().ConnectUser(arg.body[0], arg.body[1]))
+        return (Common::Response {
+            Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
+            "false",
+        });
+    client->GetUserData().SetUserName(arg.body[0]);
+    return (Utils::NotifyUserStatusToFriends(client,
+                                             Utils::UserState::CONNECTED));
 }
 
 Common::Response

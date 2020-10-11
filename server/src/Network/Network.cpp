@@ -138,17 +138,14 @@ void Server::Network::Network::PreRun() {
 }
 
 bool Server::Network::Network::IsUserConnected(const std::string &name) {
-    if (!this->_mutex.try_lock()) {
-        this->_logger->Warning(
-            "Cannot lock mutex using function: IsUserConnected w/ ", name);
-        return (false);
-    }
+    bool locked = this->_mutex.try_lock();
     auto find = std::find_if(this->_clients.begin(), this->_clients.end(),
                              [&name](const std::shared_ptr<Client> &client) {
                                  return (client->GetUserData().GetName() ==
                                          name);
                              });
-    this->_mutex.unlock();
+    if (locked)
+        this->_mutex.unlock();
     return (find != this->_clients.end());
 }
 
