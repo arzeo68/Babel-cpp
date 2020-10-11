@@ -58,10 +58,10 @@ Common::Response Server::Route::Listing::Friend::UpdateStatus(
     Server::Route::Listing::_strcpyC(notification.msg, std::string(
         "FRIEND|STATUS|" + userName + "|" + arg.body[1]).c_str());
     client->GetWorker()->AddNotification(notification, arg.body[0]);
-    return (Common::Response {
-        Common::HTTPCodes_e::HTTP_OK,
-        "true"
-    });
+    notification.code = Common::HTTPCodes_e::HTTP_OK;
+    Server::Route::Listing::_strcpyC(notification.msg, std::string(
+        arg.body[0] + "|" + arg.body[1]).c_str());
+    return (notification);
 }
 
 Common::Response Server::Route::Listing::Friend::Delete(
