@@ -15,7 +15,6 @@ Server::Database::Database::Database(std::shared_ptr<Common::Log::Log> logger)
     if (code != SQLITE_OK)
         throw Exception::Opening(code);
     this->_logger->Info("Successfully connected to the database");
-    this->RegisterTables();
 }
 
 Server::Database::Database::~Database() {

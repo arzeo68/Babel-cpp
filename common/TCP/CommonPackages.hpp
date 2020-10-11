@@ -15,7 +15,7 @@
 
 namespace Common {
     static const constexpr uint16_t g_MagicNumber = 0xFABAu;
-    const static constexpr uint16_t g_maxMessageLength = 56u;
+    const static constexpr uint16_t g_maxMessageLength = 256u;
 
     enum class HTTPCodes_e : uint16_t {
         FAKE_HTTP_NOTIFICATION = 100,

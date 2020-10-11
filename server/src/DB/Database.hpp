@@ -19,25 +19,45 @@
 
 namespace Server::Database {
     namespace User {
+
+        /**
+         * An enumeration that corresponds to the column order in the database.
+         */
         enum Data : uint8_t {
+            /**
+             * User database
+             */
             ID = 0,
             NAME = 1,
             PASSWORD = 2,
             STATUS = 3,
 
+            /**
+             * Friend database
+             */
             F_NAME = 0,
             F_FRIEND = 1,
             F_STATUS = 2,
         };
     }
 
+    /**
+     * The class database inherit from the interface IDatabase.
+     * The main purpose is to handle any operation related to SQLite3
+     */
     class Database : public IDatabase {
         public:
+        /**
+         * The constructor open a SQLITE3 database and keep the handler w/ it
+         * @param logger Shared pointer to log error or info messages
+         */
         explicit Database(std::shared_ptr<Common::Log::Log> logger);
-
+        /**
+         * The destructor close the SQLITE3 handler
+         */
         ~Database() override;
 
-        void RegisterTables();
+        void RegisterTables() override;
         bool ConnectUser(const std::string &name,
                          const std::string &password) override;
         bool
@@ -46,17 +66,17 @@ namespace Server::Database {
         void UpdateStatus(const std::string &name,
                           const std::string &status) override;
         Common::FriendStatus
-        GetFriendStatus(const std::string &name, const std::string &opponent);
-        bool AddFriend(const std::string &name, const std::string &addressee);
+        GetFriendStatus(const std::string &name,
+                        const std::string &opponent) override;
+        bool AddFriend(const std::string &name,
+                       const std::string &addressee) override;
         void
-        DeleteFriend(const std::string &name, const std::string &addressee);
+        DeleteFriend(const std::string &name,
+                     const std::string &addressee) override;
         void UpdateFriendStatus(const std::string &name,
                                 const std::string &addressee,
-                                const Common::FriendStatus &status);
-
-        // Vector1: Friend name - Vector2: Friendship status
-        typedef std::pair<std::vector<std::string>, std::vector<std::string>> FriendListData_t;
-        FriendListData_t GetFriends(const std::string &author);
+                                const Common::FriendStatus &status) override;
+        FriendListData_t GetFriends(const std::string &author) override;
 
         private:
         typedef int (*DatabaseCallback_t)(void *, int, char **, char **);

@@ -24,6 +24,7 @@ Server::Network::Network::Network(uint32_t port,
     _signalSet(_service, SIGINT),
     _database(logger->shared_from_this()),
     _logger(logger) {
+    this->_database.RegisterTables();
     this->_router = std::make_shared<Server::Router>();
     this->_pool = std::make_shared<Server::User::Pool>();
     this->_worker = std::make_shared<Server::Worker>(this->_mutex,
