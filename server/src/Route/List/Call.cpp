@@ -17,11 +17,11 @@ Common::Response Server::Route::Listing::StartCall(
         return Common::BadRequestTemplate;
     if (arg.method != Common::HTTP_POST)
         return Common::InvalidMethodTemplate;
-    if (client->GetUserData().GetCallState() != Common::NONE ||
+    if (client->GetUserData().GetCallState() != Common::NONE &&
         client->GetUserData().GetCallState() != Common::PENDING)
         return (Common::Response{
             Common::HTTPCodes_e::HTTP_FORBIDDEN,
-            "false - not in call"
+            "false"
         });
 
     if (auto destClient = client->GetNetwork()->GetClientFromName(
@@ -42,7 +42,7 @@ Common::Response Server::Route::Listing::StartCall(
             else
                 return (Common::Response{
                     Common::HTTPCodes_e::HTTP_FORBIDDEN,
-                    "false - wrong caller"
+                    "false"
                 });
         }
         Common::Response request = {
