@@ -6,9 +6,11 @@
 #include <QDebug>
 #include <QtWidgets/QLineEdit>
 #include <QtCore/QPropertyAnimation>
+#include "client/src/GUI/Scenes/MainScene.hpp"
 
-FriendInfo::FriendInfo(FriendBox *friendBox, UserGUI *user, GUIController *guiController)
-    :   _containers({new Container(new QHBoxLayout),
+FriendInfo::FriendInfo(MainScene *scene, FriendBox *friendBox, UserGUI *user, GUIController *guiController)
+    :   _scene(scene),
+        _containers({new Container(new QHBoxLayout),
                      new Container(new QHBoxLayout)}),
          _buttons({new QPushButton("Start a call"),
                    new QPushButton("Delete friend")}),
@@ -52,6 +54,7 @@ void FriendInfo::initWidgets()
     setLayout(_layout);
 
     connect(_buttons.at(BT_DELETE), SIGNAL(clicked()), this, SLOT(deleteFriend()));
+    connect(_buttons.at(BT_CALL), SIGNAL(clicked()), this, SLOT(callFriend()));
 }
 
 QString FriendInfo::setFriendStyleSheet(FriendBox::UserState state)
@@ -91,4 +94,17 @@ void FriendInfo::deleteFriend()
     strncpy(pkg->args, _friend->getName().toStdString().c_str(), Common::g_maxMessageLength);
     _guiController->call(Common::HTTP_DELETE, 4, pkg);
     hide();
+}
+
+void FriendInfo::callFriend()
+{
+    Common::PackageServer *pkg = new Common::PackageServer;
+    pkg->magic = Common::g_MagicNumber;
+    pkg->id = _user->_id;
+    pkg->method = Common::HTTP_POST;
+    pkg->command = 6; // START_CALL
+
+    strncpy(pkg->args, _friend->getName().toStdString().c_str(), Common::g_maxMessageLength);
+    _guiController->call(Common::HTTP_POST, 6, pkg);
+    _scene->setCallInfo(_friend);
 }

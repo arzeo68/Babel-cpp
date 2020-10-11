@@ -17,12 +17,13 @@ class FriendInfo : public Container
 {
     Q_OBJECT
 public:
-    FriendInfo(FriendBox *friendBox, UserGUI *user, GUIController *guiController);
+    FriendInfo(MainScene *scene, FriendBox *friendBox, UserGUI *user, GUIController *guiController);
 
     void setNewFriendInfo(FriendBox *friendBox);
 
 public slots:
     void deleteFriend();
+    void callFriend();
 
 private:
     void initWidgets();
@@ -38,6 +39,7 @@ private:
         BT_DELETE
     };
 
+    MainScene *_scene;
     QLabel *_name;
     QLabel *_desc;
     QGroupBox *_box;

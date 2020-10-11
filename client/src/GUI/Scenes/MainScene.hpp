@@ -11,6 +11,7 @@
 #include <client/src/GUI/Modules/FriendBox.hpp>
 #include <client/src/GUI/Modules/FriendsList.hpp>
 #include <client/src/GUI/Modules/UserBox.hpp>
+#include <client/src/GUI/Modules/CallGUI.hpp>
 #include "client/src/GUI/Modules/FriendInfo.hpp"
 
 class MainScene : public AScene
@@ -21,14 +22,19 @@ public:
     FriendsList *getFriendsList();
 
     void initScene(UserGUI *user) override;
-    void setFriendInfo(FriendBox *_friend);
+    void setFriendInfo(FriendBox *friendBox);
     void refreshFriendsList(std::map<std::string, FriendBox *> list);
+    void setCallInfo(FriendBox *friendBox);
+
+    bool callNotification(Common::Response response);
 
 private:
     void initFriendList();
     void initUser();
     void initFriendInfo();
     void initCall();
+    void initNotif();
+    std::vector<std::string> split(std::string str, std::string token);
 
 //    void notifCall();
 
@@ -46,11 +52,12 @@ private:
     UserBox *_userBox;
     FriendInfo *_friendInfo;
     UserGUI *_user;
+    CallGUI *_call;
     GUIController *_guiController;
-//    QLineEdit *notif;
-//    QPushButton *accept_button;
-//    QPushButton *refuse_button;
-//    QPropertyAnimation *anim;
+    QLineEdit *notif;
+    QPushButton *accept_button;
+    QPushButton *refuse_button;
+    QPropertyAnimation *anim;
 };
 
 #endif //BABEL_MAINSCENE_HPP

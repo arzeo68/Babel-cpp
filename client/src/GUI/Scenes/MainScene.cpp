@@ -49,7 +49,7 @@ void MainScene::initUser() {
 
 void MainScene::initFriendInfo()
 {
-    _friendInfo = new FriendInfo(new FriendBox(_guiController, _user, this, "name", FriendBox::UserState::CONNECTED), _user, _guiController);
+    _friendInfo = new FriendInfo(this, new FriendBox(_guiController, _user, this, "name", FriendBox::UserState::CONNECTED), _user, _guiController);
 
     _containers.at(CONT_FRIEND_INFO)->setFixedSize(300, 450);
     _containers.at(CONT_FRIEND_INFO)->addWidget(_friendInfo);
@@ -61,9 +61,12 @@ void MainScene::initFriendInfo()
 
 void MainScene::initCall()
 {
-    _containers.at(CONT_CALL)->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    _call = new CallGUI(this, _user, _guiController);
 
-    _layout->addWidget(_containers.at(CONT_CALL), 2, 2);
+    _call->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+
+    _call->hide();
+    _layout->addWidget(_call, 2, 2);
 
 }
 
@@ -72,13 +75,6 @@ void MainScene::setFriendInfo(FriendBox *_friend) {
         _containers.at(CONT_FRIEND_INFO)->show();
 
     _friendInfo->setNewFriendInfo(_friend);
-
-//    notif->show();
-//    QString name = QString("New call from ");
-//    name.append(_friend->getName());
-//    notif->setText(name);
-//    anim->start();
-
 }
 void MainScene::initScene(UserGUI *user)
 {
@@ -91,7 +87,7 @@ void MainScene::initScene(UserGUI *user)
     std::cout << "initFriendInfo passed" << std::endl;
     initCall();
     std::cout << "initCall passed" << std::endl;
-//    notifCall();
+    initNotif();
 }
 
 FriendsList *MainScene::getFriendsList() {
@@ -110,30 +106,58 @@ void MainScene::refreshFriendsList(std::map<std::string, FriendBox *> list) {
     _layout->addWidget(_scroll, 2, 0);
 }
 
+void MainScene::setCallInfo(FriendBox *friendBox) {
+    _call->setFriendCall(friendBox);
+}
 
+bool MainScene::callNotification(Common::Response response) {
+//    CALL|START|Clément|127.0.0.1|65281
+    std::string str(response.msg);
 
+    str = str.substr(11);
+    std::vector<std::string> args = split(str, "|");
+    notif->show();
+    QString text = QString("Incoming call from ");
+    text.append(args[0].c_str());
+    notif->setText(text);
+    anim->start();
+}
 
+void MainScene::initNotif()
+{
+    notif = new QLineEdit("", this);
+    notif->setReadOnly(true);
+    notif->setTextMargins(50, 0, 0, 0);
+    notif->setFixedSize(500, 100);
 
-//void MainScene::notifCall()
-//{
-//    notif = new QLineEdit("", this);
-//    notif->setReadOnly(true);
-//    notif->setTextMargins(50, 0, 0, 0);
-//    notif->setFixedSize(500, 100);
-//
-//    accept_button = new QPushButton("Accept", notif);
-//    accept_button->setGeometry(QRect(QPoint(260, 25),
-//                                     QSize(100, 50)));
-//
-//    refuse_button = new QPushButton("Refuse", notif);
-//    refuse_button->setGeometry(QRect(QPoint(380, 25),
-//                                     QSize(100, 50)));
-//
-//    anim = new QPropertyAnimation(notif, "geometry");
-//    anim->setDuration(800);
-//    anim->setStartValue(QRect(368, -150, 500, 100));
-//    qDebug() << "x: " << notif->pos().x() << " && y: " <<notif->pos().y();
-//    anim->setEndValue(QRect(368, 15, 500, 100));
-//    notif->hide();
-//    _layout->addWidget(notif, 0, 2, 1, 2);
-//}
+    accept_button = new QPushButton("Accept", notif);
+    accept_button->setGeometry(QRect(QPoint(260, 25),
+                                     QSize(100, 50)));
+
+    refuse_button = new QPushButton("Refuse", notif);
+    refuse_button->setGeometry(QRect(QPoint(380, 25),
+                                     QSize(100, 50)));
+
+    anim = new QPropertyAnimation(notif, "geometry");
+    anim->setDuration(800);
+    anim->setStartValue(QRect(368, -150, 500, 100));
+    anim->setEndValue(QRect(368, 15, 500, 100));
+    notif->hide();
+    _layout->addWidget(notif, 0, 2, 1, 2);
+}
+
+std::vector<std::string> MainScene::split(std::string str, std::string token){
+    std::vector<std::string>result;
+    while(str.size()){
+        int index = str.find(token);
+        if(index!=std::string::npos){
+            result.push_back(str.substr(0,index));
+            str = str.substr(index+token.size());
+            if(str.size()==0)result.push_back(str);
+        }else{
+            result.push_back(str);
+            str = "";
+        }
+    }
+    return result;
+}

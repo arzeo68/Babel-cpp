@@ -3,9 +3,9 @@
 //
 
 #include <iostream>
-#include <client/src/Utils/Utils.hpp>
 #include "FriendsList.hpp"
 #include "client/src/GUI/Scenes/MainScene.hpp"
+#include "client/src/Utils/Utils.hpp"
 
 FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController, std::map<std::string, FriendBox *> friends)
     :   Container(new QVBoxLayout),

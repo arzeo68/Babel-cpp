@@ -12,6 +12,7 @@
 class Container : public QGroupBox
 {
 public:
+    ~Container() = default;
     Container(QBoxLayout *layout = new QVBoxLayout, Qt::Alignment alignment1 = Qt::AlignVCenter, Qt::Alignment alignment2 = Qt::AlignHCenter);
     QWidget *addWidget(QWidget *widget, Qt::Alignment alignment = Qt::AlignLeft);
     QLayoutItem *addItem(QLayoutItem *item, Qt::Alignment alignment = Qt::AlignLeft);
