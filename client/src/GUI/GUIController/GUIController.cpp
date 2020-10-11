@@ -203,3 +203,7 @@ void GUIController::FriendBusy(Common::Response r) {
     dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->getFriendsList()->friendBusyNotif(r);
     std::cout << "Notification call busy" << std::endl;
 }
+
+NetworkUDP &GUIController::getUdp() {
+    return _udp;
+}

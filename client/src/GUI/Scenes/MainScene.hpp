@@ -27,6 +27,7 @@ public:
     void refreshFriendsList(std::map<std::string, FriendBox *> list);
     void setCallInfo(FriendBox *friendBox);
     void removeCallGUI();
+    void startUdpCall(std::string ip, std::string port);
 
     bool callNotification(Common::Response response);
     bool endCall(Common::Response response);

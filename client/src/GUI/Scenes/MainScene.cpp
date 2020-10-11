@@ -177,7 +177,6 @@ void MainScene::acceptCall() {
     pkg->command = 6; // START_CALL
 
     strncpy(pkg->args, _name.c_str(), Common::g_maxMessageLength);
-    std::cout << "call accept: " << _name << std::endl;
     _guiController->call(Common::HTTP_POST, 6, pkg);
     notif->hide();
     _layout->removeWidget(notif);
@@ -190,6 +189,7 @@ void MainScene::acceptCall() {
     response.code = Common::HTTPCodes_e::HTTP_OK;
     strncpy(response.msg, string.c_str(), Common::g_maxMessageLength);
     _call->acceptedCall(response);
+    _guiController->getUdp().startConnection(_ip, _port);
 }
 
 void MainScene::refuseCall() {
@@ -215,4 +215,12 @@ bool MainScene::endCall(Common::Response response) {
     _call->hide();
     _layout->removeWidget(_call);
     initCall();
+    _guiController->getUdp().stopConnection();
+}
+
+void MainScene::startUdpCall(std::string ip, std::string port) {
+    _ip = ip;
+    _port = port;
+    _guiController->getUdp().startConnection(ip, port);
+
 }

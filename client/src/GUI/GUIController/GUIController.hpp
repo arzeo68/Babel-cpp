@@ -193,12 +193,19 @@ public:
      */
     void CallStatus(Common::Response r);
 
+    /**
+     * get network udp instance
+     * @return network udp instance
+     */
+    NetworkUDP &getUdp();
+
+
 private:
 
     NetworkTcp _network;
     PackageTcp _package;
     MainWindow _mainWindow;
-
+    NetworkUDP _udp;
     std::queue<uint8_t> _routes;
     std::queue<Common::Method> _methods;
 
