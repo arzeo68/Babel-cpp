@@ -19,6 +19,7 @@
 int main(int argc, char **argv)
 {
     if (argc == 1) {
+        std::cerr << "./babel_client [SERVER_IP]" << std::endl << "Example: ./babel_client 127.0.0.1" << std::endl;
         return 84;
     }
     QApplication app(argc, argv);
