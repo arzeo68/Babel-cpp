@@ -25,7 +25,7 @@ public:
 
     bool deleteFriend(Common::Response response);
     bool requestFriend(Common::Response response);
-    bool pendingFriend(Common::Response response);
+    bool statusFriend(Common::Response response);
 
 private:
     MainScene *_scene;
@@ -43,6 +43,7 @@ private:
 
 private slots:
     void addNewFriend();
+    bool deleteFriend(std::string name);
 };
 
 

@@ -90,9 +90,8 @@ bool FriendsList::fillFriend(Common::Response response)
     name = str.substr(0, pos);
     str.erase(0, pos + 1);
 
-    _friend.push_back(new FriendBox(_scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED));
+    _friend.push_back(new FriendBox(_scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED, 0));
     _overlay->addWidget(_friend.back());
-    // Définir avec les autres sous quel format est reçu le friend
     return true;
 }
 
@@ -132,18 +131,53 @@ void FriendsList::addNewFriend()
     _guiController->call(Common::HTTP_PUT, 4, pkg);
 }
 
+
 bool FriendsList::deleteFriend(Common::Response response) {
     std::string str(response.msg);
-    std::map<std::string, FriendBox *>::iterator it;
-    
+
     if (response.code != Common::HTTPCodes_e::HTTP_OK)
         return false;
-    it = _friends.find(str);
+    return deleteFriend(str);
+}
+
+bool FriendsList::requestFriend(Common::Response response) {
+    std::string str(response.msg);
+    std::string name;
+    size_t pos = 0;
+
+    str = str.substr(15);
+    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+        return false;
+
+    _friend.push_back(new FriendBox(_scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED, 1));
+    _overlay->addWidget(_friend.back());
+    return true;
+}
+
+bool FriendsList::statusFriend(Common::Response response) {
+    std::string str(response.msg);
+
+    str = str.substr(14);
+    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+        return false;
+    std::vector<std::string> args = Babel::Utils::split(str, "|");
+
+    if (args[1] == "2") {
+        _friends[args[0]]->setPendingState(2);
+    } else if (args[1] == "3") {
+        deleteFriend(args[0]);
+    }
+
+}
+
+bool FriendsList::deleteFriend(std::string name) {
+    std::map<std::string, FriendBox *>::iterator it;
+
+    it = _friends.find(name);
     if (it == _friends.end())
         return false;
-    _overlay->removeWidget(_friends[str]);
-    _friends[str]->hide();
-    _friends.erase(str);
-    return true;
+    _overlay->removeWidget(_friends[name]);
+    _friends[name]->hide();
+    _friends.erase(name);
 }
 
