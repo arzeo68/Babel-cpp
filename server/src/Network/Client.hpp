@@ -16,6 +16,9 @@
 #include "server/src/User/User.hpp"
 
 namespace Server::Network {
+    /**
+     * This class represent someone connected to the server. It means the application has established a connection to the server and a socket has been created.
+     */
     class Client : public std::enable_shared_from_this<Client> {
         public:
         typedef std::shared_ptr<boost::asio::ip::tcp::socket> SharedPtrSocket_t;

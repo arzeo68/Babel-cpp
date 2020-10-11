@@ -20,7 +20,7 @@ namespace Server::Database {
          *  1) A vector with the friends name
          *  2) A vector with the friendship status within the friend at the same index from the first vector
          */
-        typedef std::pair<std::vector<std::string>, std::vector<std::string>> FriendListData_t;
+        typedef std::pair<std::vector<std::pair<std::string, std::string>>, std::vector<std::string>> FriendListData_t;
         virtual ~IDatabase() = default;
 
         /**

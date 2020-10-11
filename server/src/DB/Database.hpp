@@ -79,11 +79,32 @@ namespace Server::Database {
         FriendListData_t GetFriends(const std::string &author) override;
 
         private:
-        typedef int (*DatabaseCallback_t)(void *, int, char **, char **);
+        /**
+         * DatabaseCallback_t is a function pointer used by SQLITE3 when a SQL statement requires response.
+         * @param callback_arg The custom argument passed to the callback
+         * @param max_size The number of column for the selected table
+         * @param data Data from the current row with the size of 'max_size'
+         * @param column_names All the column names with the size of 'max_size'
+         */
+        typedef int (*DatabaseCallback_t)(void *callback_arg, int max_size,
+                                          char **data, char **column_names);
 
+        /**
+         * Handler to the SQL database
+         */
         sqlite3 *_handler;
+
+        /**
+         * Shared pointer corresponds to the server's logger
+         */
         std::shared_ptr<Common::Log::Log> _logger;
 
+        /**
+         * A private function that execute a query and redirect the output on a callback if needed that can take a custom argument of any type
+         * @param query SQL query
+         * @param callback A function that will be called when the query end. Only SELECT SQL statement call this function
+         * @param callback_arg Custom argument passed to the callback function
+         */
         void ExecuteQuery(const std::string &query,
                           DatabaseCallback_t callback = nullptr,
                           void *callback_arg = nullptr);

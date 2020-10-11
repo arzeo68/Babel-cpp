@@ -35,7 +35,8 @@ Common::Response Server::Route::Listing::Utils::NotifyUserStatusToFriends(
     auto userName = client->GetUserData().GetName();
     auto friendList = client->GetDatabase().GetFriends(userName);
     for (auto &i: friendList.first) {
-        if (auto target = client->GetNetwork()->GetClientFromName(i)) {
+        std::string friendName = i.first == userName ? i.second : i.first;
+        if (auto target = client->GetNetwork()->GetClientFromName(friendName)) {
             Common::Response notification {
                 Common::HTTPCodes_e::FAKE_HTTP_NOTIFICATION,
                 ""
@@ -54,7 +55,7 @@ Common::Response Server::Route::Listing::Utils::NotifyUserStatusToFriends(
                              std::string("FRIEND|BUSY|" + userName).c_str());
                     break;
             }
-            (*target)->GetWorker()->AddNotification(notification, i);
+            (*target)->GetWorker()->AddNotification(notification, friendName);
         }
     }
     return (Common::Response {

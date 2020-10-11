@@ -117,12 +117,9 @@ Server::Database::Database::GetFriends(const std::string &author) {
         author + "';",
         [](void *arg, int, char **data, char **) -> int {
             auto *friendList = reinterpret_cast<std::pair<FriendListData_t, std::string> *>(arg);
-            if (data[User::Data::F_NAME] == (*friendList).second)
-                (*friendList).first.first.emplace_back(
-                    std::string(data[User::Data::F_FRIEND]));
-            else
-                (*friendList).first.first.emplace_back(
-                    std::string(data[User::Data::F_NAME]));
+            (*friendList).first.first.emplace_back(
+                std::make_pair(std::string(data[User::Data::F_NAME]),
+                               std::string(data[User::Data::F_FRIEND])));
             (*friendList).first.second.emplace_back(
                 std::string(data[User::Data::F_STATUS]));
             return (0);

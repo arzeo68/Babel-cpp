@@ -94,25 +94,25 @@ Common::Response Server::Route::Listing::Friend::Get(
         Common::HTTPCodes_e::FAKE_HTTP_PAGINATION,
         "FRIEND|",
     };
-    auto friendList = client->GetDatabase().GetFriends(
-        client->GetUserData().GetName());
+    std::string userName = client->GetUserData().GetName();
+    auto friendList = client->GetDatabase().GetFriends(userName);
     const std::string prefix = "FRIEND|LIST|";
     std::string formattedFriendList = prefix;
     for (auto i = friendList.first.begin(); i != friendList.first.end(); ++i) {
         std::string encodeText;
-        if (auto target = client->GetNetwork()->GetClientFromName(*i)) {
-            encodeText =
-                *i + "|" + friendList.second[i - friendList.first.begin()] +
-                "|" +
-                ((*target)->GetUserData().IsConnected() ?
-                 ((*target)->GetUserData().GetCallState() != Common::NONE ? "2"
-                                                                          : "1")
-                                                        : "0");
-        } else {
-            encodeText =
-                *i + "|" + friendList.second[i - friendList.first.begin()] +
-                "|0";
+        std::string friendName =
+            (*i).first == userName ? (*i).second : (*i).first;
+        std::string status = "0";
+        if (auto target = client->GetNetwork()->GetClientFromName(friendName)) {
+            status = ((*target)->GetUserData().IsConnected() ?
+                      ((*target)->GetUserData().GetCallState() != Common::NONE
+                       ? "2"
+                       : "1")
+                                                             : "0");
         }
+        encodeText = (*i).first + "|" + (*i).second + "|" +
+                     friendList.second[i - friendList.first.begin()] +
+                     "|" + status;
         if ((formattedFriendList.size() + encodeText.size()) >
             Common::g_maxMessageLength) {
             formattedFriendList.erase(formattedFriendList.end() - 1);
