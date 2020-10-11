@@ -75,6 +75,7 @@ bool FriendsList::fillFriendsList(Common::Response response)
             _overlay->addWidget(_friends[newFriend[0]]);
         }
     }
+    _scene->refreshFriendsList(_friends);
     return true;
 }
 
