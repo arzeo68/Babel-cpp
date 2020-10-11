@@ -17,6 +17,9 @@ Common::Response Server::Route::Listing::StartCall(
         return Common::BadRequestTemplate;
     if (arg.method != Common::HTTP_POST)
         return Common::InvalidMethodTemplate;
+    std::cerr << "Dest " << client->GetUserData().GetName() << " w/ " <<
+              client->GetUserData().GetCallState() << " and "
+              << client->GetUserData().GetCallerName() << std::endl;
     if (client->GetUserData().GetCallState() != Common::NONE)
         return (Common::Response{
             Common::HTTPCodes_e::HTTP_FORBIDDEN,
@@ -63,6 +66,10 @@ Common::Response Server::Route::Listing::StartCall(
                                                   client->GetUserData().GetName());
         client->GetUserData().SetCallState(Common::CallState::PENDING,
                                            (*destClient)->GetUserData().GetName());
+        std::cerr << "Dest " << (*destClient)->GetUserData().GetName() << " w/ "
+                  << (*destClient)->GetUserData().GetCallState() <<
+                  " and " << (*destClient)->GetUserData().GetCallerName()
+                  << std::endl;
         _strcpyC(request.msg,
                  std::string((*destClient)->GetUserData().GetIP() + "|" +
                              std::to_string(port)).c_str());
