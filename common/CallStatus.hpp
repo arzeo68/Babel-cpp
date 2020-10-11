@@ -17,7 +17,6 @@ namespace Common {
         PENDING = 1,
         ACCEPTED = 2,
         DECLINED = 3,
-        PENDING_CALLER = 4,
         ENDED = 5
     };
 }

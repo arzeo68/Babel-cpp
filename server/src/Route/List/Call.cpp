@@ -17,11 +17,16 @@ Common::Response Server::Route::Listing::StartCall(
         return Common::BadRequestTemplate;
     if (arg.method != Common::HTTP_POST)
         return Common::InvalidMethodTemplate;
+    if (client->GetUserData().GetCallState() != Common::NONE)
+        return (Common::Response{
+            Common::HTTPCodes_e::HTTP_FORBIDDEN,
+            "false"
+        });
 
     if (auto destClient = client->GetNetwork()->GetClientFromName(
         arg.body[0])) {
         if (!(*destClient)->GetUserData().IsConnected())
-            return (Common::Response {
+            return (Common::Response{
                 Common::HTTPCodes_e::HTTP_NOT_FOUND,
                 "false",
             });
@@ -52,10 +57,8 @@ Common::Response Server::Route::Listing::StartCall(
         client->GetWorker()->AddNotification(request, arg.body[0]);
         (*destClient)->GetUserData().SetCallState(Common::CallState::PENDING,
                                                   client->GetUserData().GetName());
-        client->GetUserData().SetCallState(Common::CallState::PENDING_CALLER,
+        client->GetUserData().SetCallState(Common::CallState::PENDING,
                                            (*destClient)->GetUserData().GetName());
-        Utils::NotifyUserStatusToFriends(client, Utils::UserState::BUSY);
-        Utils::NotifyUserStatusToFriends((*destClient), Utils::UserState::BUSY);
         _strcpyC(request.msg,
                  std::string((*destClient)->GetUserData().GetIP() + "|" +
                              std::to_string(port)).c_str());
