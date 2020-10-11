@@ -13,9 +13,34 @@ class Container : public QGroupBox
 {
 public:
     ~Container() = default;
+    /**
+     * Constructor for Container
+     * @param layout
+     * @param alignment1
+     * @param alignment2
+     */
     Container(QBoxLayout *layout = new QVBoxLayout, Qt::Alignment alignment1 = Qt::AlignVCenter, Qt::Alignment alignment2 = Qt::AlignHCenter);
+
+    /**
+     * add new Widget to _layout
+     * @param widget
+     * @param alignment
+     * @return
+     */
     QWidget *addWidget(QWidget *widget, Qt::Alignment alignment = Qt::AlignLeft);
+
+    /**
+     * add new Widget to _layout
+     * @param item
+     * @param alignment
+     * @return
+     */
     QLayoutItem *addItem(QLayoutItem *item, Qt::Alignment alignment = Qt::AlignLeft);
+
+    /**
+     * remove widget from list and _layout
+     * @param widget
+     */
     void removeWidget(QWidget *widget);
 
 private:

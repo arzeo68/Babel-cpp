@@ -40,7 +40,7 @@ class NetworkUDP: public INetwork<std::string, std::string>
     quint16 _port = 0;
     std::string _ip = "";
     std::shared_ptr<PackageManager> _packageManger;
-    QUdpSocket *_socket;
+    QUdpSocket *_socket = nullptr;
     uint32_t _nextPackageSize = 0;
 
     public slots:

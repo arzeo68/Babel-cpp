@@ -73,7 +73,6 @@ bool CallGUI::acceptedCall(Common::Response response) {
         string.append(args[0].c_str());
         _text->setText(string);
         runTimer();
-        _scene->startUdpCall();
     } else if (args[1] == "3") {
         QString string  = QString(args[0].c_str());
         string.append(" declined your call.");
@@ -93,4 +92,11 @@ void CallGUI::endCall() {
 
     strncpy(pkg->args, _friend->getName().toStdString().c_str(), Common::g_maxMessageLength);
     _guiController->call(Common::HTTP_POST, 7, pkg);
+}
+
+void CallGUI::setGUICall(std::string name) {
+    QString string  = QString("In call with ");
+    string.append(name.c_str());
+    _text->setText(string);
+    runTimer();
 }

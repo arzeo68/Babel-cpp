@@ -230,7 +230,7 @@ bool MainScene::infosCall(Common::Response response) {
 
     std::cout << "INFOS CALL:" << str << std::endl;
     if (str == "true") {
-        _guiController->getUdp().startConnection(_ip, _port);
+        _call->setGUICall(_name);
         return true;
     }
     std::vector<std::string> args = split(str, "|");

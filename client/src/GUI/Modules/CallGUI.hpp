@@ -49,6 +49,8 @@ public:
      */
     bool acceptedCall(Common::Response response);
 
+    void setGUICall(std::string name);
+
 private slots:
     void timerRefresh();
 
