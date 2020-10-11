@@ -79,6 +79,7 @@ void GUIController::call(Common::Method method, uint8_t route, Common::PackageSe
 
 int GUIController::run() {
     _mainWindow.show();
+    return 0;
 }
 
 void GUIController::User(Common::Response r, Common::Method m) {

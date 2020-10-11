@@ -65,3 +65,5 @@ target_include_directories(babel_client PRIVATE inc ../common/inc)
 #############################################################
 target_link_libraries(babel_server ${CONAN_LIBS})
 #target_link_libraries(babel_server Qt5::Widgets Qt5::Network Qt5::Core Qt5::Gui)
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/bin/qt.conf "[Paths]\nPrefix = ")
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/bin/qt.conf ${CONAN_QT_ROOT})
