@@ -245,6 +245,8 @@ bool FriendsList::friendConnectedNotif(Common::Response response) {
     std::string str(response.msg);
 
     str = str.substr(15);
+    if (!_friends[str])
+        return false;
     _friends[str]->setState(FriendBox::CONNECTED);
     return true;
 }
@@ -253,6 +255,8 @@ bool FriendsList::friendDisonnectedNotif(Common::Response response) {
     std::string str(response.msg);
 
     str = str.substr(18);
+    if (!_friends[str])
+        return false;
     _friends[str]->setState(FriendBox::DISCONNECTED);
     return true;
 }
@@ -261,6 +265,8 @@ bool FriendsList::friendBusyNotif(Common::Response response) {
     std::string str(response.msg);
 
     str = str.substr(12);
+    if (!_friends[str])
+        return false;
     _friends[str]->setState(FriendBox::OCCUPIED);
     return true;
 }
