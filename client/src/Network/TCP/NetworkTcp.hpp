@@ -16,7 +16,7 @@ class NetworkTcp: public INetwork<std::string &, std::string> {
     Q_OBJECT
     public:
     NetworkTcp(GUIController *g) : _guiController(g) {};
-    ~NetworkTcp() override { delete _socket; };
+    ~NetworkTcp() override {/* delete _socket; */};
     bool startConnection(const std::string &ip, const std::string &port) override;
 
     signals:
