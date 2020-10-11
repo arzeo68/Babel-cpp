@@ -13,7 +13,7 @@ bool NetworkTcp::startConnection(const std::string &ip, const std::string &port)
 
     connect(_socket, SIGNAL(connected()), this, SLOT(connected()));
     connect(_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    _socket->connectToHost(QHostAddress::LocalHost, 4242);
+    _socket->connectToHost(QHostAddress::Any, 4242);
 
     if (!_socket->waitForConnected(5000)) {
         std::cout << "socket " << &_socket << std::endl;
