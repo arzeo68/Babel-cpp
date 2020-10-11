@@ -13,15 +13,17 @@
 #include <QtWidgets/QButtonGroup>
 #include <zconf.h>
 #include <QtCore/QTimer>
+#include <client/src/GUI/GUIController/GUIController.hpp>
 
 
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
-    MainWindow mainWindow;
-
-    mainWindow.show();
-
+    GUIController guiController;
+    Common::Response msg;
+    msg.code = Common::HTTPCodes_e::HTTP_OK;
+    strncpy(msg.msg, "FRIEND|LELEL|TestTestTest", Common::g_maxMessageLength);
+    guiController.handleNotifications(msg);
+    guiController.run();
     return app.exec();
 }
-
