@@ -24,23 +24,58 @@ class PortAudio: public AAudio
 {
     public:
     PortAudio();
-
+    /*!
+        open the input stream to allow the program to get your mic input
+    */
     void startRecording() override;
-
+    //! stopRecording
+    /*!
+        close the input stream to stop recording mic input
+    */
     void stopRecording() override;
-
+    /*!
+        open the output stream to allow the program to play sound on your output device
+    */
     void startPlaying() override;
-
+    /*!
+        close the output stream to stop playing sound
+    */
     void stopPlaying() override;
-
+    /*!
+        return the next sound that is needed to be played
+    */
+    /**
+     *
+     * @return the next sound that is needed to be played
+     */
     std::shared_ptr<Babel::Audio::soundDecoded> getNextSound();
+    /*!
+        add a sound at the back of the sound to be played queue
+    */
+    /**
+     *
+     * @param data take a const std::shared_ptr<Babel::Audio::soundDecoded>& that contain the sound that you want to add in the queue
+     */
     void addSoundToQueue(const std::shared_ptr<Babel::Audio::soundDecoded>& data);
 
     private:
     NetworkUDP *_soundCallBack = nullptr;
     public:
+    /*!
+        return the callback that is played when a sound is ready to be send
+    */
+    /**
+     *
+     * @return the callback that is played when a sound is ready to be send
+     */
     NetworkUDP *getSoundCallBack() const;
-
+    /*!
+        set the callback that is played when a sound is ready to be send
+    */
+    /**
+     *
+     * @param soundCallBack callback that is played when a sound is ready to be send
+     */
     void setSoundCallBack(NetworkUDP *soundCallBack);
 
     private:

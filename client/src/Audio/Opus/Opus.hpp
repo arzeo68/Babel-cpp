@@ -18,19 +18,34 @@ class Opus
     public:
     Opus();
     ~Opus();
-    Babel::Audio::soundEncoded encode (Babel::Audio::soundDecoded &);
-    Babel::Audio::soundDecoded decode (Babel::Audio::soundEncoded &);
+    /*!
+        take a encoded sound package as parameter and decode the sound inside of it
+    */
+    /**
+     *
+     * @param decoded sound decoded of type Babel::Audio::soundDecoded &
+     * @return sound encoded
+     */
+    Babel::Audio::soundEncoded encode (Babel::Audio::soundDecoded &decoded);
+    /*!
+        take a decoded sound package as parameter and encode the sound inside of it
+    */
+    /**
+     *
+     * @param encoded sound encoded of type Babel::Audio::soundEncoded
+     * @return sound decoded
+     */
+    Babel::Audio::soundDecoded decode (Babel::Audio::soundEncoded &encoded);
 
     private:
-    OpusEncoder *_encoder;
-    OpusDecoder *_decoder;
-    const int _channel  = 2;
-    const int _bitRate = 64000;
-    const int _frameSize = 480;
-    const int _sampleRate  = 48000;
-    const int _maxFrameSize  = 5760;
-    const int _maxPacketSize = 3828;
-    int _err;
+    OpusEncoder *_encoder; /*!< encoder instance */
+    OpusDecoder *_decoder; /*!< decoder instance */
+    const int _channel  = 2; /*!< number of channel */
+    const int _bitRate = 64000; /*!< recording and playing bitrate */
+    const int _frameSize = 480; /*!< frame size */
+    const int _sampleRate  = 48000; /*!< smaple rate */
+    const int _maxFrameSize  = 5760; /*!< frame size */
+    int _err; /*!< always contain the last error */
 };
 
 #endif //BABEL_OPUS_HPP

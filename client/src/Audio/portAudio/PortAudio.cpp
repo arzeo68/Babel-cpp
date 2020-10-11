@@ -11,7 +11,6 @@
 
 PortAudio::PortAudio()
 {
-    _inCall = false;
     _recording = false;
     _listening = false;
     // Init
