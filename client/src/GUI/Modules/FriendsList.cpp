@@ -198,7 +198,7 @@ bool FriendsList::responseRequest(Common::Response response) {
         std::vector<std::string> args = Babel::Utils::split(str, "|");
         if (args[1] == "0")
             deleteFriend(args[0]);
-        else if (args[0] == "1")
+        else if (args[1] == "1")
             _friends[str]->setPendingState(2);
     }
     return true;
