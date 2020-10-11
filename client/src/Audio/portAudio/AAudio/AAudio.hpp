@@ -11,10 +11,9 @@
 class AAudio: public IAudio
 {
     protected:
-    bool _inCall = false;
-    bool _recording = false;
-    bool _listening = false;
-    bool _init = false;
+    bool _recording = false; /*!< boolean that represent the recording status */
+    bool _listening = false; /*!< boolean that represent the playing status */
+    bool _init = false; /*!< boolean that represent the lib initialization status */
 };
 
 #endif //BABEL_AAUDIO_HPP

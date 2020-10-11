@@ -18,9 +18,12 @@
 
 int main(int argc, char **argv)
 {
+    if (argc == 1) {
+        return 84;
+    }
     QApplication app(argc, argv);
 
-    GUIController guiController;
+    GUIController guiController(argv[1]);
     guiController.run();
     return app.exec();
 }

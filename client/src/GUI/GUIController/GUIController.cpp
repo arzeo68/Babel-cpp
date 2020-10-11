@@ -7,7 +7,7 @@
 #include "client/src/GUI/Scenes/LoginScene.hpp"
 #include "GUIController.hpp"
 
-GUIController::GUIController() : _network(this), _mainWindow(this) {
+GUIController::GUIController(std::string ip) : _network(this, ip), _mainWindow(this), _ip(ip) {
     // declare routes callback map ptr
     _fctPtr[0] = &GUIController::User;
     _fctPtr[1] = &GUIController::Login;

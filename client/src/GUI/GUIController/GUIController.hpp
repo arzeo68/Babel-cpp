@@ -26,7 +26,7 @@ public:
     /**
      * constructor
      */
-    GUIController();
+    GUIController(std::string ip);
 
     /**
      * run GUI
@@ -206,6 +206,7 @@ private:
     PackageTcp _package;
     MainWindow _mainWindow;
     NetworkUDP _udp;
+    std::string _ip;
     std::queue<uint8_t> _routes;
     std::queue<Common::Method> _methods;
 
