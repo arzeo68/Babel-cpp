@@ -116,6 +116,9 @@ bool MainScene::callNotification(Common::Response response) {
 
     str = str.substr(11);
     std::vector<std::string> args = split(str, "|");
+    _name = args[0];
+    _ip = args[1];
+    _port = args[2];
     notif->show();
     QString text = QString("Incoming call from ");
     text.append(args[0].c_str());
@@ -144,6 +147,9 @@ void MainScene::initNotif()
     anim->setEndValue(QRect(368, 15, 500, 100));
     notif->hide();
     _layout->addWidget(notif, 0, 2, 1, 2);
+
+    connect(accept_button, SIGNAL(clicked()), this, SLOT(acceptCall()));
+    connect(refuse_button, SIGNAL(clicked()), this, SLOT(refuseCall()));
 }
 
 std::vector<std::string> MainScene::split(std::string str, std::string token){
@@ -160,4 +166,53 @@ std::vector<std::string> MainScene::split(std::string str, std::string token){
         }
     }
     return result;
+}
+
+void MainScene::acceptCall() {
+    Common::PackageServer *pkg = new Common::PackageServer;
+
+    pkg->magic = Common::g_MagicNumber;
+    pkg->id = _user->_id;
+    pkg->method = Common::HTTP_POST;
+    pkg->command = 6; // START_CALL
+
+    strncpy(pkg->args, _name.c_str(), Common::g_maxMessageLength);
+    std::cout << "call accept: " << _name << std::endl;
+    _guiController->call(Common::HTTP_POST, 6, pkg);
+    notif->hide();
+    _layout->removeWidget(notif);
+    initNotif();
+    setCallInfo(_friendsList->getFriends()[_name]);
+    std::string string = std::string("CALL|STATUS|");
+    string.append(_name);
+    string.append("|2");
+    Common::Response response;
+    response.code = Common::HTTPCodes_e::HTTP_OK;
+    strncpy(response.msg, string.c_str(), Common::g_maxMessageLength);
+    _call->acceptedCall(response);
+}
+
+void MainScene::refuseCall() {
+    Common::PackageServer *pkg = new Common::PackageServer;
+
+    pkg->magic = Common::g_MagicNumber;
+    pkg->id = _user->_id;
+    pkg->method = Common::HTTP_POST;
+    pkg->command = 7; // END_CALL
+
+    strncpy(pkg->args, _name.c_str(), Common::g_maxMessageLength);
+    _guiController->call(Common::HTTP_POST, 7, pkg);
+    notif->hide();
+    _layout->removeWidget(notif);
+    initNotif();
+}
+
+CallGUI *MainScene::getCallGUI() {
+    return _call;
+}
+
+bool MainScene::endCall(Common::Response response) {
+    _call->hide();
+    _layout->removeWidget(_call);
+    initCall();
 }

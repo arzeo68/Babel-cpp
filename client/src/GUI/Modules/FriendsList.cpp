@@ -271,3 +271,7 @@ bool FriendsList::friendBusyNotif(Common::Response response) {
     return true;
 }
 
+std::map<std::string, FriendBox *> &FriendsList::getFriends() {
+    return _friends;
+}
+

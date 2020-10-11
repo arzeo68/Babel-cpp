@@ -20,13 +20,20 @@ class MainScene : public AScene
 public:
     explicit MainScene(GUIController *guiController, QWidget *parent = Q_NULLPTR);
     FriendsList *getFriendsList();
+    CallGUI *getCallGUI();
 
     void initScene(UserGUI *user) override;
     void setFriendInfo(FriendBox *friendBox);
     void refreshFriendsList(std::map<std::string, FriendBox *> list);
     void setCallInfo(FriendBox *friendBox);
+    void removeCallGUI();
 
     bool callNotification(Common::Response response);
+    bool endCall(Common::Response response);
+
+private slots:
+    void acceptCall();
+    void refuseCall();
 
 private:
     void initFriendList();
@@ -57,6 +64,9 @@ private:
     QLineEdit *notif;
     QPushButton *accept_button;
     QPushButton *refuse_button;
+    std::string _name;
+    std::string _ip;
+    std::string _port;
     QPropertyAnimation *anim;
 };
 

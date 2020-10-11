@@ -20,6 +20,8 @@ class FriendsList : public Container
 public:
     FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController, std::map<std::string, FriendBox *> friends);
 
+    std::map<std::string, FriendBox *> &getFriends();
+
     bool fillFriendsList(Common::Response response);
     bool fillFriend(Common::Response response);
     bool deleteFriend(Common::Response response);
