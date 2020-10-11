@@ -124,6 +124,7 @@ bool MainScene::callNotification(Common::Response response) {
     text.append(args[0].c_str());
     notif->setText(text);
     anim->start();
+    return true;
 }
 
 void MainScene::initNotif()
@@ -218,6 +219,7 @@ bool MainScene::endCall(Common::Response response) {
     _layout->removeWidget(_call);
     initCall();
     _guiController->getUdp().stopConnection();
+    return true;
 }
 
 void MainScene::startUdpCall() {

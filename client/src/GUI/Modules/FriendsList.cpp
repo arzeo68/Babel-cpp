@@ -239,6 +239,7 @@ bool FriendsList::responseRequestFriend(Common::Response response) {
         strncpy(pkg->args, args[0].c_str(), Common::g_maxMessageLength);
         _guiController->call(Common::HTTP_GET, 5, pkg);
     }
+    return true;
 }
 
 bool FriendsList::friendConnectedNotif(Common::Response response) {

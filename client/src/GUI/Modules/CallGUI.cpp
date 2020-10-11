@@ -81,6 +81,7 @@ bool CallGUI::acceptedCall(Common::Response response) {
     } else if (args[1] == "5") {
         _scene->endCall(response);
     }
+    return true;
 }
 
 void CallGUI::endCall() {
