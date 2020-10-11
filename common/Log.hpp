@@ -96,14 +96,8 @@ namespace Common::Log {
         static std::string GetCurrentTime() {
             time_t rawtime;
             time(&rawtime);
-            // Use localtime_s on windows
-            #ifdef _WIN32
-            struct tm timeinfo;
-            localtime_s(&timeinfo, &rawtime);
-            #else
             struct tm *timeinfo;
             timeinfo = localtime(&rawtime);
-            #endif
             char buffer[80];
             strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
             return (buffer);

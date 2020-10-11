@@ -9,7 +9,7 @@
 
 Server::Server::Server(uint32_t port) :
     _logger(std::make_shared<Common::Log::Log>("server", "server.log",
-                                               Common::Log::Log::g_AllLogLevel,
+                                               Common::Log::LOG_INFO_E | Common::Log::LOG_WARN_E | Common::Log::LOG_ERROR_E,
                                                std::ios_base::trunc)),
     _network(std::make_shared<Network::Network>(port,
                                                 this->_logger->shared_from_this())) {
