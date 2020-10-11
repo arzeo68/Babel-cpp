@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 if(MSVC)
     set(CMAKE_EXE_LINKER_FLAGS
-            "${CMAKE_EXE_LINKER_FLAGS} -D_WIN32_WINNT=0x0601")
+            "${CMAKE_EXE_LINKER_FLAGS}")
 else()
     set(STANDARD_UNIX_CXX_FLAGS "-Wall -g3 -Wextra -Wfatal-errors")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STANDARD_UNIX_CXX_FLAGS}")
@@ -44,11 +44,9 @@ file(GLOB_RECURSE SOURCES_CLIENT RELATIVE ${CMAKE_SOURCE_DIR} "client/*.cpp")
 # UI.h  PATH
 include_directories(test/build)
 
-add_executable(babel_client ${SOURCES_CLIENT} client/main.cpp
-        common/TCP/CommonPackages.hpp
-        common/Log.cpp
-        common/Log.hpp server/src/Network/Client/Socket.cpp server/src/Network/Client/Socket.hpp common/FriendStatus.hpp common/CallStatus.hpp)
+add_executable(babel_client ${SOURCES_CLIENT} common/Log.cpp common/Log.hpp common/Error/ThrowError.cpp common/Error/ThrowError.hpp client/src/GUI/GUIController/GUIController.cpp client/src/GUI/GUIController/GUIController.hpp)
 add_executable(babel_server
+        server/src/Main.cpp
         server/src/DB/Database.cpp
         server/src/DB/Database.hpp
         server/src/DB/Exception.cpp
@@ -56,7 +54,6 @@ add_executable(babel_server
         server/src/Route/Route.hpp
         server/src/Router/Router.cpp
         server/src/Router/Router.hpp
-        server/src/Main.cpp
         server/src/Network/Client.cpp
         server/src/Network/Client.hpp
         server/src/Network/Network.cpp
@@ -98,3 +95,6 @@ target_include_directories(babel_client PRIVATE inc ../common/inc)
 
 #############################################################
 target_link_libraries(babel_server ${CONAN_LIBS})
+#target_link_libraries(babel_server Qt5::Widgets Qt5::Network Qt5::Core Qt5::Gui)
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/bin/qt.conf "[Paths]\nPrefix = ")
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/bin/qt.conf ${CONAN_QT_ROOT})
