@@ -20,10 +20,8 @@ Common::Response Server::Route::Listing::Utils::ChangeStateCall(
     Server::Route::Listing::_strcpyC(notification.msg, std::string(
         "CALL|STATUS|" + client->GetUserData().GetName() + "|" +
         std::to_string(static_cast<uint8_t>(state))).c_str());
-    if (state == Common::ACCEPTED) {
+    if (state == Common::ACCEPTED)
         Utils::NotifyUserStatusToFriends(client, Utils::UserState::BUSY);
-        Utils::NotifyUserStatusToFriends(opponent, Utils::UserState::BUSY);
-    }
     opponent->GetUserData().SetCallState(state);
     client->GetUserData().SetCallState(state);
     client->GetWorker()->AddNotification(notification,
