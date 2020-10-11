@@ -52,6 +52,13 @@ FriendBox::FriendBox(GUIController *guiController, UserGUI *user, MainScene *sce
 void FriendBox::setState()
 {
     _box->setFixedSize(15, 15);
+    if (_statePending == STATE_PENDING_RECEIVER) {
+        _buttons.at(BT_ACCEPT).get()->show();
+        _buttons.at(BT_REFUSE).get()->show();
+    } else {
+        _buttons.at(BT_ACCEPT).get()->hide();
+        _buttons.at(BT_REFUSE).get()->hide();
+    }
     if (_statePending == STATE_PENDING_SENDER || _statePending == STATE_PENDING_RECEIVER) {
         _box->setStyleSheet("border: 1px solid gray; "
                             "background-color: orange;");
