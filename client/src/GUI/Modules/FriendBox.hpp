@@ -26,6 +26,7 @@ public:
     QString getName();
     QString getDesc();
     UserState getState();
+    void setPendingState(int state);
 
 protected:
     enum StatePending {

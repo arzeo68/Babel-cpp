@@ -83,3 +83,7 @@ FriendBox::UserState FriendBox::getState() {
 QString FriendBox::getDesc() {
     return _desc;
 }
+
+void FriendBox::setPendingState(int state) {
+    _statePending = state;
+}
