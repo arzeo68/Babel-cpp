@@ -17,10 +17,8 @@ Common::Response Server::Route::Listing::StartCall(
         return Common::BadRequestTemplate;
     if (arg.method != Common::HTTP_POST)
         return Common::InvalidMethodTemplate;
-    std::cerr << "Dest " << client->GetUserData().GetName() << " w/ " <<
-              std::to_string(client->GetUserData().GetCallState()) << " and "
-              << client->GetUserData().GetCallerName() << std::endl;
-    if (client->GetUserData().GetCallState() != Common::NONE)
+    if (client->GetUserData().GetCallState() != Common::NONE ||
+        client->GetUserData().GetCallState() != Common::PENDING)
         return (Common::Response{
             Common::HTTPCodes_e::HTTP_FORBIDDEN,
             "false - not in call"
@@ -33,10 +31,6 @@ Common::Response Server::Route::Listing::StartCall(
                 Common::HTTPCodes_e::HTTP_NOT_FOUND,
                 "false",
             });
-        std::cerr << "Author: " << client->GetUserData().GetName() << " w/ "
-                  << client->GetUserData().GetName() << " && "
-                  << (*destClient)->GetUserData().GetName() << " w/ "
-                  << (*destClient)->GetUserData().GetCallerName() << std::endl;
         if ((*destClient)->GetUserData().GetCallState() !=
             Common::CallState::NONE) {
             if ((*destClient)->GetUserData().GetCallerName() ==
@@ -66,11 +60,6 @@ Common::Response Server::Route::Listing::StartCall(
                                                   client->GetUserData().GetName());
         client->GetUserData().SetCallState(Common::CallState::PENDING,
                                            (*destClient)->GetUserData().GetName());
-        std::cerr << "Dest " << (*destClient)->GetUserData().GetName() << " w/ "
-                  << std::to_string((*destClient)->GetUserData().GetCallState())
-                  <<
-                  " and " << (*destClient)->GetUserData().GetCallerName()
-                  << std::endl;
         _strcpyC(request.msg,
                  std::string((*destClient)->GetUserData().GetIP() + "|" +
                              std::to_string(port)).c_str());
