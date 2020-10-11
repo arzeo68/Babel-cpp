@@ -19,7 +19,14 @@ namespace Server::Network {
     class ISocket {
         public:
         virtual ~ISocket() = default;
+        /**
+         * The function shutdown the client. It must close the socket and stop all asynchronous operation.
+         */
         virtual void Shutdown() = 0;
+        /**
+         * Get a shared instance of the socket
+         * @return A smart pointer of the current stocked socket
+         */
         virtual std::shared_ptr<T> GetSocket() = 0;
     };
 
