@@ -172,6 +172,7 @@ void GUIController::FriendList(Common::Response r) {
 }
 
 void GUIController::CallStart(Common::Response r) {
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->callNotification(r);
     std::cout << "Notification call start" << std::endl;
 }
 
