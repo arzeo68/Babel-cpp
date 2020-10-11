@@ -15,16 +15,38 @@
 #include "FriendBox.hpp"
 
 class MainScene;
+/**
+ * Call interface on MainScene
+ */
 class CallGUI : public Container
 {
     Q_OBJECT
 public:
     ~CallGUI() override;
+    /**
+     * Constructor for CallGUI
+     * @param scene MainScene
+     * @param user User connected
+     * @param guiController
+     */
     CallGUI(MainScene *scene, UserGUI *user, GUIController *guiController);
 
+    /**
+     * set friend info on gui
+     * @param friendBox
+     */
     void setFriendCall(FriendBox *friendBox);
+
+    /**
+     * start timer for first time
+     */
     void runTimer();
 
+    /**
+     * switch gui to call accepted gui
+     * @param response
+     * @return
+     */
     bool acceptedCall(Common::Response response);
 
 private slots:
