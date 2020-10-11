@@ -24,7 +24,7 @@ class NetworkTcp: public INetwork<std::string &, std::string> {
      * constructor
      * @param g the GUIController
      */
-    NetworkTcp(GUIController *g) : _guiController(g) {};
+    NetworkTcp(GUIController *g, std::string &ip) : _guiController(g), _ip(ip) {};
 
     /**
      * destructor
@@ -66,6 +66,7 @@ class NetworkTcp: public INetwork<std::string &, std::string> {
     private:
     GUIController *_guiController;
     QTcpSocket *_socket;
+    std::string _ip;
 };
 
 #endif //BABEL_NETWORKTCP_HPP
