@@ -199,7 +199,7 @@ bool FriendsList::responseRequest(Common::Response response) {
         if (args[1] == "0")
             deleteFriend(args[0]);
         else if (args[1] == "1")
-            _friends[str]->setPendingState(2);
+            _friends[args[0]]->setPendingState(2);
     }
     return true;
 }
