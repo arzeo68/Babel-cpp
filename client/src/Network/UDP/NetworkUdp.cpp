@@ -24,6 +24,19 @@ bool NetworkUDP::startConnection(const std::string &ip, const std::string &port)
     _packageManger->start();
 }
 
+bool NetworkUDP::startConnection() {
+    if (_port == 0 || _ip == "")
+        throw ThrowError("NetworkUdp: port or ip is not set");
+    _socket = (new QUdpSocket(this));
+    if ( _socket->bind(QHostAddress::Any, _port) == 0)
+    {
+        throw ThrowError("QUdpSocket bind failed");
+    }
+    connect(_socket, SIGNAL(readyRead()),this, SLOT(markAsReadable()));
+    _packageManger->getPa()->setSoundCallBack(this);
+    _packageManger->start();
+}
+
 bool NetworkUDP::write(std::string t)
 {
     int res = _socket->writeDatagram(t.c_str(), _nextPackageSize, QHostAddress(QString(_ip.c_str())), _port);
@@ -83,6 +96,20 @@ bool NetworkUDP::stopConnection()
     return true;
 }
 
+quint16 NetworkUDP::getPort() const {
+    return _port;
+}
 
+void NetworkUDP::setPort(quint16 port) {
+    _port = port;
+}
+
+const std::string &NetworkUDP::getIp() const {
+    return _ip;
+}
+
+void NetworkUDP::setIp(const std::string &ip) {
+    _ip = ip;
+}
 
 

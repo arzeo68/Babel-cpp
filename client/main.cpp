@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     GUIController guiController;
     Common::Response msg;
     msg.code = Common::HTTPCodes_e::HTTP_OK;
-    strncpy(msg.msg, "FRIEND|LELEL|TestTestTest", Common::g_maxMessageLength);
+    strncpy(msg.msg, "FRIEND|REQUEST|TestTestTest", Common::g_maxMessageLength);
     guiController.handleNotifications(msg);
     guiController.run();
     return app.exec();

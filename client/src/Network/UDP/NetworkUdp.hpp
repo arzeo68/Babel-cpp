@@ -18,6 +18,7 @@ class NetworkUDP: public INetwork<std::string, std::string>
     NetworkUDP();
 
     bool startConnection(const std::string &ip, const std::string &port) override;
+    bool startConnection();
     bool stopConnection();
 
     bool write(std::string t);
@@ -27,9 +28,17 @@ class NetworkUDP: public INetwork<std::string, std::string>
 
     void packageReadyToSendCallback();
 
+    quint16 getPort() const;
+
+    void setPort(quint16 port);
+
+    const std::string &getIp() const;
+
+    void setIp(const std::string &ip);
+
     private:
-    quint16 _port;
-    std::string _ip;
+    quint16 _port = 0;
+    std::string _ip = "";
     std::shared_ptr<PackageManager> _packageManger;
     QUdpSocket *_socket;
     uint32_t _nextPackageSize = 0;
@@ -38,5 +47,7 @@ class NetworkUDP: public INetwork<std::string, std::string>
         void markAsReadable(void);
 
 };
+
+
 
 #endif //BABEL_NETWORKUDP_HPP
