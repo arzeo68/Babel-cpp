@@ -36,8 +36,7 @@ private:
     enum InputList {
         IN_USERNAME,
         IN_PASS,
-        IN_CONF_PASS,
-        IN_IP
+        IN_CONF_PASS
     };
 
     enum ContainerList {

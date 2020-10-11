@@ -4,8 +4,8 @@
 
 #include "UserBox.hpp"
 
-UserBox::UserBox(MainScene *scene, QString name, FriendBox::UserState state, Qt::Alignment alignment)
-    : FriendBox(scene, name, state, 2, alignment)
+UserBox::UserBox(GUIController *guiController, UserGUI *user, MainScene *scene, QString name, FriendBox::UserState state, Qt::Alignment alignment)
+    : FriendBox(guiController, user, scene, name, state, 2, alignment)
 {
     setFixedSize(350, 90);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);

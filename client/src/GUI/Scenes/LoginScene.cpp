@@ -15,8 +15,7 @@ LoginScene::LoginScene(GUIController *guiController, MainWindow *parent)
                   std::make_unique<Button>("Reset", QSize(80, 50))}),
         _inputs({std::make_unique<InputText>("Username", 20),
                  std::make_unique<InputText>("Password", 20),
-                 std::make_unique<InputText>("Confirm Password", 20),
-                 std::make_unique<InputText>("IP: 0.0.0.0", 20)}),
+                 std::make_unique<InputText>("Confirm Password", 20)}),
         _containers({new Container(), new Container(new QHBoxLayout(), Qt::AlignHCenter)}),
         _info(new QLabel),
         _parent(parent),
@@ -44,7 +43,6 @@ void LoginScene::initWidgets()
     QSpacerItem *spacer = new QSpacerItem(_parent->size().width() / 2 - 150,
                                           _parent->size().height() / 2 - 150);
 
-    _containers.at(CONT_INPUT)->addWidget(_inputs.at(IN_IP).get());
     _containers.at(CONT_INPUT)->addWidget(_inputs.at(IN_USERNAME).get());
     _containers.at(CONT_INPUT)->addWidget(_inputs.at(IN_PASS).get());
     _containers.at(CONT_INPUT)->addWidget(_inputs.at(IN_CONF_PASS).get());

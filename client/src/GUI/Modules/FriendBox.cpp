@@ -9,8 +9,10 @@
 #include "FriendBox.hpp"
 #include "client/src/GUI/Scenes/MainScene.hpp"
 
-FriendBox::FriendBox(MainScene *scene, QString name, UserState state, int statePending, Qt::Alignment alignment)
-    :   _name(name),
+FriendBox::FriendBox(GUIController *guiController, UserGUI *user, MainScene *scene, QString name, UserState state, int statePending, Qt::Alignment alignment)
+    :   _guiController(guiController),
+        _user(user),
+        _name(name),
         Container(new QHBoxLayout, alignment),
         _buttons({std::make_unique<Button>("o", QSize(25, 25)),
                   std::make_unique<Button>("x", QSize(25, 25))}),
@@ -39,6 +41,8 @@ FriendBox::FriendBox(MainScene *scene, QString name, UserState state, int stateP
     _label->setContentsMargins(10, 0, 0, 0);
     _label->setFont(QFont("Arial", 12));
 
+    connect(_buttons.at(BT_ACCEPT).get(), SIGNAL(clicked()), this, SLOT(acceptFriend()));
+    connect(_buttons.at(BT_REFUSE).get(), SIGNAL(clicked()), this, SLOT(refuseFriend()));
     addWidget(_box);
     addWidget(_label);
     addWidget(_buttons.at(BT_ACCEPT).get());
@@ -86,4 +90,33 @@ QString FriendBox::getDesc() {
 
 void FriendBox::setPendingState(int state) {
     _statePending = state;
+    setState();
+}
+
+void FriendBox::acceptFriend() {
+    Common::PackageServer *pkg = new Common::PackageServer;
+
+    pkg->magic = Common::g_MagicNumber;
+    pkg->id = _user->_id;
+    pkg->method = Common::HTTP_POST;
+    pkg->command = 4; //FRIEND
+
+    std::string arg = _name.toStdString();
+    arg.append("|1");
+    strncpy(pkg->args, arg.c_str(), Common::g_maxMessageLength);
+    _guiController->call(Common::HTTP_POST, 4, pkg);
+}
+
+void FriendBox::refuseFriend() {
+    Common::PackageServer *pkg = new Common::PackageServer;
+
+    pkg->magic = Common::g_MagicNumber;
+    pkg->id = _user->_id;
+    pkg->method = Common::HTTP_POST;
+    pkg->command = 4; //FRIEND
+
+    std::string arg = _name.toStdString();
+    arg.append("|0");
+    strncpy(pkg->args, arg.c_str(), Common::g_maxMessageLength);
+    _guiController->call(Common::HTTP_POST, 4, pkg);
 }

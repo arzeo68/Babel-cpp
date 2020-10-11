@@ -7,7 +7,7 @@
 #include "FriendsList.hpp"
 #include "client/src/GUI/Scenes/MainScene.hpp"
 
-FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController)
+FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController, std::map<std::string, FriendBox *> *friends)
     :   Container(new QVBoxLayout),
         _scene(scene),
         _user(user),
@@ -30,26 +30,27 @@ FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiCont
     setTitle("                    Friends List     ");
 //    for (int i = 1; i < 21; i++) {
 //        QString name = QString("BabelUser %1").arg(i);
-//        FriendBox *le_s = new FriendBox(_scene, name, FriendBox::UserState::CONNECTED);
+//        FriendBox *le_s = new FriendBox(_guiController, user, _scene, name, FriendBox::UserState::CONNECTED, 2);
 //        _overlay->addWidget(le_s);
 //    }
 //
 //    QString name = QString("BabelUser déco");
-//    FriendBox *le_s = new FriendBox(_scene, name, FriendBox::UserState::DISCONNECTED);
+//    FriendBox *le_s = new FriendBox(_guiController, _user ,_scene, name, FriendBox::UserState::DISCONNECTED);
 //    _overlay->addWidget(le_s);
 
     _layout->addWidget(_friendAdd);
     _layout->addWidget(_submitFriendAdd);
     _layout->addWidget(_overlay);
-    _layout->setAlignment(Qt::AlignTop);
-
-
     connect(_submitFriendAdd, SIGNAL(clicked()), this, SLOT(addNewFriend()));
 
-    _guiController->call(Common::HTTP_GET, 4, pkg);
-    Common::Response resp;
-    strncpy(resp.msg, "FRIEND|LIST|Clément|Alexis|1|0-Clément|JG|1|1-Clem|Clément|1|0-Dems|Clément|2|1", Common::g_maxMessageLength);
-    fillFriendsList(resp);
+    if (!friends->empty())
+        initList(friends);
+    else
+        _guiController->call(Common::HTTP_GET, 4, pkg);
+//    Common::Response resp;
+//    resp.code = Common::HTTPCodes_e::HTTP_OK;
+//    strncpy(resp.msg, "FRIEND|LIST|Clément|Alexis|1|0-Clément|JG|1|1-Clem|Clément|1|0-Dems|Clément|2|1", Common::g_maxMessageLength);
+//    fillFriendsList(resp);
 }
 
 bool FriendsList::fillFriendsList(Common::Response response)
@@ -62,15 +63,16 @@ bool FriendsList::fillFriendsList(Common::Response response)
     str = str.substr(12);
     std::vector<std::string> friends = Babel::Utils::split(str, "-");
 
+    std::cout << "USERNAME: " << _user->_name << std::endl;
     for (auto it : friends) {
         std::vector<std::string> newFriend = Babel::Utils::split(it, "|");
         if (newFriend[0] == _user->_name) {
             state = stoi(newFriend[2]) == 1 ? 0 : 2;
-            _friends[newFriend[1]] = new FriendBox(_scene, QString::fromUtf8(newFriend[1].c_str()), (FriendBox::UserState)stoi(newFriend[3]), state);
+            _friends[newFriend[1]] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(newFriend[1].c_str()), (FriendBox::UserState)stoi(newFriend[3]), state);
             _overlay->addWidget(_friends[newFriend[1]]);
         } else {
             state = stoi(newFriend[2]) == 1 ? 1 : 2;
-            _friends[newFriend[0]] = new FriendBox(_scene, QString::fromUtf8(newFriend[0].c_str()), (FriendBox::UserState)stoi(newFriend[3]), state);
+            _friends[newFriend[0]] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(newFriend[0].c_str()), (FriendBox::UserState)stoi(newFriend[3]), state);
             _overlay->addWidget(_friends[newFriend[0]]);
         }
     }
@@ -90,29 +92,11 @@ bool FriendsList::fillFriend(Common::Response response)
     name = str.substr(0, pos);
     str.erase(0, pos + 1);
 
-    _friend.push_back(new FriendBox(_scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED, 0));
-    _overlay->addWidget(_friend.back());
+    _friends[name] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED, 0);
+    _overlay->addWidget(_friends[name]);
+    std::cout << "added: " << name << std::endl;
+    _scene->refreshFriendsList(&_friends);
     return true;
-}
-
-void FriendsList::loopFriendInfo()
-{
-    Common::PackageServer *pkg = new Common::PackageServer;
-    pkg->magic = Common::g_MagicNumber;
-    pkg->id = _user->_id;
-    pkg->method = Common::HTTP_GET;
-    pkg->command = 1000; // FRIEND_INFO
-
-    for (auto newFriend : _friendsNames) {
-        strncpy(pkg->args, newFriend.c_str(), Common::g_maxMessageLength);
-        // call avec le GUI CONTROLLER
-        Common::Response response;
-        response.code = Common::HTTPCodes_e::HTTP_OK;
-        std::string str = newFriend;
-        newFriend.append("|0");
-        strncpy(response.msg, newFriend.c_str(), Common::g_maxMessageLength);
-        fillFriend(response);
-    }
 }
 
 void FriendsList::addNewFriend()
@@ -129,14 +113,20 @@ void FriendsList::addNewFriend()
     _friendAdd->setText("");
     strncpy(pkg->args, str.c_str(), Common::g_maxMessageLength);
     _guiController->call(Common::HTTP_PUT, 4, pkg);
+//    Common::Response resp;
+//    resp.code = Common::HTTPCodes_e::HTTP_OK;
+//    strncpy(resp.msg, str.c_str(), Common::g_maxMessageLength);
+//    fillFriend(resp);
 }
 
 
 bool FriendsList::deleteFriend(Common::Response response) {
     std::string str(response.msg);
 
-    if (response.code != Common::HTTPCodes_e::HTTP_OK)
+    if (response.code != Common::HTTPCodes_e::HTTP_OK) {
+        std::cout << "Bad request." << std::endl;
         return false;
+    }
     return deleteFriend(str);
 }
 
@@ -149,7 +139,7 @@ bool FriendsList::requestFriend(Common::Response response) {
     if (response.code != Common::HTTPCodes_e::HTTP_OK)
         return false;
 
-    _friend.push_back(new FriendBox(_scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED, 1));
+    _friend.push_back(new FriendBox(_guiController, _user, _scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED, 1));
     _overlay->addWidget(_friend.back());
     return true;
 }
@@ -179,5 +169,17 @@ bool FriendsList::deleteFriend(std::string name) {
     _overlay->removeWidget(_friends[name]);
     _friends[name]->hide();
     _friends.erase(name);
+}
+
+bool FriendsList::deleteFriendNotif(Common::Response response) {
+    std::string str(response.msg);
+
+    str = str.substr(14);
+    return deleteFriend(str);
+}
+
+void FriendsList::initList(std::map<std::string, FriendBox *> *friends) {
+    for (auto it : *friends)
+        _overlay->addWidget(it.second);
 }
 

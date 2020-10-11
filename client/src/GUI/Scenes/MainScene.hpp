@@ -20,8 +20,8 @@ public:
     FriendsList *getFriendsList();
 
     void initScene(UserGUI *user) override;
-
     void setFriendInfo(FriendBox *_friend);
+    void refreshFriendsList(std::map<std::string, FriendBox *> *list);
 
 private:
     void initFriendList();

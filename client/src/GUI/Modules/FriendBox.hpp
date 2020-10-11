@@ -7,8 +7,10 @@
 
 
 #include <QtWidgets/QLabel>
+#include <client/src/GUI/GUIController/GUIController.hpp>
 #include "Container.hpp"
 #include "Button.hpp"
+#include "UserGUI.hpp"
 
 class MainScene;
 class FriendBox : public Container
@@ -22,7 +24,7 @@ public:
     } UserState;
 
 
-    explicit FriendBox(MainScene *scene, QString name, FriendBox::UserState state, int statePending = 1, Qt::Alignment alignment = Qt::AlignLeft);
+    explicit FriendBox(GUIController *guiController, UserGUI *_user, MainScene *scene, QString name, FriendBox::UserState state, int statePending = 1, Qt::Alignment alignment = Qt::AlignLeft);
     QString getName();
     QString getDesc();
     UserState getState();
@@ -40,6 +42,8 @@ protected:
         BT_REFUSE
     };
 
+    GUIController *_guiController;
+    UserGUI *_user;
     QString _name;
     QString _desc;
     QLabel *_label;
@@ -51,6 +55,10 @@ protected:
 
     void setState();
     void mousePressEvent(QMouseEvent *event) override;
+
+private slots:
+    void acceptFriend();
+    void refuseFriend();
 
 };
 

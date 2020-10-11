@@ -28,7 +28,9 @@ void MainScene::initFriendList()
 {
     QSpacerItem *spacer = new QSpacerItem(10, 25);
 
-    _friendsList = new FriendsList(this, _user, _guiController);
+    std::cout << "before" << std::endl;
+    _friendsList = new FriendsList(this, _user, _guiController, new std::map<std::string, FriendBox *>());
+    std::cout << "after" << std::endl;
     _scroll = new QScrollArea();
 
     _scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -40,14 +42,14 @@ void MainScene::initFriendList()
 }
 
 void MainScene::initUser() {
-    _userBox = new UserBox(this, QString::fromUtf8(_user->_name.c_str()), FriendBox::UserState::CONNECTED, Qt::AlignHCenter);
+    _userBox = new UserBox(_guiController, _user, this, QString::fromUtf8(_user->_name.c_str()), FriendBox::UserState::CONNECTED, Qt::AlignHCenter);
 
     _layout->addWidget(_userBox, 0, 0, 1, 2);
 }
 
 void MainScene::initFriendInfo()
 {
-    _friendInfo = new FriendInfo(new FriendBox(this, "name", FriendBox::UserState::CONNECTED), _user, _guiController);
+    _friendInfo = new FriendInfo(new FriendBox(_guiController, _user, this, "name", FriendBox::UserState::CONNECTED), _user, _guiController);
 
     _containers.at(CONT_FRIEND_INFO)->setFixedSize(300, 450);
     _containers.at(CONT_FRIEND_INFO)->addWidget(_friendInfo);
@@ -94,6 +96,18 @@ void MainScene::initScene(UserGUI *user)
 
 FriendsList *MainScene::getFriendsList() {
     return _friendsList;
+}
+
+void MainScene::refreshFriendsList(std::map<std::string, FriendBox *> *list) {
+    _layout->removeWidget(_scroll);
+    _friendsList = new FriendsList(this, _user, _guiController, list);
+    _scroll = new QScrollArea();
+
+    _scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _scroll->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
+    _scroll->setWidget(_friendsList);
+
+    _layout->addWidget(_scroll, 2, 0);
 }
 
 
