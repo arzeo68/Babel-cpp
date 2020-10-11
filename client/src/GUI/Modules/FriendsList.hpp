@@ -22,21 +22,17 @@ public:
 
     bool fillFriendsList(Common::Response response);
     bool fillFriend(Common::Response response);
-
     bool deleteFriend(Common::Response response);
     bool requestFriend(Common::Response response);
     bool statusFriend(Common::Response response);
     bool deleteFriendNotif(Common::Response response);
-
     bool responseRequest(Common::Response response);
-
     bool friendIsConnected(Common::Response response);
-
     bool responseRequestFriend(Common::Response response);
-
     bool friendConnectedNotif(Common::Response response);
     bool friendDisonnectedNotif(Common::Response response);
     bool friendBusyNotif(Common::Response response);
+
 private:
     MainScene *_scene;
     UserGUI *_user;
