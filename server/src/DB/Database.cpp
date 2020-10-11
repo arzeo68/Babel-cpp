@@ -6,10 +6,11 @@
 */
 
 #include <iostream>
+#include <utility>
 #include "Database.hpp"
 
-Server::Database::Database::Database(std::shared_ptr <Common::Log::Log> logger)
-    : _handler(nullptr), _logger(logger) {
+Server::Database::Database::Database(std::shared_ptr<Common::Log::Log> logger)
+    : _handler(nullptr), _logger(std::move(logger)) {
     uint32_t code = sqlite3_open("database.db", &this->_handler);
     if (code != SQLITE_OK)
         throw Exception::Opening(code);

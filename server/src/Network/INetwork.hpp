@@ -17,16 +17,11 @@ namespace Server::Network {
     class INetwork {
         public:
         virtual ~INetwork() = default;
-
         virtual void Run() = 0;
-
         virtual void Stop() = 0;
-
         virtual uint32_t
-        AddUserToPool(const std::shared_ptr <Client> &) = 0;
-
+        AddUserToPool(const std::shared_ptr<Client> &) = 0;
         virtual void RemoveUserFromPool(const Client *) = 0;
-
         virtual void RemoveClient(const Client *) = 0;
 
     };

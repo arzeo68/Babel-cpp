@@ -33,31 +33,23 @@ namespace Server::Database {
 
     class Database : public IDatabase {
         public:
-        explicit Database(std::shared_ptr <Common::Log::Log> logger);
+        explicit Database(std::shared_ptr<Common::Log::Log> logger);
 
         ~Database() override;
 
         void RegisterTables();
-
         bool ConnectUser(const std::string &name,
                          const std::string &password) override;
-
         bool
         AddUser(const std::string &name, const std::string &password) override;
-
         bool UserExists(const std::string &name) override;
-
         void UpdateStatus(const std::string &name,
                           const std::string &status) override;
-
         Common::FriendStatus
         GetFriendStatus(const std::string &name, const std::string &opponent);
-
         bool AddFriend(const std::string &name, const std::string &addressee);
-
         void
         DeleteFriend(const std::string &name, const std::string &addressee);
-
         void UpdateFriendStatus(const std::string &name,
                                 const std::string &addressee,
                                 const Common::FriendStatus &status);
@@ -90,7 +82,7 @@ namespace Server::Database {
 
         class Query : std::exception {
             public:
-            Query(uint32_t code, char *error, const std::string& query);
+            Query(uint32_t code, char *error, const std::string &query);
             ~Query() override = default;
 
             const char *what() const noexcept override;

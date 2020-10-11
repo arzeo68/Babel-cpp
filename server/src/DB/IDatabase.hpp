@@ -16,12 +16,12 @@ namespace Server::Database {
         virtual ~IDatabase() = default;
 
         virtual bool
-        ConnectUser(const std::string& name, const std::string& password) = 0;
+        ConnectUser(const std::string &name, const std::string &password) = 0;
         virtual bool
-        AddUser(const std::string& name, const std::string& password) = 0;
-        virtual bool UserExists(const std::string& name) = 0;
+        AddUser(const std::string &name, const std::string &password) = 0;
+        virtual bool UserExists(const std::string &name) = 0;
         virtual void
-        UpdateStatus(const std::string& name, const std::string& status) = 0;
+        UpdateStatus(const std::string &name, const std::string &status) = 0;
     };
 }
 

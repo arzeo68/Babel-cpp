@@ -18,16 +18,16 @@
 
 
 Server::Network::Network::Network(uint32_t port,
-                                  std::shared_ptr <Common::Log::Log> logger) :
+                                  std::shared_ptr<Common::Log::Log> logger) :
     _acceptor(_service,
               boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
     _signalSet(_service, SIGINT),
     _database(logger->shared_from_this()),
     _logger(logger) {
-    this->_router = std::make_shared <Server::Router>();
-    this->_pool = std::make_shared <Server::User::Pool>();
-    this->_worker = std::make_shared <Server::Worker>(this->_mutex,
-                                                      this->_logger->shared_from_this());
+    this->_router = std::make_shared<Server::Router>();
+    this->_pool = std::make_shared<Server::User::Pool>();
+    this->_worker = std::make_shared<Server::Worker>(this->_mutex,
+                                                     this->_logger->shared_from_this());
 }
 
 void Server::Network::Network::Run() {
@@ -44,12 +44,12 @@ void Server::Network::Network::Run() {
                 self->Stop();
         });
     try {
-        SharedPtrClient_t client = std::make_shared <Client>(this->_database,
-                                                             *this->_router,
-                                                             this->shared_from_this(),
-                                                             this->_logger->shared_from_this(),
-                                                             this->_service,
-                                                             this->_worker->shared_from_this());
+        SharedPtrClient_t client = std::make_shared<Client>(this->_database,
+                                                            *this->_router,
+                                                            this->shared_from_this(),
+                                                            this->_logger->shared_from_this(),
+                                                            this->_service,
+                                                            this->_worker->shared_from_this());
         this->_clients.emplace_back(client);
         this->_logger->Debug(client.get(), " - Waiting for new client on ",
                              this->_acceptor.local_endpoint().port(), "...");
@@ -60,7 +60,7 @@ void Server::Network::Network::Run() {
                                      });
         this->_service.run();
     }
-    catch (const InternalError <boost::system::error_code> &e) {
+    catch (const InternalError<boost::system::error_code> &e) {
         auto errorCode = e.GetError();
         if (errorCode != boost::asio::error::eof &&
             errorCode != boost::asio::error::operation_aborted)
@@ -107,7 +107,7 @@ void Server::Network::Network::Stop() {
 }
 
 uint32_t Server::Network::Network::AddUserToPool(
-    const std::shared_ptr <Client> &client) {
+    const std::shared_ptr<Client> &client) {
     if (!this->_mutex.try_lock())
         throw std::exception();
     uint32_t id = this->_pool->AddClient(client);
@@ -150,5 +150,23 @@ bool Server::Network::Network::IsUserConnected(const std::string &name) {
                              });
     this->_mutex.unlock();
     return (find != this->_clients.end());
+}
+
+std::optional<std::shared_ptr<Server::Network::Client>>
+Server::Network::Network::GetClientFromName(const std::string &name) {
+    bool locked = this->_mutex.try_lock();
+    auto find = std::find_if(this->_clients.begin(), this->_clients.end(),
+                             [&name](const std::shared_ptr<Client> &client) {
+                                 return (client->GetUserData().GetName() ==
+                                         name);
+                             });
+    if (locked)
+        this->_mutex.unlock();
+    return (find != this->_clients.end()
+            ? std::optional<std::shared_ptr<Client>> {*find} : std::nullopt);
+}
+std::list<Server::Network::Network::SharedPtrClient_t> &
+Server::Network::Network::GetClients() {
+    return (this->_clients);
 }
 

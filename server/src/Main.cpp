@@ -9,7 +9,7 @@
 #include "Server.hpp"
 #include "server/src/DB/Database.hpp"
 
-int main (const int ac, const char **av) {
+int main(const int ac, const char **av) {
     uint32_t port = 4242;
     if (ac != 1)
         port = std::stoi(av[1], nullptr);

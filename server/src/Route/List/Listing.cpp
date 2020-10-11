@@ -19,7 +19,7 @@ void Server::Route::Listing::_strcpyC(char *dest, const char *source) {
 
 Common::Response
 Server::Route::Listing::UserExists(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
         Common::HTTPCodes_e::HTTP_OK,
@@ -40,7 +40,7 @@ Server::Route::Listing::UserExists(
 }
 
 Common::Response
-Server::Route::Listing::Login(std::shared_ptr <Server::Network::Client> client,
+Server::Route::Listing::Login(std::shared_ptr<Server::Network::Client> &client,
                               const Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
         Common::HTTPCodes_e::HTTP_OK,
@@ -65,13 +65,12 @@ Server::Route::Listing::Login(std::shared_ptr <Server::Network::Client> client,
 
 Common::Response
 Server::Route::Listing::Register(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
         Common::HTTPCodes_e::HTTP_OK,
-        "false",
+        "true",
     };
-    uint32_t id;
 
     switch (arg.method) {
         case Common::HTTP_POST:
@@ -83,11 +82,7 @@ Server::Route::Listing::Register(
                     Common::HTTPCodes_e::HTTP_UNAUTHORIZED,
                     "false",
                 });
-            id = client->GetNetwork()->AddUserToPool(
-                client->shared_from_this());
             client->GetUserData().SetUserName(arg.body[0]);
-            _strcpyC(response.msg,
-                     std::string(std::to_string(id)).c_str());
             return (response);
         default:
             return Common::InvalidMethodTemplate;
@@ -96,7 +91,7 @@ Server::Route::Listing::Register(
 
 Common::Response
 Server::Route::Listing::SetStatus(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
     Common::Response response {
         Common::HTTPCodes_e::HTTP_OK,
@@ -121,7 +116,7 @@ Server::Route::Listing::SetStatus(
 }
 
 Common::Response Server::Route::Listing::HandleFriend(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
     if (arg.method != Common::HTTP_GET) {
         if (arg.body.empty())
@@ -137,8 +132,8 @@ Common::Response Server::Route::Listing::HandleFriend(
                 "false",
             });
     }
-    std::array <Common::Response (*)(std::shared_ptr <Server::Network::Client>,
-                                     const Server::Route::Arguments::RouteHandlerArgs &), 5> arr = {
+    std::array<Common::Response (*)(std::shared_ptr<Server::Network::Client> &,
+                                    const Server::Route::Arguments::RouteHandlerArgs &), 5> arr = {
         &Friend::Get,
         &Friend::Delete,
         &Friend::UpdateStatus,
@@ -148,7 +143,7 @@ Common::Response Server::Route::Listing::HandleFriend(
 }
 
 Common::Response Server::Route::Listing::IsFriendConnected(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
     if (arg.body.empty())
         return Common::BadRequestTemplate;
@@ -182,3 +177,4 @@ Common::Response Server::Route::Listing::IsFriendConnected(
             "false",
         });
 }
+

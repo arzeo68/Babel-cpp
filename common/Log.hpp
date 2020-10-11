@@ -99,8 +99,6 @@ namespace Common::Log {
                                _map.find(level)->second + "] ");
             std::cout << prefix;
             (std::cout << ... << args) << std::endl;
-            //if (!this->_mutex.try_lock())
-            //    return;
             this->_file << prefix;
             (this->_file << ... << args) << std::endl;
             this->_mutex.unlock();

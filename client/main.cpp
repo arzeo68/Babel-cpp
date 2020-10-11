@@ -19,10 +19,12 @@ void readSocket(boost::asio::ip::tcp::socket *socket) {
               << std::endl;
     if (r.code == Common::HTTPCodes_e::FAKE_HTTP_PAGINATION)
         readSocket(socket);
-    else if (r.code != Common::HTTPCodes_e::HTTP_OK) {
+    else if (r.code != Common::HTTPCodes_e::HTTP_OK &&
+             r.code != Common::HTTPCodes_e::FAKE_HTTP_NOTIFICATION) {
         delete socket;
         exit(0);
     }
+    //readSocket(socket);
 }
 
 void writeSocket(boost::asio::ip::tcp::socket *socket, Common::PackageServer&& p) {
@@ -88,6 +90,14 @@ int main(int UNUSED(argc), char **argv) {
     //    "dayrion|password"
     //});
     //readSocket(socket);
+    //writeSocket(socket, Common::PackageServer {
+    //    Common::g_MagicNumber,
+    //    0,
+    //    Common::HTTP_POST,
+    //    6,
+    //    "admin"
+    //});
+    //readSocket(socket);
 
 
     //std::cout << "Sleeping for 16 secs" << std::endl;
@@ -102,10 +112,18 @@ int main(int UNUSED(argc), char **argv) {
     writeSocket(socket, Common::PackageServer {
         Common::g_MagicNumber,
         0,
-        Common::HTTP_GET,
-        4,
-        ""
+        Common::HTTP_POST,
+        6,
+        "dayrion"
     });
+    readSocket(socket);
+    //writeSocket(socket, Common::PackageServer {
+    //    Common::g_MagicNumber,
+    //    0,
+    //    Common::HTTP_GET,
+    //    4,
+    //    ""
+    //});
     //writeSocket(socket, Common::PackageServer{
     //    Common::g_MagicNumber,
     //    0,

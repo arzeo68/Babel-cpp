@@ -7,8 +7,8 @@
 
 #include "Database.hpp"
 
-bool Server::Database::Database::AddUser(const std::string& name,
-                                         const std::string& password) {
+bool Server::Database::Database::AddUser(const std::string &name,
+                                         const std::string &password) {
     this->_logger->Debug(
         "Checking if user " + name + " exists in the database...");
     if (this->UserExists(name))
@@ -20,7 +20,7 @@ bool Server::Database::Database::AddUser(const std::string& name,
     return (true);
 }
 
-bool Server::Database::Database::UserExists(const std::string& name) {
+bool Server::Database::Database::UserExists(const std::string &name) {
     bool exists = false;
     this->ExecuteQuery(
         "SELECT * FROM user WHERE name='" + name + "';",
@@ -34,8 +34,8 @@ bool Server::Database::Database::UserExists(const std::string& name) {
 
 // https://github.com/mpdn/sqlite-digest/blob/master/digest.c
 // Encoding SHA526
-bool Server::Database::Database::ConnectUser(const std::string& name,
-                                             const std::string& password) {
+bool Server::Database::Database::ConnectUser(const std::string &name,
+                                             const std::string &password) {
     bool exists = false;
     this->ExecuteQuery(
         "SELECT * FROM user WHERE name = '" + name + "' AND password='" +

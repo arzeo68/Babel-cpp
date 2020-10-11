@@ -10,7 +10,7 @@
 #include "server/src/Network/Worker.hpp"
 
 Common::Response Server::Route::Listing::Friend::Add(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
     std::string userName = client->GetUserData().GetName();
     Common::Response notification = {
@@ -40,7 +40,7 @@ Common::Response Server::Route::Listing::Friend::Add(
 }
 
 Common::Response Server::Route::Listing::Friend::UpdateStatus(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
     if (arg.body.size() != 2)
         return Common::BadRequestTemplate;
@@ -68,7 +68,7 @@ Common::Response Server::Route::Listing::Friend::UpdateStatus(
 }
 
 Common::Response Server::Route::Listing::Friend::Delete(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &arg) {
     std::string userName = client->GetUserData().GetName();
     Common::Response notification = {
@@ -91,7 +91,7 @@ Common::Response Server::Route::Listing::Friend::Delete(
 }
 
 Common::Response Server::Route::Listing::Friend::Get(
-    std::shared_ptr <Server::Network::Client> client,
+    std::shared_ptr<Server::Network::Client> &client,
     const Server::Route::Arguments::RouteHandlerArgs &) {
     Common::Response response = {
         Common::HTTPCodes_e::HTTP_OK,

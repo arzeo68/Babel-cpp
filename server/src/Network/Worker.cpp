@@ -10,7 +10,7 @@
 #include "Client.hpp"
 
 Server::Worker::Worker(std::mutex &mutex,
-                       std::shared_ptr <Common::Log::Log> logger)
+                       std::shared_ptr<Common::Log::Log> logger)
     : _mutex(mutex), _logger(logger) {
 }
 
@@ -25,8 +25,6 @@ void Server::Worker::Run() {
     this->_logger->Info("Starting worker...");
     while (this->_is_running) {
         if (this->_tasks.empty()) {
-            //std::cerr << "No task available. Sleeping for 1 second... -> " << std::to_string(this->_network->GetClients().size())
-            //          << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
             continue;
         }
@@ -58,7 +56,7 @@ void Server::Worker::AddNotification(const Common::Response &rep,
     this->_tasks.emplace_back(std::make_pair(rep, dest));
 }
 
-void Server::Worker::SetNetwork(std::shared_ptr <Network::Network> network) {
+void Server::Worker::SetNetwork(std::shared_ptr<Network::Network> network) {
     this->_network = network;
     this->_thread = std::thread(&Worker::Run, this);
 }
