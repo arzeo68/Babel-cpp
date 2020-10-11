@@ -19,7 +19,7 @@
 #endif
 
 #include "server/src/Route/Route.hpp"
-#include "server/src/Network/Client.hpp"
+#include "server/src/Network/Client/Client.hpp"
 #include "server/src/Route/Arguments.hpp"
 
 namespace Server::Route::Listing {

@@ -102,7 +102,6 @@ void Server::Database::Database::UpdateFriendStatus(const std::string &name,
                            "' WHERE name='" + name + "' AND friend='" +
                            addressee +
                            "';");
-
     } else
         this->DeleteFriend(name, addressee);
 }

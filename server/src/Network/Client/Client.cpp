@@ -10,30 +10,8 @@
 #include <utility>
 #include "Client.hpp"
 #include "server/src/Router/Router.hpp"
-#include "Worker.hpp"
+#include "server/src/Network/Worker.hpp"
 #include "server/src/Route/List/Utils.hpp"
-
-Server::Network::Client::Client(Server::Database::Database &database,
-                                Server::Router &router,
-                                std::shared_ptr<Network> network,
-                                std::shared_ptr<Common::Log::Log> logger,
-                                boost::asio::io_service &service,
-                                std::shared_ptr<Worker> worker)
-    :
-    _socket(std::make_shared<boost::asio::ip::tcp::socket>(service)),
-    _database(database),
-    _router(router),
-    _network_parent(std::move(network)),
-    _logger(std::move(logger)),
-    _worker(std::move(worker)) {
-    this->_logger->Debug("Client constructor, ptr: ", this);
-}
-
-Server::Network::Client::SharedPtrSocket_t
-Server::Network::Client::GetSocket() {
-    return (this->_socket);
-}
-
 
 void Server::Network::Client::Read() {
     std::shared_ptr<MessageArr_t> message = std::make_shared<MessageArr_t>();
@@ -52,7 +30,7 @@ void Server::Network::Client::ExecRead(const boost::system::error_code &error,
                                        const std::shared_ptr<MessageArr_t> &message) {
     if (error) {
         this->_logger->Warning("[client] ExecRead: ", error.message());
-        this->_network_parent->RemoveClient(this);
+        this->_network_parent->RemoveClient(this->shared_from_this());
         throw InternalError<boost::system::error_code>(error);
     }
     this->_logger->Debug("Bytes transferred: ",
@@ -84,7 +62,8 @@ void Server::Network::Client::Write(const Common::Response &response) {
                                   if (error) {
                                       this->_logger->Error("[client->] write ",
                                                            error.message());
-                                      this->_network_parent->RemoveClient(this);
+                                      this->_network_parent->RemoveClient(
+                                          this->shared_from_this());
                                   }
                               });
 }
@@ -137,3 +116,7 @@ std::shared_ptr<Server::Worker> Server::Network::Client::GetWorker() {
     return (this->_worker->shared_from_this());
 }
 
+Server::Network::Client::SharedPtrSocket_t
+Server::Network::Client::GetSocket() {
+    return (this->_socket);
+}

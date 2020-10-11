@@ -7,7 +7,7 @@
 
 #include <thread>
 #include "Worker.hpp"
-#include "Client.hpp"
+#include "server/src/Network/Client/Client.hpp"
 
 Server::Worker::Worker(std::mutex &mutex,
                        std::shared_ptr<Common::Log::Log> logger)

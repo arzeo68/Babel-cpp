@@ -70,9 +70,9 @@ int main(int UNUSED(argc), char **argv) {
     //writeSocket(socket, Common::PackageServer {
     //    Common::g_MagicNumber,
     //    0,
-    //    Common::HTTP_POST,
-    //    2,
-    //    "admin|admin"
+    //    Common::HTTP_GET,
+    //    4,
+    //    ""
     //});
     //writeSocket(socket, Common::PackageServer {
     //    Common::g_MagicNumber,
@@ -113,10 +113,10 @@ int main(int UNUSED(argc), char **argv) {
         Common::g_MagicNumber,
         0,
         Common::HTTP_POST,
-        6,
-        "dayrion"
+        4,
+        "dayrion|2"
     });
-    readSocket(socket);
+    //readSocket(socket);
     //writeSocket(socket, Common::PackageServer {
     //    Common::g_MagicNumber,
     //    0,

@@ -48,6 +48,12 @@ Common::Response Server::Route::Listing::Friend::UpdateStatus(
     };
     auto status = static_cast<Common::FriendStatus>(std::atoi(
         arg.body[1].c_str()));
+    if (status != Common::FriendStatus::ACCEPTED &&
+        status != Common::FriendStatus::REJECTED)
+        return (Common::Response {
+            Common::HTTPCodes_e::HTTP_FORBIDDEN,
+            "false"
+        });
     if (client->GetDatabase().GetFriendStatus(userName, arg.body[0]) !=
         Common::FriendStatus::PENDING)
         return (Common::Response {

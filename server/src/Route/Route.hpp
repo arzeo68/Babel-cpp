@@ -15,7 +15,7 @@
 #include <vector>
 #include "common/TCP/CommonPackages.hpp"
 #include "Arguments.hpp"
-#include "server/src/Network/Client.hpp"
+#include "server/src/Network/Client/Client.hpp"
 #include "server/src/DB/Database.hpp"
 
 namespace Server::Route {

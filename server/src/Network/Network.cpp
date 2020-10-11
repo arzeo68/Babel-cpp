@@ -12,13 +12,13 @@
 #include "server/src/Router/Router.hpp"
 #include "server/src/DB/Database.hpp"
 #include "Network.hpp"
-#include "Client.hpp"
-#include "../User/Pool.hpp"
+#include "server/src/Network/Client/Client.hpp"
 #include "Worker.hpp"
 
 
 Server::Network::Network::Network(uint32_t port,
-                                  std::shared_ptr<Common::Log::Log> logger) :
+                                  const std::shared_ptr<Common::Log::Log> &logger)
+    :
     _acceptor(_service,
               boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
     _signalSet(_service, SIGINT),
@@ -26,7 +26,6 @@ Server::Network::Network::Network(uint32_t port,
     _logger(logger) {
     this->_database.RegisterTables();
     this->_router = std::make_shared<Server::Router>();
-    this->_pool = std::make_shared<Server::User::Pool>();
     this->_worker = std::make_shared<Server::Worker>(this->_mutex,
                                                      this->_logger->shared_from_this());
 }
@@ -107,25 +106,12 @@ void Server::Network::Network::Stop() {
     this->_logger->Info("Server stopped!");
 }
 
-uint32_t Server::Network::Network::AddUserToPool(
-    const std::shared_ptr<Client> &client) {
-    if (!this->_mutex.try_lock())
-        throw std::exception();
-    uint32_t id = this->_pool->AddClient(client);
-    this->_mutex.unlock();
-    return (id);
-}
-
-void Server::Network::Network::RemoveUserFromPool(const Client *client) {
-    this->_pool->RemoveClient(client);
-}
-
-void Server::Network::Network::RemoveClient(const Client *client) {
+void
+Server::Network::Network::RemoveClient(const std::shared_ptr<Client> &client) {
     this->_mutex.lock();
     for (auto &i : this->_clients)
-        if (i.get() == client) {
+        if (i.get() == client.get()) {
             i->Shutdown();
-            this->RemoveUserFromPool(client);
             this->_clients.remove(i);
             this->_mutex.unlock();
             return;
@@ -163,7 +149,8 @@ Server::Network::Network::GetClientFromName(const std::string &name) {
     return (find != this->_clients.end()
             ? std::optional<std::shared_ptr<Client>> {*find} : std::nullopt);
 }
-std::list<Server::Network::Network::SharedPtrClient_t> &
+
+std::list<Server::Network::SharedPtrClient_t>
 Server::Network::Network::GetClients() {
     return (this->_clients);
 }
