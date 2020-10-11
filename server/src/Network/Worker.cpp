@@ -33,8 +33,7 @@ void Server::Worker::Run() {
             this->_mutex.lock();
             for (auto &client: this->_network->GetClients()) {
                 if (client->GetUserData().GetName() == task.second) {
-                    std::cerr << "Sending data to user '" << task.second << "'"
-                              << std::endl;
+                    this->_logger->Debug("Sending data to user '", task.second, "'");
                     client->Write(task.first);
                     break;
                 }
