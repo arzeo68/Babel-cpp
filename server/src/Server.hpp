@@ -13,12 +13,25 @@
 #include "server/src/Network/Network.hpp"
 
 namespace Server {
+    /**
+     * The class Server start and stop the server and provide a logger. The server must always exit gracefully.
+     */
     class Server {
         public:
+        /**
+         * The port for the network
+         * @param port
+         */
         explicit Server(uint32_t port);
+        /**
+         * Defined but it only prints a informative message
+         */
         ~Server();
         Server(const Server &obj) = default;
 
+        /**
+         * Run the server. The server might be stopped by pressing CTRL+C (or sending SIGINT).
+         */
         void Run();
 
         private:

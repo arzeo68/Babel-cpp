@@ -18,13 +18,33 @@
 #include "server/src/Route/List/Callback.hpp"
 
 namespace Server {
+    /**
+     * Router register all route, retrieve raw data, parse it and dispatch it in the aimed route
+     */
     class Router {
         public:
         static const constexpr uint8_t MAX_ROUTE_ID = 8;
 
+        /**
+         * From a string, the function parse and retrieve data that will be stored in the returned structure
+         * @param string Raw string for the client's input
+         * @return A server package
+         */
         static Common::PackageServer FormatRouteArgs(const std::string &string);
+        /**
+         * From an higher data level, the function retrieve the arguments and return it in the a structure
+         * @param protocol Server package retrieved by the previous function: FormatRouteArgs
+         * @return A structure with all the route's arguments
+         */
         static Route::Arguments::RouteHandlerArgs
         SplitRawData(const Common::PackageServer &protocol);
+        /**
+         * Execute the route's handler
+         * @param protocol Package server with the route data
+         * @param args The route's arguments
+         * @param client Client, caller of the route
+         * @return A response from the route
+         */
         Common::Response Execute(const Common::PackageServer &protocol,
                                  Route::Arguments::RouteHandlerArgs const &args,
                                  std::shared_ptr<Server::Network::Client> client);

@@ -19,32 +19,37 @@
 #include "server/src/DB/Database.hpp"
 
 namespace Server::Route {
-    namespace Exception {
-        class InvalidRoute : std::exception {
-            public:
-            explicit InvalidRoute(const std::string &name);
-            ~InvalidRoute() override = default;
-            const char *what() const noexcept override;
-
-            private:
-            std::string _name;
-        };
-    }
+    /**
+     * Route is class that encapsulate the different API route
+     */
     class Route {
         public:
+        /**
+         * Each route must have a handler that correspond to this signature
+         */
         typedef Common::Response (*RouteHandler_t)(
             std::shared_ptr<Server::Network::Client> &,
             const Arguments::RouteHandlerArgs &);
 
+        /**
+         * Register a route with a name and a handler
+         * @param name Route's name
+         * @param handler Route's handler
+         */
         Route(const std::string &name, RouteHandler_t handler);
         Route() = default;
         ~Route() = default;
         Route(const Route &obj);
 
+        /**
+         * The route's handler is executed with the generic argument below. The response is written on the client's socket
+         * @param client Client that called the route
+         * @param args Arguments retrieved from the client's request
+         * @return The structure response with his data depending on the route behavior
+         */
         Common::Response
         ExecuteHandler(std::shared_ptr<Server::Network::Client> &client,
                        const Arguments::RouteHandlerArgs &args) const;
-        std::string GetName() const;
         bool operator==(const std::string &name) const;
         bool operator==(const std::string &name);
         bool operator!=(const std::string &name) const;

@@ -57,7 +57,7 @@ namespace Server::Network {
          */
         std::list<SharedPtrClient_t> _clients;
         /**
-         * The mutex to the thread-safety for the list of clients
+         * The mutex for the thread-safety for the list of clients
          */
         std::mutex _mutex;
     };

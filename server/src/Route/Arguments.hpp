@@ -12,9 +12,14 @@
 
 namespace Server::Route::Arguments {
     struct RouteHandlerArgs {
+        /**
+         * HTTP Method for the request
+         */
         Common::Method method;
+        /**
+         * The body is a sequence of arguments
+         */
         std::vector<std::string> body;
-        std::string token;
     };
 }
 

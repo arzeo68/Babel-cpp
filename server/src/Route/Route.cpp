@@ -19,10 +19,6 @@ Server::Route::Route::ExecuteHandler(
     return (this->_handler(client, args));
 }
 
-std::string Server::Route::Route::GetName() const {
-    return (this->_name);
-}
-
 bool Server::Route::Route::operator==(const std::string &name) {
     return (this->_name == name);
 }
@@ -43,13 +39,4 @@ Server::Route::Route::Route(const Route &obj) {
     this->_handler = obj._handler;
     this->_name = obj._name;
     this->_method = obj._method;
-}
-
-Server::Route::Exception::InvalidRoute::InvalidRoute(const std::string &name)
-    : _name(name) {
-}
-
-const char *Server::Route::Exception::InvalidRoute::what() const noexcept {
-    static std::string msg = "Route named '" + this->_name + "' is invalid";
-    return (msg.c_str());
 }

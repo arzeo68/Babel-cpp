@@ -25,15 +25,30 @@ namespace Common::Log {
         LOG_ERROR_E = 0b10000u,
     };
 
-    class Log : public std::enable_shared_from_this <Log> {
+    /**
+     * Log is a logger with different level:
+     *  - DEBUG
+     *  - INFO
+     *  - WARNING
+     *  - ERROR
+     * It write the logs inside a file and in the C++ standard output with a timestamp
+     */
+    class Log : public std::enable_shared_from_this<Log> {
         public:
+        /**
+         * Open or create the log file
+         * @param title The main title of the log
+         * @param path Path to the log's file
+         * @param logLevel The log level. You can use bitwise operator on it with the modes above, default: all logs level
+         * @param openMode Open mode for the log's file, default: append s text to the end
+         * @throws InvalidPath
+         */
         explicit Log(const std::string &title, const std::string &path,
                      uint8_t logLevel = LOG_DEBUG_E | LOG_INFO_E | LOG_WARN_E |
                                         LOG_ERROR_E,
                      std::ios_base::openmode openMode = std::ios::app);
 
         Log(const Log &log);
-
         ~Log() = default;
 
         static const constexpr uint8_t g_AllLogLevel =
@@ -80,10 +95,15 @@ namespace Common::Log {
         private:
         static std::string GetCurrentTime() {
             time_t rawtime;
-            struct tm *timeinfo;
             time(&rawtime);
             // Use localtime_s on windows
+            #ifdef _WIN32
+            struct tm timeinfo;
+            localtime_s(&timeinfo, &rawtime);
+            #else
+            struct tm *timeinfo;
             timeinfo = localtime(&rawtime);
+            #endif
             char buffer[80];
             strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
             return (buffer);
@@ -95,8 +115,8 @@ namespace Common::Log {
                 return;
             this->_mutex.lock();
             std::string prefix("[" + Common::Log::Log::GetCurrentTime() + "/" +
-                               this->_title + "/" +
-                               _map.find(level)->second + "] ");
+                                   this->_title + "/" +
+                                   _map.find(level)->second + "] ");
             std::cout << prefix;
             (std::cout << ... << args) << std::endl;
             this->_file << prefix;
@@ -121,7 +141,6 @@ namespace Common::Log {
     class InvalidPath : std::exception {
         public:
         explicit InvalidPath(const std::string &path);
-
         const char *what() const noexcept override;
 
         private:

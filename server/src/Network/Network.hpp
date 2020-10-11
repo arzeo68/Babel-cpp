@@ -31,10 +31,18 @@ namespace Server {
 namespace Server::Network {
     class Client;
 
+    /**
+     * Network is the main class for the whole server's network. It includes client with their socket. The class inherit from ANetwork.
+     */
     class Network
         : public std::enable_shared_from_this<Network>, public ANetwork {
         public:
 
+        /**
+         * Initialize main structure: boost's acceptor, signal set and database. The database tables are registered in the constructor
+         * @param port Port which the network is listening
+         * @param logger Shared instance of a logger
+         */
         explicit Network(uint32_t port,
                          const std::shared_ptr<Common::Log::Log> &logger);
 
@@ -42,10 +50,23 @@ namespace Server::Network {
         Network(const Network &network) = delete;
 
         void Run() override;
+        /**
+         * PreRun calls setup function for the worker
+         */
         void PreRun();
         void Stop() override;
         void RemoveClient(const std::shared_ptr<Client> &client) override;
+        /**
+         * Check if client is connected to the server
+         * @param name Client's name
+         * @return true if the client is connected, otherwise returns false
+         */
         bool IsUserConnected(const std::string &name);
+        /**
+         * Get the client shared instance from his name
+         * @param name user's name
+         * @return A client shared instance
+         */
         std::optional<std::shared_ptr<Client>>
         GetClientFromName(const std::string &name);
         std::list<SharedPtrClient_t> GetClients() override;
