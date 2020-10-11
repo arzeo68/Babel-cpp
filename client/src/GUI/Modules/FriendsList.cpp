@@ -7,11 +7,12 @@
 #include "FriendsList.hpp"
 #include "client/src/GUI/Scenes/MainScene.hpp"
 
-FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController, std::map<std::string, FriendBox *> *friends)
+FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController, std::map<std::string, FriendBox *> friends)
     :   Container(new QVBoxLayout),
         _scene(scene),
         _user(user),
         _response(new QLabel),
+        _friends(friends),
         _overlay(new Container),
         _friendAdd(new InputText("Add a new friend", 18)),
         _submitFriendAdd(new Button("Add", QSize(50, 20))),
@@ -43,7 +44,7 @@ FriendsList::FriendsList(MainScene *scene, UserGUI *user, GUIController *guiCont
     _layout->addWidget(_overlay);
     connect(_submitFriendAdd, SIGNAL(clicked()), this, SLOT(addNewFriend()));
 
-    if (!friends->empty())
+    if (!friends.empty())
         initList(friends);
     else
         _guiController->call(Common::HTTP_GET, 4, pkg);
@@ -58,8 +59,6 @@ bool FriendsList::fillFriendsList(Common::Response response)
     std::string str(response.msg);
     int state;
 
-    if (response.code != Common::HTTPCodes_e::HTTP_OK)
-        return false;
     str = str.substr(12);
     std::vector<std::string> friends = Babel::Utils::split(str, "-");
 
@@ -94,8 +93,7 @@ bool FriendsList::fillFriend(Common::Response response)
 
     _friends[name] = new FriendBox(_guiController, _user ,_scene, QString::fromUtf8(name.c_str()), str == "0" ? FriendBox::DISCONNECTED : FriendBox::CONNECTED, 0);
     _overlay->addWidget(_friends[name]);
-    std::cout << "added: " << name << std::endl;
-    _scene->refreshFriendsList(&_friends);
+    _scene->refreshFriendsList(_friends);
     return true;
 }
 
@@ -178,8 +176,8 @@ bool FriendsList::deleteFriendNotif(Common::Response response) {
     return deleteFriend(str);
 }
 
-void FriendsList::initList(std::map<std::string, FriendBox *> *friends) {
-    for (auto it : *friends)
+void FriendsList::initList(std::map<std::string, FriendBox *> friends) {
+    for (auto it : friends)
         _overlay->addWidget(it.second);
 }
 

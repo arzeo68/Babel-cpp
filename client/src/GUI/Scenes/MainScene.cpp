@@ -29,7 +29,7 @@ void MainScene::initFriendList()
     QSpacerItem *spacer = new QSpacerItem(10, 25);
 
     std::cout << "before" << std::endl;
-    _friendsList = new FriendsList(this, _user, _guiController, new std::map<std::string, FriendBox *>());
+    _friendsList = new FriendsList(this, _user, _guiController, std::map<std::string, FriendBox *>());
     std::cout << "after" << std::endl;
     _scroll = new QScrollArea();
 
@@ -98,7 +98,7 @@ FriendsList *MainScene::getFriendsList() {
     return _friendsList;
 }
 
-void MainScene::refreshFriendsList(std::map<std::string, FriendBox *> *list) {
+void MainScene::refreshFriendsList(std::map<std::string, FriendBox *> list) {
     _layout->removeWidget(_scroll);
     _friendsList = new FriendsList(this, _user, _guiController, list);
     _scroll = new QScrollArea();

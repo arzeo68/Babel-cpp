@@ -18,7 +18,7 @@ class FriendsList : public Container
 {
     Q_OBJECT
 public:
-    FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController, std::map<std::string, FriendBox *> *friends);
+    FriendsList(MainScene *scene, UserGUI *user, GUIController *guiController, std::map<std::string, FriendBox *> friends);
 
     bool fillFriendsList(Common::Response response);
     bool fillFriend(Common::Response response);
@@ -44,7 +44,7 @@ private slots:
     void addNewFriend();
     bool deleteFriend(std::string name);
 
-    void initList(std::map<std::string, FriendBox *> *friends);
+    void initList(std::map<std::string, FriendBox *> friends);
 };
 
 
