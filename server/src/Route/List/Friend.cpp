@@ -50,17 +50,17 @@ Common::Response Server::Route::Listing::Friend::UpdateStatus(
         arg.body[1].c_str()));
     if (status != Common::FriendStatus::ACCEPTED &&
         status != Common::FriendStatus::REJECTED)
-        return (Common::Response {
+        return (Common::Response{
             Common::HTTPCodes_e::HTTP_FORBIDDEN,
             "false"
         });
-    if (client->GetDatabase().GetFriendStatus(userName, arg.body[0]) !=
+    if (client->GetDatabase().GetFriendStatus(arg.body[0], userName) !=
         Common::FriendStatus::PENDING)
-        return (Common::Response {
+        return (Common::Response{
             Common::HTTPCodes_e::HTTP_NOT_FOUND,
             "false",
         });
-    client->GetDatabase().UpdateFriendStatus(userName, arg.body[0], status);
+    client->GetDatabase().UpdateFriendStatus(arg.body[0], userName, status);
     Server::Route::Listing::_strcpyC(notification.msg, std::string(
         "FRIEND|STATUS|" + userName + "|" + arg.body[1]).c_str());
     client->GetWorker()->AddNotification(notification, arg.body[0]);
