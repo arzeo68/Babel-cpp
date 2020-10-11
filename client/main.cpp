@@ -19,11 +19,9 @@
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
+
     GUIController guiController;
-    Common::Response msg;
-    msg.code = Common::HTTPCodes_e::HTTP_OK;
-    strncpy(msg.msg, "FRIEND|REQUEST|TestTestTest", Common::g_maxMessageLength);
-    guiController.handleNotifications(msg);
     guiController.run();
+    NetworkUDP net;
     return app.exec();
 }

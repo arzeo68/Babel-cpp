@@ -29,6 +29,9 @@ GUIController::GUIController() : _network(this), _mainWindow(this) {
     _notificationHandlers["FRIEND|STATUS"] = &GUIController::FriendStatus;
     _notificationHandlers["FRIEND|REMOVE"] = &GUIController::FriendRemoved;
     _notificationHandlers["FRIEND|LIST"] = &GUIController::FriendList;
+    _notificationHandlers["FRIEND|CONNECT"] = &GUIController::FriendConnect;
+    _notificationHandlers["FRIEND|BUSY"] = &GUIController::FriendBusy;
+    _notificationHandlers["FRIEND|DISCONNECT"] = &GUIController::FriendDisconnect;
     _notificationHandlers["CALL|START"] = &GUIController::CallStart;
     _notificationHandlers["CALL|STATUS"] = &GUIController::CallStatus;
     _network.startConnection("", "");
@@ -124,6 +127,7 @@ void GUIController::Friends(Common::Response r, Common::Method m) {
 
 void GUIController::FriendIsConnected(Common::Response r, Common::Method m) {
     (void)m;
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->getFriendsList()->friendIsConnected(r);
     std::cout << "friend is connected callback: " << r.msg << std::endl;
 }
 
@@ -148,10 +152,12 @@ void GUIController::GetFriends(Common::Response r) {
 }
 
 void GUIController::FriendRequest(Common::Response r) {
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->getFriendsList()->requestFriend(r);
     std::cout << "Notification friend request" << std::endl;
 }
 
 void GUIController::FriendStatus(Common::Response r) {
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->getFriendsList()->responseRequestFriend(r);
     std::cout << "Notification friend status" << std::endl;
 }
 
@@ -179,4 +185,19 @@ void GUIController::StartCall(Common::Response r, Common::Method m) {
 
 void GUIController::EndCall(Common::Response r, Common::Method m) {
 
+}
+
+void GUIController::FriendConnect(Common::Response r) {
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->getFriendsList()->friendConnectedNotif(r);
+    std::cout << "Notification call connect" << std::endl;
+}
+
+void GUIController::FriendDisconnect(Common::Response r) {
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->getFriendsList()->friendDisonnectedNotif(r);
+    std::cout << "Notification call disconnect" << std::endl;
+}
+
+void GUIController::FriendBusy(Common::Response r) {
+    dynamic_cast<MainScene *>(_mainWindow.getSceneManager().getScenes().at("main"))->getFriendsList()->friendBusyNotif(r);
+    std::cout << "Notification call busy" << std::endl;
 }

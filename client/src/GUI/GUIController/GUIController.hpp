@@ -53,6 +53,9 @@ public:
     void FriendStatus(Common::Response r /**< [in] the response sent by the server. */);
     void FriendRemoved(Common::Response r /**< [in] the response sent by the server. */);
     void FriendList(Common::Response r /**< [in] the response sent by the server. */);
+    void FriendConnect(Common::Response r /**< [in] the response sent by the server. */);
+    void FriendDisconnect(Common::Response r /**< [in] the response sent by the server. */);
+    void FriendBusy(Common::Response r /**< [in] the response sent by the server. */);
     void CallStart(Common::Response r /**< [in] the response sent by the server. */);
     void CallStatus(Common::Response r /**< [in] the response sent by the server. */);
 
@@ -61,7 +64,6 @@ private:
     NetworkTcp _network; //!< manage TCP Communication (sender/receiver)
     PackageTcp _package; //!< encode and decode packages send and received
     MainWindow _mainWindow; //!< manage GUI
-    NetworkUDP _udp;
 
     std::queue<uint8_t> _routes; //!< queue of actual routes called
     std::queue<Common::Method> _methods; //!<queue of actual methods called
