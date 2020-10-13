@@ -21,7 +21,9 @@ public:
      * @param alignment
      */
     UserBox(GUIController *guiController, UserGUI *user, MainScene *scene, QString name, FriendBox::UserState state, Qt::Alignment alignment = Qt::AlignLeft);
-};
 
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+};
 
 #endif //BABEL_USERBOX_HPP

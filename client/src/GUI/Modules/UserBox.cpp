@@ -12,3 +12,7 @@ UserBox::UserBox(GUIController *guiController, UserGUI *user, MainScene *scene, 
     _label->setFont(QFont("Arial", 24));
     _label->setStyleSheet("font-weight: bold;");
 }
+
+void UserBox::mousePressEvent(QMouseEvent *event) {
+    (void)event;
+}
